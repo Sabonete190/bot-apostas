@@ -1,5 +1,114 @@
 import streamlit as st
 
-st.title("📊 Bot de Apostas")
+# CONFIGURAÇÃO DA PÁGINA
+st.set_page_config(
+    page_title="Bot de Apostas",
+    layout="centered"
+)
 
-st.write("Aplicação online funcionando 🚀")
+# TÍTULO
+st.title("📊 Bot de Apostas Profissional")
+
+st.write("Preencha os dados da partida.")
+
+# =========================
+# ODDS 1X2
+# =========================
+
+st.subheader("Mercado 1X2")
+
+odd_casa = st.number_input(
+    "Odd Casa",
+    min_value=1.0,
+    step=0.01
+)
+
+odd_empate = st.number_input(
+    "Odd Empate",
+    min_value=1.0,
+    step=0.01
+)
+
+odd_fora = st.number_input(
+    "Odd Fora",
+    min_value=1.0,
+    step=0.01
+)
+
+# =========================
+# OVER / UNDER
+# =========================
+
+st.subheader("Over / Under")
+
+odd_over15 = st.number_input(
+    "Odd Over 1.5",
+    min_value=1.0,
+    step=0.01
+)
+
+odd_over25 = st.number_input(
+    "Odd Over 2.5",
+    min_value=1.0,
+    step=0.01
+)
+
+odd_over35 = st.number_input(
+    "Odd Over 3.5",
+    min_value=1.0,
+    step=0.01
+)
+
+# =========================
+# BTTS
+# =========================
+
+st.subheader("BTTS")
+
+odd_btts_sim = st.number_input(
+    "Odd BTTS SIM",
+    min_value=1.0,
+    step=0.01
+)
+
+odd_btts_nao = st.number_input(
+    "Odd BTTS NÃO",
+    min_value=1.0,
+    step=0.01
+)
+
+# =========================
+# DADOS DOS TIMES
+# =========================
+
+st.subheader("Dados dos Times")
+
+xg_casa = st.number_input(
+    "xG Casa",
+    min_value=0.0,
+    step=0.1
+)
+
+xg_fora = st.number_input(
+    "xG Fora",
+    min_value=0.0,
+    step=0.1
+)
+
+xga_casa = st.number_input(
+    "xGA Casa",
+    min_value=0.0,
+    step=0.1
+)
+
+xga_fora = st.number_input(
+    "xGA Fora",
+    min_value=0.0,
+    step=0.1
+)
+
+# =========================
+# BOTÃO
+# =========================
+
+st.button("Analisar Jogo")
