@@ -111,4 +111,34 @@ xga_fora = st.number_input(
 # BOTÃO
 # =========================
 
-st.button("Analisar Jogo")
+if st.button("Analisar Jogo"):
+
+    # =========================
+    # PROBABILIDADES IMPLÍCITAS
+    # =========================
+
+    prob_casa = 1 / odd_casa
+    prob_empate = 1 / odd_empate
+    prob_fora = 1 / odd_fora
+
+    # =========================
+    # NORMALIZAÇÃO
+    # =========================
+
+    soma = prob_casa + prob_empate + prob_fora
+
+    prob_casa /= soma
+    prob_empate /= soma
+    prob_fora /= soma
+
+    # =========================
+    # RESULTADO
+    # =========================
+
+    st.success("Análise concluída")
+
+    st.subheader("Probabilidades")
+
+    st.write(f"Casa: {round(prob_casa * 100, 2)}%")
+    st.write(f"Empate: {round(prob_empate * 100, 2)}%")
+    st.write(f"Fora: {round(prob_fora * 100, 2)}%")
