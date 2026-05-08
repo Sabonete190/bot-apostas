@@ -294,7 +294,35 @@ if st.button("Analisar Jogo"):
     st.write(
         f"EV Fora: {round(ev_fora, 2)}"
     )
+# =========================
+    # EDGE
+    # =========================
 
+    edge_casa = (
+        prob_casa_modelo - prob_casa
+    )
+
+    edge_empate = (
+        prob_empate_modelo - prob_empate
+    )
+
+    edge_fora = (
+        prob_fora_modelo - prob_fora
+    )
+
+    st.subheader("Edge do Modelo")
+
+    st.write(
+        f"Edge Casa: {round(edge_casa * 100, 2)}%"
+    )
+
+    st.write(
+        f"Edge Empate: {round(edge_empate * 100, 2)}%"
+    )
+
+    st.write(
+        f"Edge Fora: {round(edge_fora * 100, 2)}%"
+    )
     # =========================
     # DECISÃO
     # =========================
