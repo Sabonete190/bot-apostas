@@ -196,6 +196,41 @@ if st.button("Analisar Jogo"):
     st.write(f"Defesa Fora: {round(defesa_fora, 2)}")
 
     st.write(f"Força de Gol: {round(forca_gol, 2)}")
+ # =========================
+    # PROBABILIDADES PRÓPRIAS
+    # =========================
+
+    forca_total = ataque_casa + ataque_fora + defesa_casa + defesa_fora
+
+    prob_casa_modelo = (
+        ataque_casa + defesa_fora
+    ) / forca_total
+
+    prob_fora_modelo = (
+        ataque_fora + defesa_casa
+    ) / forca_total
+
+    equilibrio = abs(prob_casa_modelo - prob_fora_modelo)
+
+    prob_empate_modelo = 0.30 - (equilibrio * 0.2)
+
+    prob_empate_modelo = max(0.10, prob_empate_modelo)
+
+    soma_modelo = (
+        prob_casa_modelo +
+        prob_fora_modelo +
+        prob_empate_modelo
+    )
+
+    prob_casa_modelo /= soma_modelo
+    prob_fora_modelo /= soma_modelo
+    prob_empate_modelo /= soma_modelo
+
+    st.subheader("Probabilidades do Modelo")
+
+    st.write(f"Casa Modelo: {round(prob_casa_modelo * 100, 2)}%")
+    st.write(f"Empate Modelo: {round(prob_empate_modelo * 100, 2)}%")
+    st.write(f"Fora Modelo: {round(prob_fora_modelo * 100, 2)}%")
     # =========================
     # PROBABILIDADES IMPLÍCITAS
     # =========================
