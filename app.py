@@ -265,15 +265,35 @@ if st.button("Analisar Jogo"):
     # EV
     # =========================
 
-    ev_casa = (prob_casa * odd_casa) - 1
-    ev_empate = (prob_empate * odd_empate) - 1
-    ev_fora = (prob_fora * odd_fora) - 1
+    # =========================
+    # EV DO MODELO
+    # =========================
 
-    st.subheader("EV")
+    ev_casa = (
+        prob_casa_modelo * odd_casa
+    ) - 1
 
-    st.write(f"EV Casa: {round(ev_casa, 2)}")
-    st.write(f"EV Empate: {round(ev_empate, 2)}")
-    st.write(f"EV Fora: {round(ev_fora, 2)}")
+    ev_empate = (
+        prob_empate_modelo * odd_empate
+    ) - 1
+
+    ev_fora = (
+        prob_fora_modelo * odd_fora
+    ) - 1
+
+    st.subheader("EV do Modelo")
+
+    st.write(
+        f"EV Casa: {round(ev_casa, 2)}"
+    )
+
+    st.write(
+        f"EV Empate: {round(ev_empate, 2)}"
+    )
+
+    st.write(
+        f"EV Fora: {round(ev_fora, 2)}"
+    )
 
     # =========================
     # DECISÃO
