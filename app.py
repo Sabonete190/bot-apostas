@@ -149,6 +149,54 @@ eficiencia_fora = st.number_input(
 if st.button("Analisar Jogo"):
 
     # =========================
+    # FORÇA OFENSIVA
+    # =========================
+
+    ataque_casa = (
+        xg_casa * 0.5 +
+        chutes_casa * 0.3 +
+        eficiencia_casa * 0.2
+    )
+
+    ataque_fora = (
+        xg_fora * 0.5 +
+        chutes_fora * 0.3 +
+        eficiencia_fora * 0.2
+    )
+
+    # =========================
+    # FORÇA DEFENSIVA
+    # =========================
+
+    defesa_casa = (
+        xga_casa * 0.6 +
+        sofridos_casa * 0.4
+    )
+
+    defesa_fora = (
+        xga_fora * 0.6 +
+        sofridos_fora * 0.4
+    )
+
+    # =========================
+    # FORÇA DE GOL
+    # =========================
+
+    forca_gol = (
+        (ataque_casa / (defesa_fora + 0.5)) +
+        (ataque_fora / (defesa_casa + 0.5))
+    ) / 2
+
+    st.subheader("Análise Estatística")
+
+    st.write(f"Ataque Casa: {round(ataque_casa, 2)}")
+    st.write(f"Ataque Fora: {round(ataque_fora, 2)}")
+
+    st.write(f"Defesa Casa: {round(defesa_casa, 2)}")
+    st.write(f"Defesa Fora: {round(defesa_fora, 2)}")
+
+    st.write(f"Força de Gol: {round(forca_gol, 2)}")
+    # =========================
     # PROBABILIDADES IMPLÍCITAS
     # =========================
 
