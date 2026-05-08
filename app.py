@@ -142,3 +142,38 @@ if st.button("Analisar Jogo"):
     st.write(f"Casa: {round(prob_casa * 100, 2)}%")
     st.write(f"Empate: {round(prob_empate * 100, 2)}%")
     st.write(f"Fora: {round(prob_fora * 100, 2)}%")
+
+# =========================
+    # EV
+    # =========================
+
+    ev_casa = (prob_casa * odd_casa) - 1
+    ev_empate = (prob_empate * odd_empate) - 1
+    ev_fora = (prob_fora * odd_fora) - 1
+
+    st.subheader("EV")
+
+    st.write(f"EV Casa: {round(ev_casa, 2)}")
+    st.write(f"EV Empate: {round(ev_empate, 2)}")
+    st.write(f"EV Fora: {round(ev_fora, 2)}")
+
+    # =========================
+    # DECISÃO
+    # =========================
+
+    st.subheader("Decisão")
+
+    if ev_casa > 0.05:
+        st.success("ENTRAR CASA")
+    else:
+        st.error("NÃO ENTRAR CASA")
+
+    if ev_empate > 0.05:
+        st.success("ENTRAR EMPATE")
+    else:
+        st.error("NÃO ENTRAR EMPATE")
+
+    if ev_fora > 0.05:
+        st.success("ENTRAR FORA")
+    else:
+        st.error("NÃO ENTRAR FORA")
