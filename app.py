@@ -196,6 +196,27 @@ if st.button("Analisar Jogo"):
     st.write(f"Defesa Fora: {round(defesa_fora, 2)}")
 
     st.write(f"Força de Gol: {round(forca_gol, 2)}")
+    # =========================
+    # GOLS ESPERADOS
+    # =========================
+
+    gols_esperados_casa = (
+        ataque_casa / (defesa_fora + 0.5)
+    )
+
+    gols_esperados_fora = (
+        ataque_fora / (defesa_casa + 0.5)
+    )
+
+    st.subheader("Gols Esperados")
+
+    st.write(
+        f"Gols Esperados Casa: {round(gols_esperados_casa, 2)}"
+    )
+
+    st.write(
+        f"Gols Esperados Fora: {round(gols_esperados_fora, 2)}"
+    )
  # =========================
     # PROBABILIDADES PRÓPRIAS
     # =========================
