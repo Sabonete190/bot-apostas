@@ -1,4 +1,5 @@
 import streamlit as st
+import math
 
 # CONFIGURAÇÃO DA PÁGINA
 st.set_page_config(
@@ -217,6 +218,42 @@ if st.button("Analisar Jogo"):
     st.write(
         f"Gols Esperados Fora: {round(gols_esperados_fora, 2)}"
     )
+    # =========================
+    # POISSON
+    # =========================
+
+    def poisson(gols_esperados, gols):
+        return (
+            (math.exp(-gols_esperados) *
+            gols_esperados ** gols)
+            / math.factorial(gols)
+        )
+
+    st.subheader("Poisson")
+
+    for i in range(4):
+
+        prob_casa_gols = poisson(
+            gols_esperados_casa,
+            i
+        )
+
+        prob_fora_gols = poisson(
+            gols_esperados_fora,
+            i
+        )
+
+        st.write(
+            f"Casa marcar {i} gols: "
+            f"{round(prob_casa_gols * 100, 2)}%"
+        )
+
+        st.write(
+            f"Fora marcar {i} gols: "
+            f"{round(prob_fora_gols * 100, 2)}%"
+        )
+
+        st.write("---")
  # =========================
     # PROBABILIDADES PRÓPRIAS
     # =========================
