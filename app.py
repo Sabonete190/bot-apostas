@@ -566,3 +566,43 @@ if st.button("Analisar Jogo"):
         st.error(
             "❌ Jogo Sem Valor"
         )
+# =========================
+    # MELHOR MERCADO
+    # =========================
+
+    st.subheader("Melhor Mercado")
+
+    melhor_mercado = "Sem valor claro"
+
+    # 1x2
+
+    if edge_casa > 0.10:
+
+        melhor_mercado = "🔥 Vitória Casa"
+
+    elif edge_fora > 0.10:
+
+        melhor_mercado = "🔥 Vitória Fora"
+
+    # Over
+
+    if (
+        prob_over25 >= 0.60
+        and forca_gol >= 1.2
+    ):
+
+        melhor_mercado = "🔥 Over 2.5"
+
+    # BTTS
+
+    if (
+        prob_btts_sim >= 0.60
+        and gols_esperados_casa >= 1
+        and gols_esperados_fora >= 1
+    ):
+
+        melhor_mercado = "🔥 BTTS SIM"
+
+    st.success(
+        f"Mercado Ideal: {melhor_mercado}"
+    )
