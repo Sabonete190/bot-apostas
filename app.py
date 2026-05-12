@@ -285,6 +285,39 @@ if st.button("Analisar Jogo"):
         f"Under 2.5: "
         f"{round(prob_under25 * 100, 2)}%"
     )
+    # =========================
+    # BTTS
+    # =========================
+
+    prob_casa_0 = poisson(
+        gols_esperados_casa,
+        0
+    )
+
+    prob_fora_0 = poisson(
+        gols_esperados_fora,
+        0
+    )
+
+    prob_btts_nao = (
+        prob_casa_0 +
+        prob_fora_0 -
+        (prob_casa_0 * prob_fora_0)
+    )
+
+    prob_btts_sim = 1 - prob_btts_nao
+
+    st.subheader("BTTS")
+
+    st.write(
+        f"BTTS SIM: "
+        f"{round(prob_btts_sim * 100, 2)}%"
+    )
+
+    st.write(
+        f"BTTS NÃO: "
+        f"{round(prob_btts_nao * 100, 2)}%"
+    )
  # =========================
     # PROBABILIDADES PRÓPRIAS
     # =========================
