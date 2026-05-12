@@ -524,22 +524,45 @@ if st.button("Analisar Jogo"):
         f"Confiança: {round(confianca, 1)}/10"
     )
     # =========================
-    # DECISÃO
+    # DECISÃO INTELIGENTE
     # =========================
 
-    st.subheader("Decisão")
+    st.subheader("Decisão do Modelo")
 
-    if ev_casa > 0.05:
-        st.success("ENTRAR CASA")
-    else:
-        st.error("NÃO ENTRAR CASA")
+    melhor_edge = max(
+        edge_casa,
+        edge_empate,
+        edge_fora
+    )
 
-    if ev_empate > 0.05:
-        st.success("ENTRAR EMPATE")
-    else:
-        st.error("NÃO ENTRAR EMPATE")
+    melhor_ev = max(
+        ev_casa,
+        ev_empate,
+        ev_fora
+    )
 
-    if ev_fora > 0.05:
-        st.success("ENTRAR FORA")
+    if (
+        melhor_edge >= 0.10
+        and melhor_ev >= 0.10
+        and confianca >= 7
+    ):
+
+        st.success(
+            "🔥 Entrada Forte Detectada"
+        )
+
+    elif (
+        melhor_edge >= 0.05
+        and melhor_ev >= 0.05
+        and confianca >= 5
+    ):
+
+        st.warning(
+            "⚠️ Entrada Moderada"
+        )
+
     else:
-        st.error("NÃO ENTRAR FORA")
+
+        st.error(
+            "❌ Jogo Sem Valor"
+        )
