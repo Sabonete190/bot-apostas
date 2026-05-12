@@ -255,10 +255,12 @@ if st.button("Analisar Jogo"):
 
         st.write("---")
         # =========================
-    # PLACARES PROVÁVEIS
+    # TOP PLACARES
     # =========================
 
-    st.subheader("Placares Prováveis")
+    st.subheader("Placares Mais Prováveis")
+
+    placares = []
 
     for gols_casa in range(4):
 
@@ -276,10 +278,26 @@ if st.button("Analisar Jogo"):
                 )
             )
 
-            st.write(
-                f"{gols_casa} x {gols_fora} = "
-                f"{round(prob_placar * 100, 2)}%"
+            placares.append(
+                (
+                    f"{gols_casa} x {gols_fora}",
+                    prob_placar
+                )
             )
+
+    placares.sort(
+        key=lambda x: x[1],
+        reverse=True
+    )
+
+    top_placares = placares[:5]
+
+    for placar, probabilidade in top_placares:
+
+        st.write(
+            f"{placar} = "
+            f"{round(probabilidade * 100, 2)}%"
+        )
         # =========================
     # OVER/UNDER 2.5
     # =========================
