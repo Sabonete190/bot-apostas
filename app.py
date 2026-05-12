@@ -637,3 +637,58 @@ if st.button("Analisar Jogo"):
     st.write(
         f"Stake Recomendada: {stake}% da banca"
     )
+# =========================
+    # PERFIL DO JOGO
+    # =========================
+
+    st.subheader("Perfil da Partida")
+
+    perfil_jogo = "⚖️ Equilibrado"
+
+    total_xg = (
+        gols_esperados_casa +
+        gols_esperados_fora
+    )
+
+    diferenca_forca = abs(
+        ataque_casa - ataque_fora
+    )
+
+    # Jogo explosivo
+
+    if (
+        total_xg >= 3
+        and prob_over25 >= 0.65
+    ):
+
+        perfil_jogo = "🔥 Jogo Explosivo"
+
+    # Jogo defensivo
+
+    elif (
+        total_xg <= 2
+        and prob_under25 >= 0.55
+    ):
+
+        perfil_jogo = "🧱 Jogo Defensivo"
+
+    # Favorito forte
+
+    elif (
+        diferenca_forca >= 1
+        and confianca >= 7
+    ):
+
+        perfil_jogo = "🎯 Favorito Forte"
+
+    # BTTS forte
+
+    elif (
+        prob_btts_sim >= 0.65
+    ):
+
+        perfil_jogo = "⚔️ Jogo Aberto"
+
+    st.success(
+        f"{perfil_jogo}"
+    )
