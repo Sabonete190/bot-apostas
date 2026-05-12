@@ -490,6 +490,40 @@ if st.button("Analisar Jogo"):
         f"Edge Fora: {round(edge_fora * 100, 2)}%"
     )
     # =========================
+    # CONFIANÇA DO MODELO
+    # =========================
+
+    maior_edge = max(
+        abs(edge_casa),
+        abs(edge_empate),
+        abs(edge_fora)
+    )
+
+    maior_ev = max(
+        ev_casa,
+        ev_empate,
+        ev_fora
+    )
+
+    confianca = (
+        (forca_gol * 4)
+        +
+        (maior_edge * 20)
+        +
+        (maior_ev * 10)
+    )
+
+    confianca = max(
+        0,
+        min(confianca, 10)
+    )
+
+    st.subheader("Confiança do Modelo")
+
+    st.write(
+        f"Confiança: {round(confianca, 1)}/10"
+    )
+    # =========================
     # DECISÃO
     # =========================
 
