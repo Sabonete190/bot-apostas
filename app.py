@@ -606,3 +606,34 @@ if st.button("Analisar Jogo"):
     st.success(
         f"Mercado Ideal: {melhor_mercado}"
     )
+# =========================
+    # GESTÃO DE STAKE
+    # =========================
+
+    st.subheader("Stake Sugerida")
+
+    stake = 0
+
+    if (
+        melhor_edge >= 0.10
+        and melhor_ev >= 0.10
+        and confianca >= 7
+    ):
+
+        stake = 5
+
+    elif (
+        melhor_edge >= 0.05
+        and melhor_ev >= 0.05
+        and confianca >= 5
+    ):
+
+        stake = 2
+
+    else:
+
+        stake = 0
+
+    st.write(
+        f"Stake Recomendada: {stake}% da banca"
+    )
