@@ -255,6 +255,32 @@ if st.button("Analisar Jogo"):
 
         st.write("---")
         # =========================
+    # PLACARES PROVÁVEIS
+    # =========================
+
+    st.subheader("Placares Prováveis")
+
+    for gols_casa in range(4):
+
+        for gols_fora in range(4):
+
+            prob_placar = (
+                poisson(
+                    gols_esperados_casa,
+                    gols_casa
+                )
+                *
+                poisson(
+                    gols_esperados_fora,
+                    gols_fora
+                )
+            )
+
+            st.write(
+                f"{gols_casa} x {gols_fora} = "
+                f"{round(prob_placar * 100, 2)}%"
+            )
+        # =========================
     # OVER/UNDER 2.5
     # =========================
 
