@@ -398,6 +398,38 @@ if st.button("Analisar Jogo"):
     st.write(f"Empate Modelo: {round(prob_empate_modelo * 100, 2)}%")
     st.write(f"Fora Modelo: {round(prob_fora_modelo * 100, 2)}%")
     # =========================
+    # ODDS JUSTAS
+    # =========================
+
+    odd_justa_casa = (
+        1 / prob_casa_modelo
+    )
+
+    odd_justa_empate = (
+        1 / prob_empate_modelo
+    )
+
+    odd_justa_fora = (
+        1 / prob_fora_modelo
+    )
+
+    st.subheader("Odds Justas")
+
+    st.write(
+        f"Odd Justa Casa: "
+        f"{round(odd_justa_casa, 2)}"
+    )
+
+    st.write(
+        f"Odd Justa Empate: "
+        f"{round(odd_justa_empate, 2)}"
+    )
+
+    st.write(
+        f"Odd Justa Fora: "
+        f"{round(odd_justa_fora, 2)}"
+    )
+    # =========================
     # PROBABILIDADES IMPLÍCITAS
     # =========================
 
