@@ -330,6 +330,29 @@ if st.button("Analisar Jogo"):
         f"{round(prob_under25 * 100, 2)}%"
     )
     # =========================
+    # ODDS JUSTAS OVER/UNDER
+    # =========================
+
+    odd_justa_over25 = (
+        1 / prob_over25
+    )
+
+    odd_justa_under25 = (
+        1 / prob_under25
+    )
+
+    st.subheader("Odds Justas Over/Under")
+
+    st.write(
+        f"Odd Justa Over 2.5: "
+        f"{round(odd_justa_over25, 2)}"
+    )
+
+    st.write(
+        f"Odd Justa Under 2.5: "
+        f"{round(odd_justa_under25, 2)}"
+    )
+    # =========================
     # BTTS
     # =========================
 
