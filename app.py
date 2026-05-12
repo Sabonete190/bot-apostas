@@ -522,6 +522,51 @@ if st.button("Analisar Jogo"):
         f"Edge Fora: {round(edge_fora * 100, 2)}%"
     )
     # =========================
+    # KELLY CRITERION
+    # =========================
+
+    def calcular_kelly(probabilidade, odd):
+
+        kelly = (
+            (
+                odd * probabilidade
+            ) - 1
+        ) / (odd - 1)
+
+        return max(kelly, 0)
+
+    kelly_casa = calcular_kelly(
+        prob_casa_modelo,
+        odd_casa
+    )
+
+    kelly_empate = calcular_kelly(
+        prob_empate_modelo,
+        odd_empate
+    )
+
+    kelly_fora = calcular_kelly(
+        prob_fora_modelo,
+        odd_fora
+    )
+
+    st.subheader("Kelly Criterion")
+
+    st.write(
+        f"Kelly Casa: "
+        f"{round(kelly_casa * 100, 2)}%"
+    )
+
+    st.write(
+        f"Kelly Empate: "
+        f"{round(kelly_empate * 100, 2)}%"
+    )
+
+    st.write(
+        f"Kelly Fora: "
+        f"{round(kelly_fora * 100, 2)}%"
+    )
+    # =========================
     # CONFIANÇA DO MODELO
     # =========================
 
