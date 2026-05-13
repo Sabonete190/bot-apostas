@@ -1,6 +1,20 @@
 import streamlit as st
 import math
 
+# =========================
+# FUNÇÃO KELLY
+# =========================
+
+def calcular_kelly(probabilidade, odd):
+
+    b = odd - 1
+
+    kelly = (
+        (probabilidade * b)
+        - (1 - probabilidade)
+    ) / b
+
+    return max(kelly, 0)
 # CONFIGURAÇÃO DA PÁGINA
 st.set_page_config(
     page_title="Bot de Apostas",
