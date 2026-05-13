@@ -804,6 +804,41 @@ if st.button("Analisar Jogo"):
     st.write(
         f"EV Fora: {round(ev_fora, 2)}"
     )
+    # =========================
+    # EDGE 1X2
+    # =========================
+
+    edge_casa = (
+        prob_casa_modelo -
+        (1 / odd_casa)
+    )
+
+    edge_empate = (
+        prob_empate_modelo -
+        (1 / odd_empate)
+    )
+
+    edge_fora = (
+        prob_fora_modelo -
+        (1 / odd_fora)
+    )
+
+    st.subheader("Edge 1X2")
+
+    st.write(
+        f"Edge Casa: "
+        f"{round(edge_casa * 100, 2)}%"
+    )
+
+    st.write(
+        f"Edge Empate: "
+        f"{round(edge_empate * 100, 2)}%"
+    )
+
+    st.write(
+        f"Edge Fora: "
+        f"{round(edge_fora * 100, 2)}%"
+    )
 # =========================
     # EDGE
     # =========================
