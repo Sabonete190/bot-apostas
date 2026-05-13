@@ -531,6 +531,51 @@ if st.button("Analisar Jogo"):
         f"Edge BTTS NÃO: "
         f"{round(edge_btts_nao * 100, 2)}%"
     )
+    # =========================
+    # KELLY OVER/BTTS
+    # =========================
+
+    kelly_over25 = calcular_kelly(
+        prob_over25,
+        odd_over25
+    )
+
+    kelly_under25 = calcular_kelly(
+        prob_under25,
+        odd_under25
+    )
+
+    kelly_btts_sim = calcular_kelly(
+        prob_btts_sim,
+        odd_btts_sim
+    )
+
+    kelly_btts_nao = calcular_kelly(
+        prob_btts_nao,
+        odd_btts_nao
+    )
+
+    st.subheader("Kelly Over/BTTS")
+
+    st.write(
+        f"Kelly Over 2.5: "
+        f"{round(kelly_over25 * 100, 2)}%"
+    )
+
+    st.write(
+        f"Kelly Under 2.5: "
+        f"{round(kelly_under25 * 100, 2)}%"
+    )
+
+    st.write(
+        f"Kelly BTTS SIM: "
+        f"{round(kelly_btts_sim * 100, 2)}%"
+    )
+
+    st.write(
+        f"Kelly BTTS NÃO: "
+        f"{round(kelly_btts_nao * 100, 2)}%"
+    )
  # =========================
     # PROBABILIDADES PRÓPRIAS
     # =========================
