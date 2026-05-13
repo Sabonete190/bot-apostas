@@ -214,15 +214,25 @@ if st.button("Analisar Jogo"):
     # =========================
 
     ataque_casa = (
-        xg_casa * 0.5 +
-        chutes_casa * 0.3 +
-        eficiencia_casa * 0.2
+
+        xg_casa * 0.45 +
+
+        chutes_casa * 0.25 +
+
+        eficiencia_casa * 0.15 +
+
+        forca_tabela_casa * 0.15
     )
 
     ataque_fora = (
-        xg_fora * 0.5 +
-        chutes_fora * 0.3 +
-        eficiencia_fora * 0.2
+
+        xg_fora * 0.45 +
+
+        chutes_fora * 0.25 +
+
+        eficiencia_fora * 0.15 +
+
+        forca_tabela_fora * 0.15
     )
 
     # =========================
