@@ -108,7 +108,25 @@ odd_btts_nao = st.number_input(
     min_value=1.0,
     step=0.01
 )
+# =========================
+# POSIÇÃO NA TABELA
+# =========================
 
+st.subheader("Tabela Brasileirão")
+
+posicao_casa = st.number_input(
+    "Posição Time Casa",
+    min_value=1,
+    max_value=20,
+    value=10
+)
+
+posicao_fora = st.number_input(
+    "Posição Time Fora",
+    min_value=1,
+    max_value=20,
+    value=10
+)
 # =========================
 # DADOS DOS TIMES
 # =========================
@@ -180,6 +198,17 @@ eficiencia_fora = st.number_input(
 
 if st.button("Analisar Jogo"):
 
+    # =========================
+    # FORÇA DA TABELA
+    # =========================
+
+    forca_tabela_casa = (
+        (21 - posicao_casa) / 20
+    )
+
+    forca_tabela_fora = (
+        (21 - posicao_fora) / 20
+    )
     # =========================
     # FORÇA OFENSIVA
     # =========================
