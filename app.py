@@ -207,6 +207,43 @@ eficiencia_fora = st.number_input(
     step=0.1
 )
 # =========================
+# FORMA RECENTE
+# =========================
+
+st.subheader("Forma Recente")
+
+forma_casa = st.number_input(
+    "Forma Casa (últimos 5 jogos)",
+    min_value=0.0,
+    max_value=15.0,
+    step=1.0
+)
+
+forma_fora = st.number_input(
+    "Forma Fora (últimos 5 jogos)",
+    min_value=0.0,
+    max_value=15.0,
+    step=1.0
+)
+
+# =========================
+# MANDO DE CAMPO
+# =========================
+
+mando_casa = st.slider(
+    "Força Mandante",
+    0.8,
+    1.5,
+    1.1
+)
+
+mando_fora = st.slider(
+    "Força Visitante",
+    0.5,
+    1.2,
+    0.95
+)
+# =========================
 # BOTÃO
 # =========================
 
@@ -229,25 +266,33 @@ if st.button("Analisar Jogo"):
 
     ataque_casa = (
 
-        xg_casa * 0.45 +
+    xg_casa * 0.35 +
 
-        chutes_casa * 0.25 +
+    chutes_casa * 0.20 +
 
-        eficiencia_casa * 0.15 +
+    eficiencia_casa * 0.15 +
 
-        forca_tabela_casa * 0.15
-    )
+    forca_tabela_casa * 0.10 +
+
+    (forma_casa / 15) * 0.10 +
+
+    mando_casa * 0.10
+)
 
     ataque_fora = (
 
-        xg_fora * 0.45 +
+    xg_fora * 0.35 +
 
-        chutes_fora * 0.25 +
+    chutes_fora * 0.20 +
 
-        eficiencia_fora * 0.15 +
+    eficiencia_fora * 0.15 +
 
-        forca_tabela_fora * 0.15
-    )
+    forca_tabela_fora * 0.10 +
+
+    (forma_fora / 15) * 0.10 +
+
+    mando_fora * 0.10
+)
 
     # =========================
     # FORÇA DEFENSIVA
