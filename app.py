@@ -214,16 +214,16 @@ st.subheader("Forma Recente")
 
 forma_casa = st.number_input(
     "Forma Casa (últimos 5 jogos)",
-    min_value=0.0,
-    max_value=15.0,
-    step=1.0
+    min_value=0,
+    max_value=15,
+    step=1
 )
 
 forma_fora = st.number_input(
     "Forma Fora (últimos 5 jogos)",
-    min_value=0.0,
-    max_value=15.0,
-    step=1.0
+    min_value=0,
+    max_value=15,
+    step=1
 )
 
 # =========================
