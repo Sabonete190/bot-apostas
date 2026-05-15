@@ -227,22 +227,61 @@ forma_fora = st.number_input(
 )
 
 # =========================
-# MANDO DE CAMPO
+# FORÇA DOS TIMES
 # =========================
 
-mando_casa = st.slider(
-    "Força Mandante",
-    0.8,
-    1.5,
-    1.1
+st.subheader("Força dos Times")
+
+forca_casa = st.selectbox(
+
+    "Força Time Casa",
+
+    [
+        "Muito Forte",
+        "Forte",
+        "Médio",
+        "Fraco",
+        "Muito Fraco"
+    ]
 )
 
-mando_fora = st.slider(
-    "Força Visitante",
-    0.5,
-    1.2,
-    0.95
+forca_fora = st.selectbox(
+
+    "Força Time Fora",
+
+    [
+        "Muito Forte",
+        "Forte",
+        "Médio",
+        "Fraco",
+        "Muito Fraco"
+    ]
 )
+
+# =========================
+# MAPA DE FORÇA
+# =========================
+
+mapa_forca = {
+
+    "Muito Forte": 1.35,
+
+    "Forte": 1.20,
+
+    "Médio": 1.00,
+
+    "Fraco": 0.80,
+
+    "Muito Fraco": 0.65
+}
+
+forca_casa_valor = mapa_forca[
+    forca_casa
+]
+
+forca_fora_valor = mapa_forca[
+    forca_fora
+]
 # =========================
 # BOTÃO
 # =========================
@@ -276,7 +315,7 @@ if st.button("Analisar Jogo"):
 
     (forma_casa / 15) * 0.10 +
 
-    mando_casa * 0.10
+    forca_casa_valor * 0.10
 )
 
     ataque_fora = (
@@ -291,7 +330,7 @@ if st.button("Analisar Jogo"):
 
     (forma_fora / 15) * 0.10 +
 
-    mando_fora * 0.10
+    forca_fora_valor * 0.10
 )
 
     # =========================
