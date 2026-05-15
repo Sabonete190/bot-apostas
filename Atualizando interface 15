@@ -338,81 +338,7 @@ if st.button("Analisar Jogo"):
         )
 
         st.write("---")
-        # =========================
-    # TOP PLACARES
-    # =========================
-
-    st.subheader("Placares Mais Prováveis")
-
-    placares = []
-
-    for gols_casa in range(4):
-
-        for gols_fora in range(4):
-
-            prob_placar = (
-                poisson(
-                    gols_esperados_casa,
-                    gols_casa
-                )
-                *
-                poisson(
-                    gols_esperados_fora,
-                    gols_fora
-                )
-            )
-
-            placares.append(
-                (
-                    f"{gols_casa} x {gols_fora}",
-                    prob_placar
-                )
-            )
-
-    placares.sort(
-        key=lambda x: x[1],
-        reverse=True
-    )
-
-    top_placares = placares[:5]
-
-    for placar, probabilidade in top_placares:
-
-        st.write(
-            f"{placar} = "
-            f"{round(probabilidade * 100, 2)}%"
-        )
-        # =========================
-    # OVER/UNDER 2.5
-    # =========================
-
-    total_gols_esperados = (
-        gols_esperados_casa +
-        gols_esperados_fora
-    )
-
-    prob_under25 = 0
-
-    for gols in range(3):
-
-        prob_under25 += poisson(
-            total_gols_esperados,
-            gols
-        )
-
-    prob_over25 = 1 - prob_under25
-
-    st.subheader("Over/Under 2.5")
-
-    st.write(
-        f"Over 2.5: "
-        f"{round(prob_over25 * 100, 2)}%"
-    )
-
-    st.write(
-        f"Under 2.5: "
-        f"{round(prob_under25 * 100, 2)}%"
-    )
+        
     # =========================
     # ODDS JUSTAS OVER/UNDER
     # =========================
@@ -1082,4 +1008,79 @@ if st.button("Analisar Jogo"):
 
     st.success(
         f"{perfil_jogo}"
+    )
+# =========================
+    # TOP PLACARES
+    # =========================
+
+    st.subheader("Placares Mais Prováveis")
+
+    placares = []
+
+    for gols_casa in range(4):
+
+        for gols_fora in range(4):
+
+            prob_placar = (
+                poisson(
+                    gols_esperados_casa,
+                    gols_casa
+                )
+                *
+                poisson(
+                    gols_esperados_fora,
+                    gols_fora
+                )
+            )
+
+            placares.append(
+                (
+                    f"{gols_casa} x {gols_fora}",
+                    prob_placar
+                )
+            )
+
+    placares.sort(
+        key=lambda x: x[1],
+        reverse=True
+    )
+
+    top_placares = placares[:5]
+
+    for placar, probabilidade in top_placares:
+
+        st.write(
+            f"{placar} = "
+            f"{round(probabilidade * 100, 2)}%"
+        )
+        # =========================
+    # OVER/UNDER 2.5
+    # =========================
+
+    total_gols_esperados = (
+        gols_esperados_casa +
+        gols_esperados_fora
+    )
+
+    prob_under25 = 0
+
+    for gols in range(3):
+
+        prob_under25 += poisson(
+            total_gols_esperados,
+            gols
+        )
+
+    prob_over25 = 1 - prob_under25
+
+    st.subheader("Over/Under 2.5")
+
+    st.write(
+        f"Over 2.5: "
+        f"{round(prob_over25 * 100, 2)}%"
+    )
+
+    st.write(
+        f"Under 2.5: "
+        f"{round(prob_under25 * 100, 2)}%"
     )
