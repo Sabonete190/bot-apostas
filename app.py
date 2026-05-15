@@ -227,42 +227,35 @@ forma_fora = st.number_input(
 )
 
 # =========================
-# FORÇA AUTOMÁTICA
+# FORÇA DOS TIMES
 # =========================
 
-def calcular_forca(odd):
+st.subheader("Força dos Times")
 
-    if odd <= 1.70:
-        return 1.35, "Muito Forte"
+forca_casa = st.selectbox(
 
-    elif odd <= 2.10:
-        return 1.20, "Forte"
+    "Força Time Casa",
 
-    elif odd <= 2.80:
-        return 1.00, "Médio"
-
-    elif odd <= 4.00:
-        return 0.80, "Fraco"
-
-    else:
-        return 0.65, "Muito Fraco"
-
-forca_casa_valor, nivel_casa = calcular_forca(
-    odd_casa
+    [
+        "Muito Forte",
+        "Forte",
+        "Médio",
+        "Fraco",
+        "Muito Fraco"
+    ]
 )
 
-forca_fora_valor, nivel_fora = calcular_forca(
-    odd_fora
-)
+forca_fora = st.selectbox(
 
-st.subheader("Força Automática")
+    "Força Time Fora",
 
-st.write(
-    f"Força Casa: {nivel_casa}"
-)
-
-st.write(
-    f"Força Fora: {nivel_fora}"
+    [
+        "Muito Forte",
+        "Forte",
+        "Médio",
+        "Fraco",
+        "Muito Fraco"
+    ]
 )
 
 # =========================
