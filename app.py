@@ -264,31 +264,6 @@ st.write(
 st.write(
     f"Força Fora: {nivel_fora}"
 )
-
-# =========================
-# MAPA DE FORÇA
-# =========================
-
-mapa_forca = {
-
-    "Muito Forte": 1.35,
-
-    "Forte": 1.20,
-
-    "Médio": 1.00,
-
-    "Fraco": 0.80,
-
-    "Muito Fraco": 0.65
-}
-
-forca_casa_valor = mapa_forca[
-    forca_casa
-]
-
-forca_fora_valor = mapa_forca[
-    forca_fora
-]
 # =========================
 # BOTÃO
 # =========================
