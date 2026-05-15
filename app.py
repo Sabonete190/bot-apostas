@@ -1119,5 +1119,3 @@ elif (
 st.success(  
     f"{perfil_jogo}"  
 )
-
-Assim está o meu código, o fluxo está errado?
