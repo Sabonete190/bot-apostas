@@ -525,6 +525,17 @@ if st.button("Analisar Jogo"):
         gols_esperados_fora
     )
 
+    # =========================
+# AJUSTE DA LIGA
+# =========================
+
+ajuste_liga_gols = (
+    media_gols_liga / 2.50
+)
+
+total_gols_esperados *= (
+    ajuste_liga_gols
+)
     prob_under25 = 0
 
     for gols in range(3):
