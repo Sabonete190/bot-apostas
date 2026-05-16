@@ -604,17 +604,17 @@ if st.button("Analisar Jogo"):
 
     prob_btts_sim = (
 
-    (1 - prob_btts_nao)
+        (1 - prob_btts_nao)
 
-    * media_btts_liga
+        * media_btts_liga
 
-    / 0.50
-)
+        / 0.50
+    )
 
-prob_btts_sim = min(
-    prob_btts_sim,
-    0.95
-)
+    prob_btts_sim = min(
+        prob_btts_sim,
+        0.95
+    )
 
     st.subheader("BTTS")
 
