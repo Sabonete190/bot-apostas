@@ -601,7 +601,19 @@ total_gols_esperados *= (
         (prob_casa_0 * prob_fora_0)
     )
 
-    prob_btts_sim = 1 - prob_btts_nao
+    prob_btts_sim = (
+
+    (1 - prob_btts_nao)
+
+    * media_btts_liga
+
+    / 0.50
+)
+
+prob_btts_sim = min(
+    prob_btts_sim,
+    0.95
+)
 
     st.subheader("BTTS")
 
