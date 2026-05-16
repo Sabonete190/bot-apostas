@@ -315,6 +315,23 @@ time_fora = st.text_input(
 campeonato = st.text_input(
     "Campeonato"
 )
+
+# =========================
+# DADOS DO BRASILEIRÃO
+# =========================
+
+media_gols_liga = 2.63
+
+media_btts_liga = 0.57
+
+media_over35_liga = 0.49
+
+media_mandante_liga = 0.47
+
+media_visitante_liga = 0.24
+
+media_empate_liga = 0.29
+
 # =========================
 # BOTÃO
 # =========================
