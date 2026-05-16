@@ -301,6 +301,21 @@ st.write(
     f"Força Fora: {nivel_fora}"
 )
 # =========================
+# IDENTIFICAÇÃO DO JOGO
+# =========================
+
+time_casa = st.text_input(
+    "Time Casa"
+)
+
+time_fora = st.text_input(
+    "Time Fora"
+)
+
+campeonato = st.text_input(
+    "Campeonato"
+)
+# =========================
 # BOTÃO
 # =========================
 
