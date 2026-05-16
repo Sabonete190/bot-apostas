@@ -516,9 +516,9 @@ if st.button("Analisar Jogo"):
             f"{placar} = "
             f"{round(probabilidade * 100, 2)}%"
         )
-        # =========================
-    # OVER/UNDER 2.5
-    # =========================
+     # =========================
+# OVER/UNDER 2.5
+# =========================
 
     total_gols_esperados = (
         gols_esperados_casa +
@@ -526,16 +526,17 @@ if st.button("Analisar Jogo"):
     )
 
     # =========================
-# AJUSTE DA LIGA
-# =========================
+    # AJUSTE DA LIGA
+    # =========================
 
-ajuste_liga_gols = (
-    media_gols_liga / 2.50
-)
+    ajuste_liga_gols = (
+        media_gols_liga / 2.50
+    )
 
-total_gols_esperados *= (
-    ajuste_liga_gols
-)
+    total_gols_esperados *= (
+        ajuste_liga_gols
+    )
+
     prob_under25 = 0
 
     for gols in range(3):
@@ -557,7 +558,7 @@ total_gols_esperados *= (
     st.write(
         f"Under 2.5: "
         f"{round(prob_under25 * 100, 2)}%"
-    )
+    )   
     # =========================
     # ODDS JUSTAS OVER/UNDER
     # =========================
