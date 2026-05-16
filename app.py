@@ -1233,3 +1233,51 @@ if st.button("Analisar Jogo"):
         st.error(
             "❌ Nenhuma aposta de valor encontrada"
         )
+# =========================
+# SALVAR APOSTA
+# =========================
+
+if st.button("Salvar Aposta"):
+
+    dados_aposta = {
+
+        "Time Casa": time_casa,
+
+        "Time Fora": time_fora,
+
+        "Campeonato": campeonato,
+
+        "Mercado": melhor_mercado,
+
+        "Odd Casa": odd_casa,
+
+        "Odd Empate": odd_empate,
+
+        "Odd Fora": odd_fora,
+
+        "EV Casa": round(ev_casa, 2),
+
+        "EV Empate": round(ev_empate, 2),
+
+        "EV Fora": round(ev_fora, 2),
+
+        "Edge Casa": round(edge_casa, 4),
+
+        "Edge Empate": round(edge_empate, 4),
+
+        "Edge Fora": round(edge_fora, 4),
+
+        "Stake": stake,
+
+        "Confiança": confianca,
+
+        "Perfil": perfil_jogo
+    }
+
+    salvar_aposta(
+        dados_aposta
+    )
+
+    st.success(
+        "✅ Aposta salva no histórico"
+)
