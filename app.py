@@ -1,5 +1,7 @@
 import streamlit as st
 import math
+import pandas as pd
+import os
 
 # =========================
 # FUNÇÃO KELLY
@@ -25,6 +27,40 @@ st.set_page_config(
 st.title("📊 Bot de Apostas Profissional")
 
 st.write("Preencha os dados da partida.")
+# =========================
+# HISTÓRICO CSV
+# =========================
+
+ARQUIVO_HISTORICO = "historico_apostas.csv"
+
+def salvar_aposta(dados):
+
+    df_novo = pd.DataFrame([dados])
+
+    if os.path.exists(
+        ARQUIVO_HISTORICO
+    ):
+
+        df_antigo = pd.read_csv(
+            ARQUIVO_HISTORICO
+        )
+
+        df_final = pd.concat(
+            [
+                df_antigo,
+                df_novo
+            ],
+            ignore_index=True
+        )
+
+    else:
+
+        df_final = df_novo
+
+    df_final.to_csv(
+        ARQUIVO_HISTORICO,
+        index=False
+    )
 
 # =========================
 # ODDS 1X2
