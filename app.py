@@ -1479,7 +1479,6 @@ if st.button("Salvar Aposta"):
         "N/A"
     )
 }
-
 salvar_aposta(
         dados_aposta
     )
