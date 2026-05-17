@@ -1306,8 +1306,7 @@ if st.button("Analisar Jogo"):
     }    
     
 if st.button("Salvar Aposta"):
-
-# =========================
+   # =========================
 # RESULTADO FINAL
 # =========================
 
@@ -1508,12 +1507,4 @@ if st.button("Salvar Aposta"):
 
     st.success(
         "✅ Aposta salva no histórico"
-    )
-
-        resultado_aposta = "GREEN"
-
-    # Over 2.5
-
-    elif (
-        mercado_salvo == "Over 2.5"
-        ": ro
+    ) 
