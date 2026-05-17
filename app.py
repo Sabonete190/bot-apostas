@@ -333,13 +333,6 @@ media_visitante_liga = 0.24
 media_empate_liga = 0.29
 
 # =========================
-# SESSION STATE
-# =========================
-
-if "resultado" not in st.session_state:
-    st.session_state.resultado = {}  
-    
-# =========================
 # BOTÃO
 # =========================
 
@@ -1281,144 +1274,13 @@ if st.button("Analisar Jogo"):
         st.error(
             "❌ Nenhuma aposta de valor encontrada"
         )
-        
-# =========================
-    # SALVAR RESULTADOS
-    # =========================
-
-    st.session_state.resultado = {
-
-        "melhor_mercado": melhor_mercado,
-
-        "ev_casa": ev_casa,
-        "ev_empate": ev_empate,
-        "ev_fora": ev_fora,
-
-        "edge_casa": edge_casa,
-        "edge_empate": edge_empate,
-        "edge_fora": edge_fora,
-
-        "stake": stake,
-
-        "confianca": confianca,
-
-        "perfil": perfil_jogo
-    }    
-    
-if st.button("Salvar Aposta"):
-   # =========================
-# RESULTADO FINAL
-# =========================
-
-gols_finais_casa = st.number_input(
-    "Gols Final Casa",
-    min_value=0,
-    step=1
-)
-
-gols_finais_fora = st.number_input(
-    "Gols Final Fora",
-    min_value=0,
-    step=1
-)
-
 # =========================
 # SALVAR APOSTA
 # =========================
 
 if st.button("Salvar Aposta"):
 
-    # =========================
-    # RESULTADO DA APOSTA
-    # =========================
-
-    resultado_aposta = "RED"
-
-    mercado_salvo = st.session_state.resultado.get(
-        "melhor_mercado",
-        ""
-    )
-
-    # Vitória Casa
-
-    if (
-        mercado_salvo == "Vitória Casa"
-        and gols_finais_casa > gols_finais_fora
-    ):
-
-        resultado_aposta = "GREEN"
-
-    # Empate
-
-    elif (
-        mercado_salvo == "Empate"
-        and gols_finais_casa == gols_finais_fora
-    ):
-
-        resultado_aposta = "GREEN"
-
-    # Vitória Fora
-
-    elif (
-        mercado_salvo == "Vitória Fora"
-        and gols_finais_fora > gols_finais_casa
-    ):
-
-        resultado_aposta = "GREEN"
-
-    # Over 2.5
-
-    elif (
-        mercado_salvo == "Over 2.5"
-        and (
-            gols_finais_casa +
-            gols_finais_fora
-        ) >= 3
-    ):
-
-        resultado_aposta = "GREEN"
-
-    # Under 2.5
-
-    elif (
-        mercado_salvo == "Under 2.5"
-        and (
-            gols_finais_casa +
-            gols_finais_fora
-        ) <= 2
-    ):
-
-        resultado_aposta = "GREEN"
-
-    # BTTS SIM
-
-    elif (
-        mercado_salvo == "BTTS SIM"
-        and gols_finais_casa >= 1
-        and gols_finais_fora >= 1
-    ):
-
-        resultado_aposta = "GREEN"
-
-    # BTTS NÃO
-
-    elif (
-        mercado_salvo == "BTTS NÃO"
-        and (
-            gols_finais_casa == 0
-            or gols_finais_fora == 0
-        )
-    ):
-
-        resultado_aposta = "GREEN"
-
     dados_aposta = {
-
-        "Resultado": resultado_aposta,
-
-        "Gols Casa": gols_finais_casa,
-
-        "Gols Fora": gols_finais_fora,
 
         "Time Casa": time_casa,
 
@@ -1426,10 +1288,7 @@ if st.button("Salvar Aposta"):
 
         "Campeonato": campeonato,
 
-        "Mercado": st.session_state.resultado.get(
-            "melhor_mercado",
-            "N/A"
-        ),
+        "Mercado": melhor_mercado,
 
         "Odd Casa": odd_casa,
 
@@ -1437,68 +1296,23 @@ if st.button("Salvar Aposta"):
 
         "Odd Fora": odd_fora,
 
-        "EV Casa": round(
-            st.session_state.resultado.get(
-                "ev_casa",
-                0
-            ),
-            2
-        ),
+        "EV Casa": round(ev_casa, 2),
 
-        "EV Empate": round(
-            st.session_state.resultado.get(
-                "ev_empate",
-                0
-            ),
-            2
-        ),
+        "EV Empate": round(ev_empate, 2),
 
-        "EV Fora": round(
-            st.session_state.resultado.get(
-                "ev_fora",
-                0
-            ),
-            2
-        ),
+        "EV Fora": round(ev_fora, 2),
 
-        "Edge Casa": round(
-            st.session_state.resultado.get(
-                "edge_casa",
-                0
-            ),
-            4
-        ),
+        "Edge Casa": round(edge_casa, 4),
 
-        "Edge Empate": round(
-            st.session_state.resultado.get(
-                "edge_empate",
-                0
-            ),
-            4
-        ),
+        "Edge Empate": round(edge_empate, 4),
 
-        "Edge Fora": round(
-            st.session_state.resultado.get(
-                "edge_fora",
-                0
-            ),
-            4
-        ),
+        "Edge Fora": round(edge_fora, 4),
 
-        "Stake": st.session_state.resultado.get(
-            "stake",
-            0
-        ),
+        "Stake": stake,
 
-        "Confiança": st.session_state.resultado.get(
-            "confianca",
-            0
-        ),
+        "Confiança": confianca,
 
-        "Perfil": st.session_state.resultado.get(
-            "perfil",
-            "N/A"
-        )
+        "Perfil": perfil_jogo
     }
 
     salvar_aposta(
@@ -1507,4 +1321,4 @@ if st.button("Salvar Aposta"):
 
     st.success(
         "✅ Aposta salva no histórico"
-    ) 
+)
