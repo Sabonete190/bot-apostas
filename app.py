@@ -1320,9 +1320,9 @@ if st.button("Salvar Aposta"):
         "Campeonato": campeonato,
 
         "Mercado": st.session_state.resultado.get(
-    "melhor_mercado",
-    "N/A"
-),
+            "melhor_mercado",
+            "N/A"
+        ),
 
         "Odd Casa": odd_casa,
 
@@ -1331,66 +1331,68 @@ if st.button("Salvar Aposta"):
         "Odd Fora": odd_fora,
 
         "EV Casa": round(
-    st.session_state.resultado.get(
-        "ev_casa",
-        0
-    ),
-    2
-),
+            st.session_state.resultado.get(
+                "ev_casa",
+                0
+            ),
+            2
+        ),
+
         "EV Empate": round(
-    st.session_state.resultado.get(
-        "ev_empate",
-        0
-    ),
-    2
-),
+            st.session_state.resultado.get(
+                "ev_empate",
+                0
+            ),
+            2
+        ),
 
         "EV Fora": round(
-    st.session_state.resultado.get(
-        "ev_fora",
-        0
-    ),
-    2
-),
+            st.session_state.resultado.get(
+                "ev_fora",
+                0
+            ),
+            2
+        ),
 
         "Edge Casa": round(
-    st.session_state.resultado.get(
-        "edge_casa",
-        0
-    ),
-    4
-),
+            st.session_state.resultado.get(
+                "edge_casa",
+                0
+            ),
+            4
+        ),
 
         "Edge Empate": round(
-    st.session_state.resultado.get(
-        "edge_empate",
-        0
-    ),
-    4
-),
+            st.session_state.resultado.get(
+                "edge_empate",
+                0
+            ),
+            4
+        ),
 
         "Edge Fora": round(
-    st.session_state.resultado.get(
-        "edge_fora",
-        0
-    ),
-    4
-),
+            st.session_state.resultado.get(
+                "edge_fora",
+                0
+            ),
+            4
+        ),
 
         "Stake": st.session_state.resultado.get(
-    "stake",
-    0
-),
+            "stake",
+            0
+        ),
 
         "Confiança": st.session_state.resultado.get(
-    "confianca",
-    0
-),
+            "confianca",
+            0
+        ),
 
         "Perfil": st.session_state.resultado.get(
-    "perfil",
-    "N/A"
-)
+            "perfil",
+            "N/A"
+        )
+    }
 
     salvar_aposta(
         dados_aposta
@@ -1398,4 +1400,4 @@ if st.button("Salvar Aposta"):
 
     st.success(
         "✅ Aposta salva no histórico"
-)
+    )
