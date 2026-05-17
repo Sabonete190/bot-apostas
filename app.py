@@ -1394,7 +1394,7 @@ if st.button("Salvar Aposta"):
     dados_aposta = {
 
         "Resultado": resultado_aposta
-    }
+    
 
 "Gols Casa": gols_finais_casa,
 
