@@ -1330,24 +1330,67 @@ if st.button("Salvar Aposta"):
 
         "Odd Fora": odd_fora,
 
-        "EV Casa": round(ev_casa, 2),
+        "EV Casa": round(
+    st.session_state.resultado.get(
+        "ev_casa",
+        0
+    ),
+    2
+),
+        "EV Empate": round(
+    st.session_state.resultado.get(
+        "ev_empate",
+        0
+    ),
+    2
+),
 
-        "EV Empate": round(ev_empate, 2),
+        "EV Fora": round(
+    st.session_state.resultado.get(
+        "ev_fora",
+        0
+    ),
+    2
+),
 
-        "EV Fora": round(ev_fora, 2),
+        "Edge Casa": round(
+    st.session_state.resultado.get(
+        "edge_casa",
+        0
+    ),
+    4
+),
 
-        "Edge Casa": round(edge_casa, 4),
+        "Edge Empate": round(
+    st.session_state.resultado.get(
+        "edge_empate",
+        0
+    ),
+    4
+),
 
-        "Edge Empate": round(edge_empate, 4),
+        "Edge Fora": round(
+    st.session_state.resultado.get(
+        "edge_fora",
+        0
+    ),
+    4
+),
 
-        "Edge Fora": round(edge_fora, 4),
+        "Stake": st.session_state.resultado.get(
+    "stake",
+    0
+),
 
-        "Stake": stake,
+        "Confiança": st.session_state.resultado.get(
+    "confianca",
+    0
+),
 
-        "Confiança": confianca,
-
-        "Perfil": perfil_jogo
-    }
+        "Perfil": st.session_state.resultado.get(
+    "perfil",
+    "N/A"
+)
 
     salvar_aposta(
         dados_aposta
