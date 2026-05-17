@@ -1275,8 +1275,35 @@ if st.button("Analisar Jogo"):
             "❌ Nenhuma aposta de valor encontrada"
         )
         
-        if "resultado" not in st.session_state:
-    st.session_state.resultado = {}
+# =========================
+# SESSION STATE
+# =========================
+
+if "resultado" not in st.session_state:
+    st.session_state.resultado = {}  
+# =========================
+    # SALVAR RESULTADOS
+    # =========================
+
+    st.session_state.resultado = {
+
+        "melhor_mercado": melhor_mercado,
+
+        "ev_casa": ev_casa,
+        "ev_empate": ev_empate,
+        "ev_fora": ev_fora,
+
+        "edge_casa": edge_casa,
+        "edge_empate": edge_empate,
+        "edge_fora": edge_fora,
+
+        "stake": stake,
+
+        "confianca": confianca,
+
+        "perfil": perfil_jogo
+    }    
+    
 # =========================
 # SALVAR APOSTA
 # =========================
@@ -1291,7 +1318,10 @@ if st.button("Salvar Aposta"):
 
         "Campeonato": campeonato,
 
-        "Mercado": melhor_mercado,
+        "Mercado": st.session_state.resultado.get(
+    "melhor_mercado",
+    "N/A"
+),
 
         "Odd Casa": odd_casa,
 
