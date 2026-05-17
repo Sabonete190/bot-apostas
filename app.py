@@ -1485,7 +1485,7 @@ salvar_aposta(
 
     st.success(
         "✅ Aposta salva no histórico"
-    )
+    ) 
 # =========================
 # RESULTADO FINAL
 # =========================
