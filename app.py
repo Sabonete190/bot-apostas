@@ -1274,6 +1274,9 @@ if st.button("Analisar Jogo"):
         st.error(
             "❌ Nenhuma aposta de valor encontrada"
         )
+        
+        if "resultado" not in st.session_state:
+    st.session_state.resultado = {}
 # =========================
 # SALVAR APOSTA
 # =========================
