@@ -1305,89 +1305,96 @@ if st.button("Analisar Jogo"):
         "perfil": perfil_jogo
     }    
     
-# =========================
-# SALVAR APOSTA
-# =========================
-
 if st.button("Salvar Aposta"):
 
-resultado_aposta = "RED"
+    # =========================
+    # RESULTADO DA APOSTA
+    # =========================
 
-mercado_salvo = st.session_state.resultado.get(
-    "melhor_mercado",
-    ""
-)
+    resultado_aposta = "RED"
 
-# Vitória Casa
-
-if (
-    mercado_salvo == "Vitória Casa"
-    and gols_finais_casa > gols_finais_fora
-):
-
-    resultado_aposta = "GREEN"
-
-# Empate
-
-elif (
-    mercado_salvo == "Empate"
-    and gols_finais_casa == gols_finais_fora
-):
-
-    resultado_aposta = "GREEN"
-
-# Vitória Fora
-
-elif (
-    mercado_salvo == "Vitória Fora"
-    and gols_finais_fora > gols_finais_casa
-):
-
-    resultado_aposta = "GREEN"
-
-# Over 2.5
-
-elif (
-    mercado_salvo == "Over 2.5"
-    and (gols_finais_casa + gols_finais_fora) >= 3
-):
-
-    resultado_aposta = "GREEN"
-
-# Under 2.5
-
-elif (
-    mercado_salvo == "Under 2.5"
-    and (gols_finais_casa + gols_finais_fora) <= 2
-):
-
-    resultado_aposta = "GREEN"
-
-# BTTS SIM
-
-elif (
-    mercado_salvo == "BTTS SIM"
-    and gols_finais_casa >= 1
-    and gols_finais_fora >= 1
-):
-
-    resultado_aposta = "GREEN"
-
-# BTTS NÃO
-
-elif (
-    mercado_salvo == "BTTS NÃO"
-    and (
-        gols_finais_casa == 0
-        or gols_finais_fora == 0
+    mercado_salvo = st.session_state.resultado.get(
+        "melhor_mercado",
+        ""
     )
-):
 
-    resultado_aposta = "GREEN"
-    
+    # Vitória Casa
+
+    if (
+        mercado_salvo == "Vitória Casa"
+        and gols_finais_casa > gols_finais_fora
+    ):
+
+        resultado_aposta = "GREEN"
+
+    # Empate
+
+    elif (
+        mercado_salvo == "Empate"
+        and gols_finais_casa == gols_finais_fora
+    ):
+
+        resultado_aposta = "GREEN"
+
+    # Vitória Fora
+
+    elif (
+        mercado_salvo == "Vitória Fora"
+        and gols_finais_fora > gols_finais_casa
+    ):
+
+        resultado_aposta = "GREEN"
+
+    # Over 2.5
+
+    elif (
+        mercado_salvo == "Over 2.5"
+        and (
+            gols_finais_casa +
+            gols_finais_fora
+        ) >= 3
+    ):
+
+        resultado_aposta = "GREEN"
+
+    # Under 2.5
+
+    elif (
+        mercado_salvo == "Under 2.5"
+        and (
+            gols_finais_casa +
+            gols_finais_fora
+        ) <= 2
+    ):
+
+        resultado_aposta = "GREEN"
+
+    # BTTS SIM
+
+    elif (
+        mercado_salvo == "BTTS SIM"
+        and gols_finais_casa >= 1
+        and gols_finais_fora >= 1
+    ):
+
+        resultado_aposta = "GREEN"
+
+    # BTTS NÃO
+
+    elif (
+        mercado_salvo == "BTTS NÃO"
+        and (
+            gols_finais_casa == 0
+            or gols_finais_fora == 0
+        )
+    ):
+
+        resultado_aposta = "GREEN"
+
     dados_aposta = {
-        
-        "Resultado": resultado_aposta,
+
+        "Resultado": resultado_aposta
+    }
 
 "Gols Casa": gols_finais_casa,
 
