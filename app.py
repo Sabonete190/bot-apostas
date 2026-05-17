@@ -1307,6 +1307,28 @@ if st.button("Analisar Jogo"):
     
 if st.button("Salvar Aposta"):
 
+# =========================
+# RESULTADO FINAL
+# =========================
+
+gols_finais_casa = st.number_input(
+    "Gols Final Casa",
+    min_value=0,
+    step=1
+)
+
+gols_finais_fora = st.number_input(
+    "Gols Final Fora",
+    min_value=0,
+    step=1
+)
+
+# =========================
+# SALVAR APOSTA
+# =========================
+
+if st.button("Salvar Aposta"):
+
     # =========================
     # RESULTADO DA APOSTA
     # =========================
@@ -1393,111 +1415,105 @@ if st.button("Salvar Aposta"):
 
     dados_aposta = {
 
-    "Resultado": resultado_aposta,
+        "Resultado": resultado_aposta,
 
-    "Gols Casa": gols_finais_casa,
+        "Gols Casa": gols_finais_casa,
 
-    "Gols Fora": gols_finais_fora,
+        "Gols Fora": gols_finais_fora,
 
-    "Time Casa": time_casa,
+        "Time Casa": time_casa,
 
-    "Time Fora": time_fora,
+        "Time Fora": time_fora,
 
-    "Campeonato": campeonato,
+        "Campeonato": campeonato,
 
-    "Mercado": st.session_state.resultado.get(
-        "melhor_mercado",
-        "N/A"
-    ),
+        "Mercado": st.session_state.resultado.get(
+            "melhor_mercado",
+            "N/A"
+        ),
 
-    "Odd Casa": odd_casa,
+        "Odd Casa": odd_casa,
 
-    "Odd Empate": odd_empate,
+        "Odd Empate": odd_empate,
 
-    "Odd Fora": odd_fora,
+        "Odd Fora": odd_fora,
 
-    "EV Casa": round(
-        st.session_state.resultado.get(
-            "ev_casa",
+        "EV Casa": round(
+            st.session_state.resultado.get(
+                "ev_casa",
+                0
+            ),
+            2
+        ),
+
+        "EV Empate": round(
+            st.session_state.resultado.get(
+                "ev_empate",
+                0
+            ),
+            2
+        ),
+
+        "EV Fora": round(
+            st.session_state.resultado.get(
+                "ev_fora",
+                0
+            ),
+            2
+        ),
+
+        "Edge Casa": round(
+            st.session_state.resultado.get(
+                "edge_casa",
+                0
+            ),
+            4
+        ),
+
+        "Edge Empate": round(
+            st.session_state.resultado.get(
+                "edge_empate",
+                0
+            ),
+            4
+        ),
+
+        "Edge Fora": round(
+            st.session_state.resultado.get(
+                "edge_fora",
+                0
+            ),
+            4
+        ),
+
+        "Stake": st.session_state.resultado.get(
+            "stake",
             0
         ),
-        2
-    ),
 
-    "EV Empate": round(
-        st.session_state.resultado.get(
-            "ev_empate",
+        "Confiança": st.session_state.resultado.get(
+            "confianca",
             0
         ),
-        2
-    ),
 
-    "EV Fora": round(
-        st.session_state.resultado.get(
-            "ev_fora",
-            0
-        ),
-        2
-    ),
+        "Perfil": st.session_state.resultado.get(
+            "perfil",
+            "N/A"
+        )
+    }
 
-    "Edge Casa": round(
-        st.session_state.resultado.get(
-            "edge_casa",
-            0
-        ),
-        4
-    ),
-
-    "Edge Empate": round(
-        st.session_state.resultado.get(
-            "edge_empate",
-            0
-        ),
-        4
-    ),
-
-    "Edge Fora": round(
-        st.session_state.resultado.get(
-            "edge_fora",
-            0
-        ),
-        4
-    ),
-
-    "Stake": st.session_state.resultado.get(
-        "stake",
-        0
-    ),
-
-    "Confiança": st.session_state.resultado.get(
-        "confianca",
-        0
-    ),
-
-    "Perfil": st.session_state.resultado.get(
-        "perfil",
-        "N/A"
-    )
-}
-salvar_aposta(
+    salvar_aposta(
         dados_aposta
     )
 
     st.success(
         "✅ Aposta salva no histórico"
-    ) 
-# =========================
-# RESULTADO FINAL
-# =========================
+    )
 
-gols_finais_casa = st.number_input(
-    "Gols Final Casa",
-    min_value=0,
-    step=1
-)
+        resultado_aposta = "GREEN"
 
-gols_finais_fora = st.number_input(
-    "Gols Final Fora",
-    min_value=0,
-    step=1
-)
+    # Over 2.5
+
+    elif (
+        mercado_salvo == "Over 2.5"
+        ": ro
