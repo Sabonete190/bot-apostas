@@ -333,6 +333,13 @@ media_visitante_liga = 0.24
 media_empate_liga = 0.29
 
 # =========================
+# SESSION STATE
+# =========================
+
+if "resultado" not in st.session_state:
+    st.session_state.resultado = {}  
+    
+# =========================
 # BOTÃO
 # =========================
 
@@ -1275,12 +1282,6 @@ if st.button("Analisar Jogo"):
             "❌ Nenhuma aposta de valor encontrada"
         )
         
-# =========================
-# SESSION STATE
-# =========================
-
-if "resultado" not in st.session_state:
-    st.session_state.resultado = {}  
 # =========================
     # SALVAR RESULTADOS
     # =========================
