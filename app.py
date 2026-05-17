@@ -1393,29 +1393,29 @@ if st.button("Salvar Aposta"):
 
     dados_aposta = {
 
-        "Resultado": resultado_aposta
-    
+    "Resultado": resultado_aposta,
 
-"Gols Casa": gols_finais_casa,
+    "Gols Casa": gols_finais_casa,
 
-"Gols Fora": gols_finais_fora,
+    "Gols Fora": gols_finais_fora,
 
-        "Time Casa": time_casa,
+    "Time Casa": time_casa,
 
-        "Time Fora": time_fora,
+    "Time Fora": time_fora,
 
-        "Campeonato": campeonato,
+    "Campeonato": campeonato,
 
-        "Mercado": st.session_state.resultado.get(
-            "melhor_mercado",
-            "N/A"
-        ),
+    "Mercado": st.session_state.resultado.get(
+        "melhor_mercado",
+        "N/A"
+    ),
 
-        "Odd Casa": odd_casa,
+    "Odd Casa": odd_casa,
 
-        "Odd Empate": odd_empate,
+    "Odd Empate": odd_empate,
 
-        "Odd Fora": odd_fora,
+    "Odd Fora": odd_fora
+}
 
         "EV Casa": round(
             st.session_state.resultado.get(
