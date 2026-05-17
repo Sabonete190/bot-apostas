@@ -1482,12 +1482,10 @@ if st.button("Salvar Aposta"):
 
 salvar_aposta(
     dados_aposta
-)
-
-    st.success(
+)    
+st.success(
         "✅ Aposta salva no histórico"
     )
-
 # =========================
 # RESULTADO FINAL
 # =========================
