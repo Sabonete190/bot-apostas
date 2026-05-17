@@ -1414,76 +1414,75 @@ if st.button("Salvar Aposta"):
 
     "Odd Empate": odd_empate,
 
-    "Odd Fora": odd_fora
+    "Odd Fora": odd_fora,
+
+    "EV Casa": round(
+        st.session_state.resultado.get(
+            "ev_casa",
+            0
+        ),
+        2
+    ),
+
+    "EV Empate": round(
+        st.session_state.resultado.get(
+            "ev_empate",
+            0
+        ),
+        2
+    ),
+
+    "EV Fora": round(
+        st.session_state.resultado.get(
+            "ev_fora",
+            0
+        ),
+        2
+    ),
+
+    "Edge Casa": round(
+        st.session_state.resultado.get(
+            "edge_casa",
+            0
+        ),
+        4
+    ),
+
+    "Edge Empate": round(
+        st.session_state.resultado.get(
+            "edge_empate",
+            0
+        ),
+        4
+    ),
+
+    "Edge Fora": round(
+        st.session_state.resultado.get(
+            "edge_fora",
+            0
+        ),
+        4
+    ),
+
+    "Stake": st.session_state.resultado.get(
+        "stake",
+        0
+    ),
+
+    "Confiança": st.session_state.resultado.get(
+        "confianca",
+        0
+    ),
+
+    "Perfil": st.session_state.resultado.get(
+        "perfil",
+        "N/A"
+    )
 }
 
-        "EV Casa": round(
-            st.session_state.resultado.get(
-                "ev_casa",
-                0
-            ),
-            2
-        ),
-
-        "EV Empate": round(
-            st.session_state.resultado.get(
-                "ev_empate",
-                0
-            ),
-            2
-        ),
-
-        "EV Fora": round(
-            st.session_state.resultado.get(
-                "ev_fora",
-                0
-            ),
-            2
-        ),
-
-        "Edge Casa": round(
-            st.session_state.resultado.get(
-                "edge_casa",
-                0
-            ),
-            4
-        ),
-
-        "Edge Empate": round(
-            st.session_state.resultado.get(
-                "edge_empate",
-                0
-            ),
-            4
-        ),
-
-        "Edge Fora": round(
-            st.session_state.resultado.get(
-                "edge_fora",
-                0
-            ),
-            4
-        ),
-
-        "Stake": st.session_state.resultado.get(
-            "stake",
-            0
-        ),
-
-        "Confiança": st.session_state.resultado.get(
-            "confianca",
-            0
-        ),
-
-        "Perfil": st.session_state.resultado.get(
-            "perfil",
-            "N/A"
-        )
-    }
-
-    salvar_aposta(
-        dados_aposta
-    )
+salvar_aposta(
+    dados_aposta
+)
 
     st.success(
         "✅ Aposta salva no histórico"
