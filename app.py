@@ -884,7 +884,7 @@ if st.button("Analisar Jogo"):
     st.write(f"Empate: {round(prob_empate * 100, 2)}%")
     st.write(f"Fora: {round(prob_fora * 100, 2)}%")
 
-# =========================
+    # =========================
     # EV
     # =========================
 
@@ -952,7 +952,7 @@ if st.button("Analisar Jogo"):
         f"Edge Fora: "
         f"{round(edge_fora * 100, 2)}%"
     )
-# =========================
+    # =========================
     # EDGE
     # =========================
 
