@@ -1104,45 +1104,50 @@ if st.button("Analisar Jogo"):
             "❌ Jogo Sem Valor"
         )
 # =========================
-    # MELHOR MERCADO
-    # =========================
+# MELHOR MERCADO
+# =========================
 
-    st.subheader("Melhor Mercado")
+st.subheader("Melhor Mercado")
 
-    melhor_mercado = "Sem valor claro"
+melhor_mercado = "Sem valor claro"
 
-    # 1x2
+# 1X2
 
-    if edge_casa > 0.10:
+if edge_casa > 0.10:
 
-        melhor_mercado = "🔥 Vitória Casa"
+    melhor_mercado = "🔥 Vitória Casa"
 
-    elif edge_fora > 0.10:
+elif edge_fora > 0.10:
 
-        melhor_mercado = "🔥 Vitória Fora"
+    melhor_mercado = "🔥 Vitória Fora"
 
-    # Over
+elif edge_empate > 0.08:
 
-    if (
-        prob_over25 >= 0.60
-        and forca_gol >= 1.2
-    ):
+    melhor_mercado = "🤝 Empate"
 
-        melhor_mercado = "🔥 Over 2.5"
+# Over / Under
 
-    # BTTS
+elif edge_over25 > 0.08:
 
-    if (
-        prob_btts_sim >= 0.60
-        and gols_esperados_casa >= 1
-        and gols_esperados_fora >= 1
-    ):
+    melhor_mercado = "⚽ Over 2.5"
 
-        melhor_mercado = "🔥 BTTS SIM"
+elif edge_under25 > 0.08:
 
-    st.success(
-        f"Mercado Ideal: {melhor_mercado}"
-    )
+    melhor_mercado = "🛡️ Under 2.5"
+
+# BTTS
+
+elif edge_btts_sim > 0.08:
+
+    melhor_mercado = "🔥 BTTS SIM"
+
+elif edge_btts_nao > 0.08:
+
+    melhor_mercado = "❌ BTTS NÃO"
+
+st.success(
+    f"Melhor Mercado: {melhor_mercado}"
+)
 # =========================
     # GESTÃO DE STAKE
     # =========================
