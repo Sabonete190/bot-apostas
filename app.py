@@ -1417,23 +1417,29 @@ else:
         "Nenhuma aposta com ID encontrada."
     )
 
-aposta_selecionada = historico_resultados.loc[
-    historico_resultados["ID"] == id_aposta
-]
+if "ID" in historico_resultados.columns:
 
-st.write(
-    "Aposta selecionada:"
-)
-
-st.write(
-    aposta_selecionada[
-        [
-            "Time Casa",
-            "Time Fora",
-            "Mercado"
-        ]
+    aposta_selecionada = historico_resultados[
+        historico_resultados["ID"] == id_aposta
     ]
-)
+
+    st.write("Aposta selecionada:")
+
+    st.write(
+        aposta_selecionada[
+            [
+                "Time Casa",
+                "Time Fora",
+                "Mercado"
+            ]
+        ]
+    )
+
+else:
+
+    st.warning(
+        "Salve uma nova aposta para gerar IDs."
+    )
 resultado_aposta = st.selectbox(
     "Resultado",
     [
