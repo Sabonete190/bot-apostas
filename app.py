@@ -1384,14 +1384,36 @@ if st.button("Salvar Aposta"):
 # =========================
 
 st.subheader("Resultado da Aposta")
-historico_resultados = pd.read_csv(
-    ARQUIVO_HISTORICO
-)
+# =========================
+# CARREGAR HISTÓRICO
+# =========================
 
-id_aposta = st.selectbox(
-    "Selecione a aposta",
-    historico_resultados["ID"]
-)
+if os.path.exists(ARQUIVO_HISTORICO):
+
+    historico_resultados = pd.read_csv(
+        ARQUIVO_HISTORICO
+    )
+
+else:
+
+    historico_resultados = pd.DataFrame()
+
+# =========================
+# SELECIONAR APOSTA
+# =========================
+
+if not historico_resultados.empty:
+
+    id_aposta = st.selectbox(
+        "Selecione a aposta",
+        historico_resultados["ID"]
+    )
+
+else:
+
+    st.warning(
+        "Nenhuma aposta salva ainda."
+    )
 aposta_selecionada = historico_resultados.loc[
     historico_resultados["ID"] == id_aposta
 ]
