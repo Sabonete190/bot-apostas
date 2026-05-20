@@ -1401,7 +1401,6 @@ else:
 # =========================
 # SELECIONAR APOSTA
 # =========================
-
 if (
     not historico_resultados.empty
     and "ID" in historico_resultados.columns
@@ -1418,11 +1417,6 @@ else:
         "Nenhuma aposta com ID encontrada."
     )
 
-else:
-
-    st.warning(
-        "Nenhuma aposta salva ainda."
-    )
 aposta_selecionada = historico_resultados.loc[
     historico_resultados["ID"] == id_aposta
 ]
