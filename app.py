@@ -1288,6 +1288,7 @@ if st.button("Analisar Jogo"):
 if st.button("Salvar Aposta"):
 
     dados_aposta = {
+        "ID": len(pd.read_csv(ARQUIVO_HISTORICO)) + 1 if os.path.exists(ARQUIVO_HISTORICO) else 1,
 
         "Time Casa": time_casa,
 
