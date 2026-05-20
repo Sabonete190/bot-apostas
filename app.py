@@ -1103,7 +1103,52 @@ if st.button("Analisar Jogo"):
         st.error(
             "❌ Jogo Sem Valor"
         )
+# =========================
+    # MELHOR MERCADO
+    # =========================
 
+    st.subheader("Melhor Mercado")
+
+    melhor_mercado = "Sem valor claro"
+
+    mercados = {
+
+        "🔥 Vitória Casa": edge_casa,
+        "🤝 Empate": edge_empate,
+        "🔥 Vitória Fora": edge_fora,
+
+        "⚽ Over 2.5": edge_over25,
+        "🛡️ Under 2.5": edge_under25,
+
+        "🔥 BTTS SIM": edge_btts_sim,
+        "❌ BTTS NÃO": edge_btts_nao
+    }
+
+    melhor_mercado = max(
+        mercados,
+        key=mercados.get
+    )
+
+    melhor_edge_mercado = mercados[
+        melhor_mercado
+    ]
+
+    if melhor_edge_mercado > 0:
+
+        st.success(
+            f"Melhor Mercado: {melhor_mercado}"
+        )
+
+        st.write(
+            f"Edge: "
+            f"{round(melhor_edge_mercado * 100, 2)}%"
+        )
+
+    else:
+
+        st.error(
+            "Sem mercado de valor"
+        )
     # =========================
     # GESTÃO DE STAKE
     # =========================
