@@ -1402,11 +1402,20 @@ else:
 # SELECIONAR APOSTA
 # =========================
 
-if not historico_resultados.empty:
+if (
+    not historico_resultados.empty
+    and "ID" in historico_resultados.columns
+):
 
     id_aposta = st.selectbox(
         "Selecione a aposta",
         historico_resultados["ID"]
+    )
+
+else:
+
+    st.warning(
+        "Nenhuma aposta com ID encontrada."
     )
 
 else:
