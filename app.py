@@ -1377,3 +1377,210 @@ if st.button("Salvar Aposta"):
     st.success(
         "✅ Aposta salva no histórico"
     )
+
+# =========================
+# RESULTADO DAS APOSTAS
+# =========================
+
+st.subheader("Resultado da Aposta")
+
+resultado_aposta = st.selectbox(
+    "Resultado",
+    [
+        "GREEN",
+        "RED",
+        "VOID"
+    ]
+)
+
+valor_stake = st.number_input(
+    "Valor da Stake (R$)",
+    min_value=0.0,
+    value=100.0,
+    step=10.0
+)
+
+# =========================
+# ODD DA APOSTA FEITA
+# =========================
+
+odd_aposta = st.number_input(
+    "Odd da aposta realizada",
+    min_value=1.01,
+    value=2.00,
+    step=0.01
+)
+
+# =========================
+# SALVAR RESULTADO
+# =========================
+
+if st.button("Salvar Resultado"):
+
+    lucro = 0
+
+    if resultado_aposta == "GREEN":
+
+        lucro = (
+            valor_stake * odd_aposta
+        ) - valor_stake
+
+    elif resultado_aposta == "RED":
+
+        lucro = -valor_stake
+
+    else:
+
+        lucro = 0
+
+    dados_resultado = {
+
+        "Time Casa": time_casa,
+
+        "Time Fora": time_fora,
+
+        "Campeonato": campeonato,
+
+        "Mercado": melhor_mercado,
+
+        "Resultado": resultado_aposta,
+
+        "Stake R$": valor_stake,
+
+        "Odd": odd_aposta,
+
+        "Lucro": round(lucro, 2)
+    }
+
+    arquivo_resultados = "resultados_apostas.csv"
+
+    df_novo = pd.DataFrame(
+        [dados_resultado]
+    )
+
+    if os.path.exists(
+        arquivo_resultados
+    ):
+
+        df_antigo = pd.read_csv(
+            arquivo_resultados
+        )
+
+        df_final = pd.concat(
+            [
+                df_antigo,
+                df_novo
+            ],
+            ignore_index=True
+        )
+
+    else:
+
+        df_final = df_novo
+
+    df_final.to_csv(
+        arquivo_resultados,
+        index=False
+    )
+
+    st.success(
+        "✅ Resultado salvo"
+    )
+
+# =========================
+# ESTATÍSTICAS DO BOT
+# =========================
+
+arquivo_resultados = "resultados_apostas.csv"
+
+if os.path.exists(
+    arquivo_resultados
+):
+
+    df_stats = pd.read_csv(
+        arquivo_resultados
+    )
+
+    total_apostas = len(df_stats)
+
+    greens = len(
+        df_stats[
+            df_stats["Resultado"] == "GREEN"
+        ]
+    )
+
+    reds = len(
+        df_stats[
+            df_stats["Resultado"] == "RED"
+        ]
+    )
+
+    voids = len(
+        df_stats[
+            df_stats["Resultado"] == "VOID"
+        ]
+    )
+
+    lucro_total = df_stats[
+        "Lucro"
+    ].sum()
+
+    investimento_total = df_stats[
+        "Stake R$"
+    ].sum()
+
+    if investimento_total > 0:
+
+        roi = (
+            lucro_total /
+            investimento_total
+        ) * 100
+
+    else:
+
+        roi = 0
+
+    if total_apostas > 0:
+
+        winrate = (
+            greens /
+            total_apostas
+        ) * 100
+
+    else:
+
+        winrate = 0
+
+    # =========================
+    # PAINEL
+    # =========================
+
+    st.subheader("Performance do Bot")
+
+    st.write(
+        f"Total de Apostas: {total_apostas}"
+    )
+
+    st.write(
+        f"🟢 Greens: {greens}"
+    )
+
+    st.write(
+        f"🔴 Reds: {reds}"
+    )
+
+    st.write(
+        f"⚪ Voids: {voids}"
+    )
+
+    st.write(
+        f"🎯 Winrate: {round(winrate, 2)}%"
+    )
+
+    st.write(
+        f"💰 Lucro Total: R$ {round(lucro_total, 2)}"
+    )
+
+    st.write(
+        f"📈 ROI: {round(roi, 2)}%"
+    )
