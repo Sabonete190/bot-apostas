@@ -1239,7 +1239,6 @@ if st.button("Analisar Jogo"):
 # SALVAR RESULTADOS
 # =========================
 
-st.session_state["melhor_mercado"] = melhor_mercado
 st.session_state["ev_casa"] = ev_casa
 st.session_state["ev_empate"] = ev_empate
 st.session_state["ev_fora"] = ev_fora
