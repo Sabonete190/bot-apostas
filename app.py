@@ -1235,19 +1235,6 @@ if st.button("Analisar Jogo"):
         st.error(
             "❌ Nenhuma aposta de valor encontrada"
         )
-# =========================
-# SALVAR RESULTADOS
-# =========================
-
-st.session_state["ev_casa"] = ev_casa
-st.session_state["ev_empate"] = ev_empate
-st.session_state["ev_fora"] = ev_fora
-st.session_state["edge_casa"] = edge_casa
-st.session_state["edge_empate"] = edge_empate
-st.session_state["edge_fora"] = edge_fora
-st.session_state["stake"] = stake
-st.session_state["confianca"] = confianca
-st.session_state["perfil_jogo"] = perfil_jogo
 
 # =========================
 # SALVAR APOSTA
