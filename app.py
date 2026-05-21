@@ -87,37 +87,6 @@ odd_fora = st.number_input(
 )
 
 # =========================
-# ODDS GOLS
-# =========================
-
-odd_over25 = st.number_input(
-    "Odd Over 2.5",
-    min_value=1.01,
-    value=2.00
-)
-
-odd_under25 = st.number_input(
-    "Odd Under 2.5",
-    min_value=1.01,
-    value=1.80
-)
-
-# =========================
-# ODDS BTTS
-# =========================
-
-odd_btts_sim = st.number_input(
-    "Odd BTTS SIM",
-    min_value=1.01,
-    value=1.90
-)
-
-odd_btts_nao = st.number_input(
-    "Odd BTTS NÃO",
-    min_value=1.01,
-    value=1.90
-)
-# =========================
 # OVER / UNDER
 # =========================
 
