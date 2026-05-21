@@ -1385,10 +1385,6 @@ if st.button("Salvar Aposta"):
 # =========================
 
 st.subheader("Resultado da Aposta")
-st.info(
-    f"Mercado Atual: "
-    f"{st.session_state.get('melhor_mercado', 'N/A')}"
-)
 # =========================
 # CARREGAR HISTÓRICO
 # =========================
@@ -1427,6 +1423,12 @@ if "ID" in historico_resultados.columns:
     aposta_selecionada = historico_resultados[
         historico_resultados["ID"] == id_aposta
     ]
+
+    mercado_atual = aposta_selecionada.iloc[0]["Mercado"]
+
+st.info(
+    f"Mercado Atual: {mercado_atual}"
+)
 
     st.write("Aposta selecionada:")
 
