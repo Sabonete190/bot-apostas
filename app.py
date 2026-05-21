@@ -1294,13 +1294,17 @@ mercados = {
         "BTTS SIM": edge_btts_sim,
         "BTTS NÃO": edge_btts_nao
     }
+
 melhor_mercado = max(
         mercados,
         key=mercados.get
     )
+
 melhor_edge_final = mercados[
         melhor_mercado
     ]
+
+
 if melhor_edge_final > 0:
 
         st.success(
@@ -1313,7 +1317,7 @@ if melhor_edge_final > 0:
             f"{round(melhor_edge_final * 100, 2)}%"
         )
 
-    else:
+else:
 
         st.error(
             "❌ Nenhuma aposta de valor encontrada"
