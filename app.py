@@ -9,6 +9,9 @@ import os
 
 def calcular_kelly(probabilidade, odd):
 
+    if odd <= 1:
+        return 0
+
     b = odd - 1
 
     kelly = (
