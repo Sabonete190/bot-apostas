@@ -104,6 +104,12 @@ odd_over25 = st.number_input(
     step=0.01
 )
 
+odd_under25 = st.number_input(
+    "Odd Under 2.5",
+    min_value=1.0,
+    step=0.01
+)
+
 odd_over35 = st.number_input(
     "Odd Over 3.5",
     min_value=1.0,
