@@ -1301,8 +1301,7 @@ melhor_mercado = max(
 melhor_edge_final = mercados[
         melhor_mercado
     ]
-
-    if melhor_edge_final > 0:
+if melhor_edge_final > 0:
 
         st.success(
             f"🔥 Melhor Aposta: "
