@@ -1294,8 +1294,7 @@ mercados = {
         "BTTS SIM": edge_btts_sim,
         "BTTS NÃO": edge_btts_nao
     }
-
-    melhor_mercado = max(
+melhor_mercado = max(
         mercados,
         key=mercados.get
     )
