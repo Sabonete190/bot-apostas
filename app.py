@@ -26,6 +26,14 @@ st.set_page_config(
     layout="centered"
 )
 
+# =========================
+# SESSION STATE
+# =========================
+
+if "melhor_mercado" not in st.session_state:
+
+    st.session_state["melhor_mercado"] = "N/A"
+
 # TÍTULO
 st.title("📊 Bot de Apostas Profissional")
 
@@ -1377,6 +1385,10 @@ if st.button("Salvar Aposta"):
 # =========================
 
 st.subheader("Resultado da Aposta")
+st.info(
+    f"Mercado Atual: "
+    f"{st.session_state.get('melhor_mercado', 'N/A')}"
+)
 # =========================
 # CARREGAR HISTÓRICO
 # =========================
@@ -1490,7 +1502,10 @@ if st.button("Salvar Resultado"):
 
         "Campeonato": campeonato,
 
-        "Mercado": melhor_mercado,
+        "Mercado": st.session_state.get(
+    "melhor_mercado",
+    "N/A"
+),
 
         "Resultado": resultado_aposta,
 
