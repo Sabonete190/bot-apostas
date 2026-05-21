@@ -40,30 +40,27 @@ def salvar_aposta(dados):
 
     df_novo = pd.DataFrame([dados])
 
-    if os.path.exists(
-        ARQUIVO_HISTORICO
-    ):
+    # SE O ARQUIVO NÃO EXISTE, CRIA AUTOMATICAMENTE
+    if not os.path.exists(ARQUIVO_HISTORICO):
 
-        df_antigo = pd.read_csv(
-            ARQUIVO_HISTORICO
-        )
-
-        df_final = pd.concat(
-            [
-                df_antigo,
-                df_novo
-            ],
-            ignore_index=True
+        df_novo.to_csv(
+            ARQUIVO_HISTORICO,
+            index=False
         )
 
     else:
 
-        df_final = df_novo
+        df_antigo = pd.read_csv(ARQUIVO_HISTORICO)
 
-    df_final.to_csv(
-        ARQUIVO_HISTORICO,
-        index=False
-    )
+        df_final = pd.concat(
+            [df_antigo, df_novo],
+            ignore_index=True
+        )
+
+        df_final.to_csv(
+            ARQUIVO_HISTORICO,
+            index=False
+        )
 
 # =========================
 # ODDS 1X2
