@@ -1204,13 +1204,13 @@ if st.button("Analisar Jogo"):
     st.success(
         f"{perfil_jogo}"
     )
-    
 # =========================
     # TOP APOSTA
     # =========================
-st.subheader("Top Aposta do Jogo")
 
-mercados = {
+    st.subheader("Top Aposta do Jogo")
+
+    mercados = {
 
         "Vitória Casa": edge_casa,
         "Empate": edge_empate,
@@ -1223,17 +1223,16 @@ mercados = {
         "BTTS NÃO": edge_btts_nao
     }
 
-melhor_mercado = max(
+    melhor_mercado = max(
         mercados,
         key=mercados.get
     )
 
-melhor_edge_final = mercados[
+    melhor_edge_final = mercados[
         melhor_mercado
     ]
 
-
-if melhor_edge_final > 0:
+    if melhor_edge_final > 0:
 
         st.success(
             f"🔥 Melhor Aposta: "
@@ -1245,29 +1244,30 @@ if melhor_edge_final > 0:
             f"{round(melhor_edge_final * 100, 2)}%"
         )
 
-else:
+    else:
 
         st.error(
             "❌ Nenhuma aposta de valor encontrada"
         )
-        # =========================
-# SALVAR RESULTADOS
-# =========================
 
-st.session_state["melhor_mercado"] = melhor_mercado
+    # =========================
+    # SALVAR RESULTADOS
+    # =========================
 
-st.session_state["ev_casa"] = ev_casa
-st.session_state["ev_empate"] = ev_empate
-st.session_state["ev_fora"] = ev_fora
+    st.session_state["melhor_mercado"] = melhor_mercado
 
-st.session_state["edge_casa"] = edge_casa
-st.session_state["edge_empate"] = edge_empate
-st.session_state["edge_fora"] = edge_fora
+    st.session_state["ev_casa"] = ev_casa
+    st.session_state["ev_empate"] = ev_empate
+    st.session_state["ev_fora"] = ev_fora
 
-st.session_state["stake"] = stake
-st.session_state["confianca"] = confianca
-st.session_state["perfil_jogo"] = perfil_jogo
+    st.session_state["edge_casa"] = edge_casa
+    st.session_state["edge_empate"] = edge_empate
+    st.session_state["edge_fora"] = edge_fora
 
+    st.session_state["stake"] = stake
+    st.session_state["confianca"] = confianca
+    st.session_state["perfil_jogo"] = perfil_jogo    
+    
 # =========================
 # SALVAR APOSTA
 # =========================
