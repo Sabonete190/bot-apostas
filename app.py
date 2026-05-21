@@ -1280,9 +1280,7 @@ st.success(
 # =========================
     # TOP APOSTA
     # =========================
-
-    st.subheader("Top Aposta do Jogo")
-
+ st.subheader("Top Aposta do Jogo")
     mercados = {
 
         "Vitória Casa": edge_casa,
