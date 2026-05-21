@@ -1298,8 +1298,7 @@ melhor_mercado = max(
         mercados,
         key=mercados.get
     )
-
-    melhor_edge_final = mercados[
+melhor_edge_final = mercados[
         melhor_mercado
     ]
 
