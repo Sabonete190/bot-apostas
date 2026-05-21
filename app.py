@@ -1429,7 +1429,8 @@ if "ID" in historico_resultados.columns:
 st.info(
     f"Mercado Atual: {mercado_atual}"
 )
-    st.write("Aposta selecionada:")
+    
+st.write("Aposta selecionada:")
 
     st.write(
         aposta_selecionada[
