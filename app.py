@@ -58,16 +58,7 @@ def salvar_aposta(dados):
 
     else:
 
-        
-    if os.path.getsize(ARQUIVO_HISTORICO) > 0:
-            
-        df_antigo = pd.read_csv(
-            ARQUIVO_HISTORICO
-        )
-
-else:
-
-    df_antigo = pd.DataFrame()
+        df_antigo = pd.read_csv(ARQUIVO_HISTORICO)
 
         df_final = pd.concat(
             [df_antigo, df_novo],
@@ -1535,15 +1526,9 @@ if st.button("Salvar Resultado"):
         arquivo_resultados
     ):
 
-        if os.path.getsize(arquivo_resultados) > 0:
-
-    df_antigo = pd.read_csv(
-        arquivo_resultados
-    )
-
-else:
-
-    df_antigo = pd.DataFrame()
+        df_antigo = pd.read_csv(
+            arquivo_resultados
+        )
 
         df_final = pd.concat(
             [
