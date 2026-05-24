@@ -1400,9 +1400,15 @@ st.subheader("Resultado da Aposta")
 
 if os.path.exists(ARQUIVO_HISTORICO):
 
-    historico_resultados = pd.read_csv(
-        ARQUIVO_HISTORICO
-    )
+    try:
+
+        historico_resultados = pd.read_csv(
+            ARQUIVO_HISTORICO
+        )
+
+    except:
+
+        historico_resultados = pd.DataFrame()
 
 else:
 
