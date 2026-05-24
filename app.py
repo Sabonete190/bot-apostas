@@ -1582,9 +1582,21 @@ if os.path.exists(
     arquivo_resultados
 ):
 
-    df_stats = pd.read_csv(
-        arquivo_resultados
-    )
+    try:
+
+        df_stats = pd.read_csv(
+            arquivo_resultados
+        )
+
+    except:
+
+        df_stats = pd.DataFrame()
+
+else:
+
+    df_stats = pd.DataFrame()
+
+
 
     total_apostas = len(df_stats)
 
