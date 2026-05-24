@@ -1512,9 +1512,9 @@ if st.button("Salvar Resultado"):
         "Campeonato": campeonato,
 
         "Mercado": st.session_state.get(
-    "melhor_mercado",
-    "N/A"
-),
+            "melhor_mercado",
+            "N/A"
+        ),
 
         "Resultado": resultado_aposta,
 
@@ -1532,32 +1532,30 @@ if st.button("Salvar Resultado"):
     )
 
     if os.path.exists(
-    arquivo_resultados
-):
-
-    if os.path.getsize(
         arquivo_resultados
-    ) > 0:
+    ):
 
-        df_antigo = pd.read_csv(
-            arquivo_resultados
+        try:
+
+            df_antigo = pd.read_csv(
+                arquivo_resultados
+            )
+
+        except:
+
+            df_antigo = pd.DataFrame()
+
+        df_final = pd.concat(
+            [
+                df_antigo,
+                df_novo
+            ],
+            ignore_index=True
         )
 
     else:
 
-        df_antigo = pd.DataFrame()
-
-    df_final = pd.concat(
-        [
-            df_antigo,
-            df_novo
-        ],
-        ignore_index=True
-    )
-
-else:
-
-    df_final = df_novo
+        df_final = df_novo
 
     df_final.to_csv(
         arquivo_resultados,
