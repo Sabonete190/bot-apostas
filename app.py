@@ -1297,8 +1297,25 @@ if st.button("Analisar Jogo"):
 
 if st.button("Salvar Aposta"):
 
+    if os.path.exists(ARQUIVO_HISTORICO):
+
+        try:
+
+            df_ids = pd.read_csv(
+                ARQUIVO_HISTORICO
+            )
+
+            novo_id = len(df_ids) + 1
+
+        except:
+
+            novo_id = 1
+
+    else:
+
+        novo_id = 1
     dados_aposta = {
-        "ID": len(pd.read_csv(ARQUIVO_HISTORICO)) + 1 if os.path.exists(ARQUIVO_HISTORICO) else 1,
+        "ID": novo_id,
 
         "Time Casa": time_casa,
 
