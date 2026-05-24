@@ -59,7 +59,7 @@ def salvar_aposta(dados):
     else:
 
         if os.path.getsize(ARQUIVO_HISTORICO) > 0:
-
+            
         df_antigo = pd.read_csv(
             ARQUIVO_HISTORICO
         )
