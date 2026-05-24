@@ -58,25 +58,25 @@ def salvar_aposta(dados):
 
     else:
 
-        if os.path.getsize(ARQUIVO_HISTORICO) > 0:
+    if os.path.getsize(ARQUIVO_HISTORICO) > 0:
 
-    df_antigo = pd.read_csv(
-        ARQUIVO_HISTORICO
+        df_antigo = pd.read_csv(
+            ARQUIVO_HISTORICO
+        )
+
+    else:
+
+        df_antigo = pd.DataFrame()
+
+    df_final = pd.concat(
+        [df_antigo, df_novo],
+        ignore_index=True
     )
 
-else:
-
-    df_antigo = pd.DataFrame()
-
-        df_final = pd.concat(
-            [df_antigo, df_novo],
-            ignore_index=True
-        )
-
-        df_final.to_csv(
-            ARQUIVO_HISTORICO,
-            index=False
-        )
+    df_final.to_csv(
+        ARQUIVO_HISTORICO,
+        index=False
+    )
 
 # =========================
 # ODDS 1X2
