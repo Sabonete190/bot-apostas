@@ -2,6 +2,8 @@ import streamlit as st
 import math
 import pandas as pd
 import os
+import requests
+import base64
 
 # =========================
 # FUNÇÃO KELLY
@@ -43,6 +45,47 @@ st.write("Preencha os dados da partida.")
 # =========================
 
 ARQUIVO_HISTORICO = "historico_apostas.csv"
+
+# =========================
+# GITHUB
+# =========================
+
+GITHUB_TOKEN = st.secrets["GITHUB_TOKEN"]
+GITHUB_USER = st.secrets["GITHUB_USER"]
+GITHUB_REPO = st.secrets["GITHUB_REPO"]
+
+def salvar_no_github(nome_arquivo):
+
+    url = f"https://api.github.com/repos/{GITHUB_USER}/{GITHUB_REPO}/contents/{nome_arquivo}"
+
+    headers = {
+        "Authorization": f"token {GITHUB_TOKEN}"
+    }
+
+    with open(nome_arquivo, "rb") as file:
+        content = base64.b64encode(file.read()).decode()
+
+    response = requests.get(url, headers=headers)
+
+    sha = None
+
+    if response.status_code == 200:
+        sha = response.json()["sha"]
+
+    data = {
+        "message": f"Atualizando {nome_arquivo}",
+        "content": content,
+        "branch": "main"
+    }
+
+    if sha:
+        data["sha"] = sha
+
+    requests.put(
+        url,
+        headers=headers,
+        json=data
+    )
 
 def salvar_aposta(dados):
 
@@ -1396,6 +1439,9 @@ if st.button("Salvar Aposta"):
     salvar_aposta(
         dados_aposta
     )
+    salvar_no_github(
+        ARQUIVO_HISTORICO
+    )
 
     st.success(
         "✅ Aposta salva no histórico"
@@ -1578,6 +1624,9 @@ if st.button("Salvar Resultado"):
     df_final.to_csv(
         arquivo_resultados,
         index=False
+    )
+    salvar_no_github(
+        arquivo_resultados
     )
 
     st.success(
