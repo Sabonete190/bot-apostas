@@ -48,24 +48,15 @@ def salvar_aposta(dados):
 
     df_novo = pd.DataFrame([dados])
 
-    # SE O ARQUIVO NÃO EXISTE
-    if not os.path.exists(ARQUIVO_HISTORICO):
+    if os.path.exists(ARQUIVO_HISTORICO):
 
-        df_novo.to_csv(
-            ARQUIVO_HISTORICO,
-            index=False
-        )
-
-    else:
-
-        # SE O CSV ESTÁ VAZIO
-        if os.path.getsize(ARQUIVO_HISTORICO) > 0:
+        try:
 
             df_antigo = pd.read_csv(
                 ARQUIVO_HISTORICO
             )
 
-        else:
+        except:
 
             df_antigo = pd.DataFrame()
 
@@ -74,10 +65,14 @@ def salvar_aposta(dados):
             ignore_index=True
         )
 
-        df_final.to_csv(
-            ARQUIVO_HISTORICO,
-            index=False
-        )
+    else:
+
+        df_final = df_novo
+
+    df_final.to_csv(
+        ARQUIVO_HISTORICO,
+        index=False
+    )
 
 # =========================
 # ODDS 1X2
