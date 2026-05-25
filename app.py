@@ -1657,58 +1657,6 @@ else:
 
     df_stats = pd.DataFrame()
 
-
-
-    total_apostas = len(df_stats)
-
-    greens = len(
-        df_stats[
-            df_stats["Resultado"] == "GREEN"
-        ]
-    )
-
-    reds = len(
-        df_stats[
-            df_stats["Resultado"] == "RED"
-        ]
-    )
-
-    voids = len(
-        df_stats[
-            df_stats["Resultado"] == "VOID"
-        ]
-    )
-
-    lucro_total = df_stats[
-        "Lucro"
-    ].sum()
-
-    investimento_total = df_stats[
-        "Stake R$"
-    ].sum()
-
-    if investimento_total > 0:
-
-        roi = (
-            lucro_total /
-            investimento_total
-        ) * 100
-
-    else:
-
-        roi = 0
-
-    if total_apostas > 0:
-
-        winrate = (
-            greens /
-            total_apostas
-        ) * 100
-
-    else:
-
-        winrate = 0
-
     # =========================
     # PAINEL
     # =========================
