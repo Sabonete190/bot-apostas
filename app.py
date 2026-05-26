@@ -1566,26 +1566,41 @@ if st.button("Salvar Resultado"):
     else:
 
         lucro = 0
-        dados_resultado = {
 
-    "Time Casa": aposta_selecionada.iloc[0]["Time Casa"],
+    # =========================
+    # PEGAR DADOS DA APOSTA SELECIONADA
+    # =========================
 
-    "Time Fora": aposta_selecionada.iloc[0]["Time Fora"],
+    time_casa_resultado = aposta_selecionada.iloc[0]["Time Casa"]
 
-    "Campeonato": aposta_selecionada.iloc[0]["Campeonato"],
+    time_fora_resultado = aposta_selecionada.iloc[0]["Time Fora"]
 
-    "Mercado": aposta_selecionada.iloc[0]["Mercado"],
+    campeonato_resultado = aposta_selecionada.iloc[0]["Campeonato"]
 
-    "Resultado": resultado_aposta,
+    mercado_resultado = aposta_selecionada.iloc[0]["Mercado"]
 
-    "Stake R$": valor_stake,
+    # =========================
+    # DADOS RESULTADO
+    # =========================
 
-    "Odd": odd_aposta,
+    dados_resultado = {
 
-    "Lucro": round(lucro, 2)
-}
+        "Time Casa": time_casa_resultado,
 
-    
+        "Time Fora": time_fora_resultado,
+
+        "Campeonato": campeonato_resultado,
+
+        "Mercado": mercado_resultado,
+
+        "Resultado": resultado_aposta,
+
+        "Stake R$": valor_stake,
+
+        "Odd": odd_aposta,
+
+        "Lucro": round(lucro, 2)
+    }
 
     arquivo_resultados = "resultados_apostas.csv"
 
@@ -1623,6 +1638,7 @@ if st.button("Salvar Resultado"):
         arquivo_resultados,
         index=False
     )
+
     salvar_no_github(
         arquivo_resultados
     )
