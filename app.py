@@ -1639,9 +1639,7 @@ if st.button("Salvar Resultado"):
 
 arquivo_resultados = "resultados_apostas.csv"
 
-if os.path.exists(
-    arquivo_resultados
-):
+if os.path.exists(arquivo_resultados):
 
     try:
 
@@ -1657,13 +1655,57 @@ else:
 
     df_stats = pd.DataFrame()
 
-    # =========================
-    # PAINEL
-    # =========================
+# =========================
+# PAINEL
+# =========================
 
-    st.subheader("Performance do Bot")
-    
-    st.write("PAINEL CARREGADO")
+st.subheader("Performance do Bot")
+
+st.write("PAINEL CARREGADO")
+
+if not df_stats.empty:
+
+    total_apostas = len(df_stats)
+
+    greens = len(
+        df_stats[
+            df_stats["Resultado"] == "GREEN"
+        ]
+    )
+
+    reds = len(
+        df_stats[
+            df_stats["Resultado"] == "RED"
+        ]
+    )
+
+    voids = len(
+        df_stats[
+            df_stats["Resultado"] == "VOID"
+        ]
+    )
+
+    winrate = (
+        (greens / total_apostas) * 100
+    )
+
+    lucro_total = (
+        df_stats["Lucro"].sum()
+    )
+
+    total_stakes = (
+        df_stats["Stake R$"].sum()
+    )
+
+    if total_stakes > 0:
+
+        roi = (
+            lucro_total / total_stakes
+        ) * 100
+
+    else:
+
+        roi = 0
 
     st.write(
         f"Total de Apostas: {total_apostas}"
@@ -1691,4 +1733,10 @@ else:
 
     st.write(
         f"📈 ROI: {round(roi, 2)}%"
+    )
+
+else:
+
+    st.warning(
+        "Nenhum resultado salvo ainda."
     )
