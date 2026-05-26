@@ -1566,28 +1566,26 @@ if st.button("Salvar Resultado"):
     else:
 
         lucro = 0
+        dados_resultado = {
 
-    dados_resultado = {
+    "Time Casa": aposta_selecionada.iloc[0]["Time Casa"],
 
-        "Time Casa": time_casa,
+    "Time Fora": aposta_selecionada.iloc[0]["Time Fora"],
 
-        "Time Fora": time_fora,
+    "Campeonato": aposta_selecionada.iloc[0]["Campeonato"],
 
-        "Campeonato": campeonato,
+    "Mercado": aposta_selecionada.iloc[0]["Mercado"],
 
-        "Mercado": st.session_state.get(
-            "melhor_mercado",
-            "N/A"
-        ),
+    "Resultado": resultado_aposta,
 
-        "Resultado": resultado_aposta,
+    "Stake R$": valor_stake,
 
-        "Stake R$": valor_stake,
+    "Odd": odd_aposta,
 
-        "Odd": odd_aposta,
+    "Lucro": round(lucro, 2)
+}
 
-        "Lucro": round(lucro, 2)
-    }
+    
 
     arquivo_resultados = "resultados_apostas.csv"
 
