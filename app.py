@@ -1662,6 +1662,8 @@ else:
     # =========================
 
     st.subheader("Performance do Bot")
+    
+    st.write("PAINEL CARREGADO")
 
     st.write(
         f"Total de Apostas: {total_apostas}"
