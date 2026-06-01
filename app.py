@@ -4,6 +4,16 @@ import pandas as pd
 import os
 import requests
 import base64
+import json
+
+with open("pesos.json","r") as f:
+    pesos = json.load(f)
+    PESO_XG = pesos["peso_xg"]
+PESO_CHUTES = pesos["peso_chutes"]
+PESO_EFICIENCIA = pesos["peso_eficiencia"]
+PESO_TABELA = pesos["peso_tabela"]
+PESO_FORMA = pesos["peso_forma"]
+PESO_FORCA = pesos["peso_forca"]
 
 # =========================
 # FUNÇÃO KELLY
