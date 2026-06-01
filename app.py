@@ -1179,6 +1179,41 @@ if st.button("Analisar Jogo"):
         st.error(
             "Sem mercado de valor"
         )
+        dados = {
+    "data": data_jogo,
+    "time_casa": time_casa,
+    "time_fora": time_fora,
+
+    "xg_casa": xg_casa,
+    "xg_fora": xg_fora,
+
+    "xga_casa": xga_casa,
+    "xga_fora": xga_fora,
+
+    "forma_casa": forma_casa,
+    "forma_fora": forma_fora,
+
+    "eficiencia_casa": eficiencia_casa,
+    "eficiencia_fora": eficiencia_fora,
+
+    "chutes_casa": chutes_casa,
+    "chutes_fora": chutes_fora,
+
+    "posicao_casa": posicao_casa,
+    "posicao_fora": posicao_fora,
+
+    "mercado": melhor_mercado,
+
+    "odd": odd_escolhida,
+
+    "ev": melhor_ev,
+
+    "edge": melhor_edge,
+
+    "confianca": confianca,
+
+    "resultado": ""
+}
     # =========================
     # GESTÃO DE STAKE
     # =========================
