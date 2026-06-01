@@ -143,6 +143,24 @@ def salvar_pesos():
         json.dump(pesos, f, indent=4)
 
     salvar_no_github("pesos.json")
+
+def verificar_rodada():
+
+    df = pd.read_csv(
+        "historico_apostas.csv"
+    )
+
+    jogos = len(
+        df[
+            df["resultado"].isin(
+                ["green", "red"]
+            )
+        ]
+    )
+
+    if jogos % 10 == 0:
+        atualizar_pesos()
+        
 # =========================
 # ODDS 1X2
 # =========================
