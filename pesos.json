@@ -1,1 +1,8 @@
-
+{
+    "peso_xg": 0.35,
+    "peso_chutes": 0.20,
+    "peso_eficiencia": 0.15,
+    "peso_tabela": 0.10,
+    "peso_forma": 0.10,
+    "peso_forca": 0.10
+}
