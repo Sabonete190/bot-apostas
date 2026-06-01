@@ -152,7 +152,7 @@ def verificar_rodada():
 
     jogos = len(
         df[
-            df["resultado"].isin(
+            df["Resultado"].isin(
                 ["green", "red"]
             )
         ]
@@ -1723,6 +1723,7 @@ if st.button("Salvar Resultado"):
     salvar_no_github(
         arquivo_resultados
     )
+    verificar_rodada()
 
     st.success(
         "✅ Resultado salvo"
