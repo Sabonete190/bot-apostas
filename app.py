@@ -395,33 +395,35 @@ if st.button("Analisar Jogo"):
 
     ataque_casa = (
 
-    xg_casa * 0.35 +
+    xg_casa * PESO_XG +
 
-    chutes_casa * 0.20 +
+    chutes_casa * PESO_CHUTES +
 
-    eficiencia_casa * 0.15 +
+    eficiencia_casa * PESO_EFICIENCIA +
 
-    forca_tabela_casa * 0.10 +
+    forca_tabela_casa * PESO_TABELA +
 
-    (forma_casa / 15) * 0.10 +
+    (forma_casa / 15) * PESO_FORMA +
 
-    forca_casa_valor * 0.10
-)
+    forca_casa_valor * PESO_FORCA
+
+    )
 
     ataque_fora = (
 
-    xg_fora * 0.35 +
+    xg_fora * PESO_XG +
 
-    chutes_fora * 0.20 +
+    chutes_fora * PESO_CHUTES +
 
-    eficiencia_fora * 0.15 +
+    eficiencia_fora * PESO_EFICIENCIA +
 
-    forca_tabela_fora * 0.10 +
+    forca_tabela_fora * PESO_TABELA +
 
-    (forma_fora / 15) * 0.10 +
+    (forma_fora / 15) * PESO_FORMA +
 
-    forca_fora_valor * 0.10
-)
+    forca_fora_valor * PESO_FORCA
+
+    )
 
     # =========================
     # FORÇA DEFENSIVA
