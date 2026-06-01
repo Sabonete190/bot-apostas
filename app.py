@@ -1493,23 +1493,6 @@ if st.button("Salvar Aposta"):
     st.success(
         "✅ Aposta salva no histórico"
     )
-    def salvar_pesos():
-
-    import json
-
-    pesos = {
-        "peso_xg": PESO_XG,
-        "peso_chutes": PESO_CHUTES,
-        "peso_eficiencia": PESO_EFICIENCIA,
-        "peso_tabela": PESO_TABELA,
-        "peso_forma": PESO_FORMA,
-        "peso_forca": PESO_FORCA
-    }
-
-    with open("pesos.json", "w") as f:
-        json.dump(pesos, f, indent=4)
-
-    salvar_no_github("pesos.json")
 
 # =========================
 # RESULTADO DAS APOSTAS
