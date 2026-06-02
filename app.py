@@ -1783,7 +1783,8 @@ if st.button("Salvar Resultado"):
         arquivo_resultados
     )
 
-    try:
+
+try:
 
     df_hist = pd.read_csv(
         ARQUIVO_HISTORICO
@@ -1809,11 +1810,12 @@ if st.button("Salvar Resultado"):
         ARQUIVO_HISTORICO
     )
 
-    except Exception as e:
+except Exception as e:
 
-        st.error(
-            f"Erro ao atualizar histórico: {e}"
-            )
+    st.error(
+        f"Erro ao atualizar histórico: {e}"
+    )
+    
     verificar_rodada()
 
     st.success(
