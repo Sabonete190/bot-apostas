@@ -1782,6 +1782,38 @@ if st.button("Salvar Resultado"):
     salvar_no_github(
         arquivo_resultados
     )
+
+    try:
+
+    df_hist = pd.read_csv(
+        ARQUIVO_HISTORICO
+    )
+
+    filtro = (
+        (df_hist["Time Casa"] == time_casa_resultado)
+        &
+        (df_hist["Time Fora"] == time_fora_resultado)
+    )
+
+    df_hist.loc[
+        filtro,
+        "Resultado"
+    ] = resultado_aposta.lower()
+
+    df_hist.to_csv(
+        ARQUIVO_HISTORICO,
+        index=False
+    )
+
+    salvar_no_github(
+        ARQUIVO_HISTORICO
+    )
+
+except Exception as e:
+
+    st.error(
+        f"Erro ao atualizar histórico: {e}"
+            )
     verificar_rodada()
 
     st.success(
