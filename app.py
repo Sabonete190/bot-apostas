@@ -144,6 +144,47 @@ def salvar_pesos():
 
     salvar_no_github("pesos.json")
 
+def atualizar_pesos():
+
+    global PESO_XG
+    global PESO_CHUTES
+    global PESO_EFICIENCIA
+    global PESO_TABELA
+    global PESO_FORMA
+    global PESO_FORCA
+
+    df = pd.read_csv(
+        "resultados_apostas.csv"
+    )
+
+    ultimos = df.tail(10)
+
+    greens = len(
+        ultimos[
+            ultimos["Resultado"] == "GREEN"
+        ]
+    )
+
+    reds = len(
+        ultimos[
+            ultimos["Resultado"] == "RED"
+        ]
+    )
+
+    saldo = greens - reds
+
+    ajuste = saldo * 0.01
+
+    PESO_XG += ajuste
+    PESO_CHUTES += ajuste
+    PESO_EFICIENCIA += ajuste
+
+    PESO_TABELA -= ajuste / 2
+    PESO_FORMA += ajuste / 2
+    PESO_FORCA += ajuste / 2
+
+    salvar_pesos()
+
 def verificar_rodada():
 
     df = pd.read_csv(
