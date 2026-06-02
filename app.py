@@ -1556,23 +1556,23 @@ if st.button("Salvar Aposta"):
             "perfil_jogo",
             "N/A"
         )
-             "xg_casa": xg_casa,
-             "xg_fora": xg_fora,
+              "xg_casa": xg_casa,
+              "xg_fora": xg_fora,
 
-             "xga_casa": xga_casa,
-             "xga_fora": xga_fora,
+              "xga_casa": xga_casa,
+              "xga_fora": xga_fora,
  
-             "forma_casa": forma_casa,
-             "forma_fora": forma_fora,
+              "forma_casa": forma_casa,
+              "forma_fora": forma_fora,
 
-             "eficiencia_casa": eficiencia_casa,
-             "eficiencia_fora": eficiencia_fora,
+              "eficiencia_casa": eficiencia_casa,
+              "eficiencia_fora": eficiencia_fora,
 
-             "chutes_casa": chutes_casa,
-             "chutes_fora": chutes_fora,
+              "chutes_casa": chutes_casa,
+              "chutes_fora": chutes_fora,
 
-             "posicao_casa": posicao_casa,
-             "posicao_fora": posicao_fora,
+              "posicao_casa": posicao_casa,
+              "posicao_fora": posicao_fora,
     
     }
 
