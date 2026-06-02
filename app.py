@@ -147,13 +147,13 @@ def salvar_pesos():
 def verificar_rodada():
 
     df = pd.read_csv(
-        "historico_apostas.csv"
+    "resultados_apostas.csv"
     )
 
     jogos = len(
         df[
             df["Resultado"].isin(
-                ["green", "red"]
+              ["GREEN", "RED"]
             )
         ]
     )
