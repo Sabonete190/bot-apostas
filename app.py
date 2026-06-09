@@ -1784,7 +1784,7 @@ if st.button("Salvar Resultado"):
     )
 
 
-   try:
+    try:
 
       df_hist = pd.read_csv(
         ARQUIVO_HISTORICO
