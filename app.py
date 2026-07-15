@@ -699,39 +699,31 @@ if st.button("Analisar Jogo"):
         f"Odd Justa Under 2.5: "
         f"{round(odd_justa_under25, 2)}"
     )
-    # =========================
+         # =========================
     # BTTS
     # =========================
 
-    prob_casa_0 = poisson(
-        gols_esperados_casa,
-        0
-    )
+    prob_btts_sim = 0
 
-    prob_fora_0 = poisson(
-        gols_esperados_fora,
-        0
-    )
+    for gols_casa in range(8):
 
-    prob_btts_nao = (
-        prob_casa_0 +
-        prob_fora_0 -
-        (prob_casa_0 * prob_fora_0)
-    )
+        for gols_fora in range(8):
 
-    prob_btts_sim = (
+            if gols_casa >= 1 and gols_fora >= 1:
 
-        (1 - prob_btts_nao)
+                prob_btts_sim += (
+                    poisson(
+                        gols_esperados_casa,
+                        gols_casa
+                    )
+                    *
+                    poisson(
+                        gols_esperados_fora,
+                        gols_fora
+                    )
+                )
 
-        * media_btts_liga
-
-        / 0.50
-    )
-
-    prob_btts_sim = min(
-        prob_btts_sim,
-        0.95
-    )
+    prob_btts_nao = 1 - prob_btts_sim
 
     st.subheader("BTTS")
 
