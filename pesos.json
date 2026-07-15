@@ -1,8 +1,37 @@
 {
-    "peso_xg": 0.35,
-    "peso_chutes": 0.20,
-    "peso_eficiencia": 0.15,
-    "peso_tabela": 0.10,
-    "peso_forma": 0.10,
-    "peso_forca": 0.10
+    "1x2": {
+        "peso_xg": 0.35,
+        "peso_chutes": 0.20,
+        "peso_eficiencia": 0.15,
+        "peso_tabela": 0.10,
+        "peso_forma": 0.10,
+        "peso_forca": 0.10
+    },
+
+    "over25": {
+        "peso_xg": 0.40,
+        "peso_chutes": 0.25,
+        "peso_eficiencia": 0.15,
+        "peso_tabela": 0.05,
+        "peso_forma": 0.10,
+        "peso_forca": 0.05
+    },
+
+    "under25": {
+        "peso_xg": 0.25,
+        "peso_chutes": 0.15,
+        "peso_eficiencia": 0.10,
+        "peso_tabela": 0.20,
+        "peso_forma": 0.15,
+        "peso_forca": 0.15
+    },
+
+    "btts": {
+        "peso_xg": 0.35,
+        "peso_chutes": 0.25,
+        "peso_eficiencia": 0.20,
+        "peso_tabela": 0.05,
+        "peso_forma": 0.10,
+        "peso_forca": 0.05
+    }
 }
