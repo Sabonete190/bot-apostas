@@ -152,45 +152,62 @@ def salvar_pesos():
 
 def atualizar_pesos():
 
-    global PESO_XG
-    global PESO_CHUTES
-    global PESO_EFICIENCIA
-    global PESO_TABELA
-    global PESO_FORMA
-    global PESO_FORCA
-
     df = pd.read_csv(
         "resultados_apostas.csv"
     )
 
+    if df.empty:
+        return
+
+    # Pega os últimos 10 resultados
     ultimos = df.tail(10)
 
-    greens = len(
-        ultimos[
-            ultimos["Resultado"] == "GREEN"
+    # Separa por mercado
+    mercados = {
+        "1x2": ["Vitória Casa", "Empate", "Vitória Fora"],
+        "over25": ["Over 2.5"],
+        "under25": ["Under 2.5"],
+        "btts": ["BTTS SIM", "BTTS NÃO"]
+    }
+
+    for nome_mercado, nomes in mercados.items():
+
+        resultados_mercado = ultimos[
+            ultimos["Mercado"].isin(nomes)
         ]
-    )
 
-    reds = len(
-        ultimos[
-            ultimos["Resultado"] == "RED"
-        ]
-    )
+        if resultados_mercado.empty:
+            continue
 
-    saldo = greens - reds
+        greens = len(
+            resultados_mercado[
+                resultados_mercado["Resultado"] == "GREEN"
+            ]
+        )
 
-    ajuste = saldo * 0.01
+        reds = len(
+            resultados_mercado[
+                resultados_mercado["Resultado"] == "RED"
+            ]
+        )
 
-    PESO_XG += ajuste
-    PESO_CHUTES += ajuste
-    PESO_EFICIENCIA += ajuste
+        saldo = greens - reds
 
-    PESO_TABELA -= ajuste / 2
-    PESO_FORMA += ajuste / 2
-    PESO_FORCA += ajuste / 2
+        # Ajuste pequeno para evitar mudanças bruscas
+        ajuste = saldo * 0.01
+
+        pesos_mercado = pesos[nome_mercado]
+
+        # Ajusta os pesos do mercado específico
+        pesos_mercado["peso_xg"] += ajuste
+        pesos_mercado["peso_chutes"] += ajuste
+        pesos_mercado["peso_eficiencia"] += ajuste
+
+        pesos_mercado["peso_tabela"] -= ajuste / 2
+        pesos_mercado["peso_forma"] += ajuste / 2
+        pesos_mercado["peso_forca"] += ajuste / 2
 
     salvar_pesos()
-
 def verificar_rodada():
 
     df = pd.read_csv(
