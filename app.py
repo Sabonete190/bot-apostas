@@ -1489,7 +1489,54 @@ if st.button("Salvar Aposta"):
     else:
 
         novo_id = 1
+
+    # =========================
+    # RECUPERAR DADOS DA ANÁLISE
+    # =========================
+
+    mercado_salvo = st.session_state.get(
+        "melhor_mercado",
+        "N/A"
+    )
+
+    # =========================
+    # DEFINIR ODD DO MERCADO
+    # =========================
+
+    odds_mercados = {
+
+        "🔥 Vitória Casa": odd_casa,
+        "🤝 Empate": odd_empate,
+        "🔥 Vitória Fora": odd_fora,
+
+        "⚽ Over 2.5": odd_over25,
+        "🛡️ Under 2.5": odd_under25,
+
+        "🔥 BTTS SIM": odd_btts_sim,
+        "❌ BTTS NÃO": odd_btts_nao,
+
+        "Vitória Casa": odd_casa,
+        "Empate": odd_empate,
+        "Vitória Fora": odd_fora,
+
+        "Over 2.5": odd_over25,
+        "Under 2.5": odd_under25,
+
+        "BTTS SIM": odd_btts_sim,
+        "BTTS NÃO": odd_btts_nao
+    }
+
+    odd_escolhida = odds_mercados.get(
+        mercado_salvo,
+        0
+    )
+
+    # =========================
+    # DADOS DA APOSTA
+    # =========================
+
     dados_aposta = {
+
         "ID": novo_id,
 
         "Time Casa": time_casa,
@@ -1498,63 +1545,22 @@ if st.button("Salvar Aposta"):
 
         "Campeonato": campeonato,
 
-        "Mercado": st.session_state.get(
-            "melhor_mercado",
-            "N/A"
+        "Mercado": mercado_salvo,
+
+        "Odd": odd_escolhida,
+
+        # =========================
+        # DADOS DO MODELO
+        # =========================
+
+        "EV": st.session_state.get(
+            "melhor_ev",
+            0
         ),
 
-        "Odd Casa": odd_casa,
-
-        "Odd Empate": odd_empate,
-
-        "Odd Fora": odd_fora,
-
-        "EV Casa": round(
-            st.session_state.get(
-                "ev_casa",
-                0
-            ),
-            2
-        ),
-
-        "EV Empate": round(
-            st.session_state.get(
-                "ev_empate",
-                0
-            ),
-            2
-        ),
-
-        "EV Fora": round(
-            st.session_state.get(
-                "ev_fora",
-                0
-            ),
-            2
-        ),
-
-        "Edge Casa": round(
-            st.session_state.get(
-                "edge_casa",
-                0
-            ),
-            4
-        ),
-
-        "Edge Empate": round(
-            st.session_state.get(
-                "edge_empate",
-                0
-            ),
-            4
-        ),
-
-        "Edge Fora": round(
-            st.session_state.get(
-                "edge_fora",
-                0
-            ),
-            4
+        "Edge": st.session_state.get(
+            "melhor_edge",
+            0
         ),
 
         "Stake": st.session_state.get(
@@ -1571,29 +1577,49 @@ if st.button("Salvar Aposta"):
             "perfil_jogo",
             "N/A"
         ),
+
+        # =========================
+        # DADOS ESTATÍSTICOS
+        # =========================
+
         "xg_casa": xg_casa,
+
         "xg_fora": xg_fora,
 
         "xga_casa": xga_casa,
+
         "xga_fora": xga_fora,
- 
+
         "forma_casa": forma_casa,
+
         "forma_fora": forma_fora,
 
         "eficiencia_casa": eficiencia_casa,
+
         "eficiencia_fora": eficiencia_fora,
 
         "chutes_casa": chutes_casa,
+
         "chutes_fora": chutes_fora,
 
         "posicao_casa": posicao_casa,
+
         "posicao_fora": posicao_fora,
-    
+
+        # =========================
+        # RESULTADO
+        # =========================
+
+        "Resultado": ""
     }
+
+    
 
     salvar_aposta(
         dados_aposta
     )
+
+
     salvar_no_github(
         ARQUIVO_HISTORICO
     )
