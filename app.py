@@ -194,7 +194,7 @@ def atualizar_pesos():
         saldo = greens - reds
 
         # Ajuste pequeno para evitar mudanças bruscas
-            ajuste = saldo * 0.01
+        ajuste = saldo * 0.01
 
         media_xg = (ultima["xg_casa"] + ultima["xg_fora"]) / 2
         media_chutes = (ultima["chutes_casa"] + ultima["chutes_fora"]) / 2
