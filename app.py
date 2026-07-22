@@ -194,18 +194,25 @@ def atualizar_pesos():
         saldo = greens - reds
 
         # Ajuste pequeno para evitar mudanças bruscas
-        ajuste = saldo * 0.01
+            ajuste = saldo * 0.01
 
-        pesos_mercado = pesos[nome_mercado]
+        media_xg = (ultima["xg_casa"] + ultima["xg_fora"]) / 2
+        media_chutes = (ultima["chutes_casa"] + ultima["chutes_fora"]) / 2
+        media_eficiencia = (ultima["eficiencia_casa"] + ultima["eficiencia_fora"]) / 2
+        media_forma = (ultima["forma_casa"] + ultima["forma_fora"]) / 30
+        media_tabela = ((21 - ultima["posicao_casa"]) + (21 - ultima["posicao_fora"])) / 40
 
-        # Ajusta os pesos do mercado específico
-        pesos_mercado["peso_xg"] += ajuste
-        pesos_mercado["peso_chutes"] += ajuste
-        pesos_mercado["peso_eficiencia"] += ajuste
+        PESO_XG += ajuste * media_xg * 0.10
+        PESO_CHUTES += ajuste * media_chutes * 0.05
+        PESO_EFICIENCIA += ajuste * media_eficiencia * 0.10
+        PESO_FORMA += ajuste * media_forma * 0.20
+        PESO_TABELA += ajuste * media_tabela * 0.20
 
-        pesos_mercado["peso_tabela"] -= ajuste / 2
-        pesos_mercado["peso_forma"] += ajuste / 2
-        pesos_mercado["peso_forca"] += ajuste / 2
+        PESO_XG = max(0.10, min(PESO_XG, 3))
+        PESO_CHUTES = max(0.10, min(PESO_CHUTES, 3))
+        PESO_EFICIENCIA = max(0.10, min(PESO_EFICIENCIA, 3))
+        PESO_FORMA = max(0.10, min(PESO_FORMA, 3))
+        PESO_TABELA = max(0.10, min(PESO_TABELA, 3))
 
     salvar_pesos()
 def verificar_rodada():
