@@ -274,14 +274,187 @@ odd_over25 = st.number_input(
     step=0.01
 )
 
+odd_over35 = st.number_input(
+    "Odd Over 3.5",
+    min_value=1.0,
+    step=0.01
+)
+
 odd_under25 = st.number_input(
     "Odd Under 2.5",
     min_value=1.0,
     step=0.01
 )
 
-odd_over35 = st.number_input(
-    "Odd Over 3.5",
+odd_under35 = st.number_input(
+    "Odd Under 3.5",
+    min_value=1.0,
+    step=0.01
+)
+
+
+# =========================
+# BTTS
+# =========================
+
+st.subheader("BTTS")
+
+odd_btts_sim = st.number_input(
+    "Odd BTTS SIM",
+    min_value=1.0,
+    step=0.01
+)
+
+odd_btts_nao = st.number_input(
+    "Odd BTTS NÃO",
+    min_value=1.0,
+    step=0.01
+)
+
+
+# =========================
+# GOLS POR EQUIPE
+# =========================
+
+st.subheader("Gols por Equipe")
+
+odd_casa_marca_1 = st.number_input(
+    "Odd Casa marca 1+ gol",
+    min_value=1.0,
+    step=0.01
+)
+
+odd_fora_marca_1 = st.number_input(
+    "Odd Fora marca 1+ gol",
+    min_value=1.0,
+    step=0.01
+)
+
+odd_casa_marca_2 = st.number_input(
+    "Odd Casa marca 2+ gols",
+    min_value=1.0,
+    step=0.01
+)
+
+odd_fora_marca_2 = st.number_input(
+    "Odd Fora marca 2+ gols",
+    min_value=1.0,
+    step=0.01
+)
+
+odd_casa_over05 = st.number_input(
+    "Odd Casa Over 0.5",
+    min_value=1.0,
+    step=0.01
+)
+
+odd_casa_over15 = st.number_input(
+    "Odd Casa Over 1.5",
+    min_value=1.0,
+    step=0.01
+)
+
+odd_casa_over25 = st.number_input(
+    "Odd Casa Over 2.5",
+    min_value=1.0,
+    step=0.01
+)
+
+odd_fora_over05 = st.number_input(
+    "Odd Fora Over 0.5",
+    min_value=1.0,
+    step=0.01
+)
+
+odd_fora_over15 = st.number_input(
+    "Odd Fora Over 1.5",
+    min_value=1.0,
+    step=0.01
+)
+
+odd_fora_over25 = st.number_input(
+    "Odd Fora Over 2.5",
+    min_value=1.0,
+    step=0.01
+)
+
+
+# =========================
+# DUPLA CHANCE
+# =========================
+
+st.subheader("Dupla Chance")
+
+odd_dupla_1x = st.number_input(
+    "Odd Dupla Chance 1X",
+    min_value=1.0,
+    step=0.01
+)
+
+odd_dupla_x2 = st.number_input(
+    "Odd Dupla Chance X2",
+    min_value=1.0,
+    step=0.01
+)
+
+odd_dupla_12 = st.number_input(
+    "Odd Dupla Chance 12",
+    min_value=1.0,
+    step=0.01
+)
+
+
+# =========================
+# EMPATE ANULA APOSTA - DNB
+# =========================
+
+st.subheader("Empate Anula a Aposta - DNB")
+
+odd_dnb_casa = st.number_input(
+    "Odd DNB Casa",
+    min_value=1.0,
+    step=0.01
+)
+
+odd_dnb_fora = st.number_input(
+    "Odd DNB Fora",
+    min_value=1.0,
+    step=0.01
+)
+
+
+# =========================
+# MERCADOS COMBINADOS
+# =========================
+
+st.subheader("Mercados Combinados")
+
+odd_time_marca_primeiro = st.number_input(
+    "Odd Time marca primeiro",
+    min_value=1.0,
+    step=0.01
+)
+
+odd_casa_vence_over15 = st.number_input(
+    "Odd Casa vence + Over 1.5",
+    min_value=1.0,
+    step=0.01
+)
+
+odd_fora_vence_over15 = st.number_input(
+    "Odd Fora vence + Over 1.5",
+    min_value=1.0,
+    step=0.01
+)
+
+odd_btts_over25 = st.number_input(
+    "Odd BTTS + Over 2.5",
+    min_value=1.0,
+    step=0.01
+)
+
+odd_btts_over35 = st.number_input(
+    "Odd BTTS + Over 3.5",
     min_value=1.0,
     step=0.01
 )
