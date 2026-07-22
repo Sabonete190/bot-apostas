@@ -792,51 +792,308 @@ if st.button("Analisar Jogo"):
         )
 
         st.write("---")
-        # =========================
+        
+    # =========================
+    # MATRIZ COMPLETA DE POISSON
+    # =========================
+
+    # Limite de gols utilizado na matriz
+    MAX_GOLS = 10
+
+    matriz_placares = []
+
+    for gols_casa in range(MAX_GOLS + 1):
+
+        for gols_fora in range(MAX_GOLS + 1):
+
+            prob_casa = poisson(
+                gols_esperados_casa,
+                gols_casa
+            )
+
+            prob_fora = poisson(
+                gols_esperados_fora,
+                gols_fora
+            )
+
+            prob_placar = (
+                prob_casa *
+                prob_fora
+            )
+
+            matriz_placares.append({
+                "gols_casa": gols_casa,
+                "gols_fora": gols_fora,
+                "probabilidade": prob_placar
+            })
+
+
+    # =========================
     # TOP PLACARES
     # =========================
 
     st.subheader("Placares Mais Prováveis")
 
-    placares = []
-
-    for gols_casa in range(4):
-
-        for gols_fora in range(4):
-
-            prob_placar = (
-                poisson(
-                    gols_esperados_casa,
-                    gols_casa
-                )
-                *
-                poisson(
-                    gols_esperados_fora,
-                    gols_fora
-                )
-            )
-
-            placares.append(
-                (
-                    f"{gols_casa} x {gols_fora}",
-                    prob_placar
-                )
-            )
-
-    placares.sort(
-        key=lambda x: x[1],
+    placares_ordenados = sorted(
+        matriz_placares,
+        key=lambda x: x["probabilidade"],
         reverse=True
     )
 
-    top_placares = placares[:5]
+    top_placares = placares_ordenados[:5]
 
-    for placar, probabilidade in top_placares:
+    for placar in top_placares:
 
         st.write(
-            f"{placar} = "
-            f"{round(probabilidade * 100, 2)}%"
+            f'{placar["gols_casa"]} x '
+            f'{placar["gols_fora"]} = '
+            f'{round(placar["probabilidade"] * 100, 2)}%'
         )
-     # =========================
+
+
+    # =========================
+    # FUNÇÃO PARA SOMAR
+    # PROBABILIDADES DOS PLACARES
+    # =========================
+
+    def probabilidade_mercado(
+        condicao
+    ):
+
+        probabilidade = 0
+
+        for placar in matriz_placares:
+
+            if condicao(
+                placar["gols_casa"],
+                placar["gols_fora"]
+            ):
+
+                probabilidade += (
+                    placar["probabilidade"]
+                )
+
+        return probabilidade
+
+
+    # =========================
+    # OVER / UNDER
+    # =========================
+
+    prob_over15 = probabilidade_mercado(
+        lambda casa, fora:
+        casa + fora >= 2
+    )
+
+    prob_over25 = probabilidade_mercado(
+        lambda casa, fora:
+        casa + fora >= 3
+    )
+
+    prob_over35 = probabilidade_mercado(
+        lambda casa, fora:
+        casa + fora >= 4
+    )
+
+    prob_under25 = probabilidade_mercado(
+        lambda casa, fora:
+        casa + fora <= 2
+    )
+
+    prob_under35 = probabilidade_mercado(
+        lambda casa, fora:
+        casa + fora <= 3
+    )
+
+
+    # =========================
+    # GOLS POR EQUIPE
+    # =========================
+
+    prob_casa_marca_1 = probabilidade_mercado(
+        lambda casa, fora:
+        casa >= 1
+    )
+
+    prob_fora_marca_1 = probabilidade_mercado(
+        lambda casa, fora:
+        fora >= 1
+    )
+
+    prob_casa_marca_2 = probabilidade_mercado(
+        lambda casa, fora:
+        casa >= 2
+    )
+
+    prob_fora_marca_2 = probabilidade_mercado(
+        lambda casa, fora:
+        fora >= 2
+    )
+
+    prob_casa_over05 = probabilidade_mercado(
+        lambda casa, fora:
+        casa >= 1
+    )
+
+    prob_casa_over15 = probabilidade_mercado(
+        lambda casa, fora:
+        casa >= 2
+    )
+
+    prob_casa_over25 = probabilidade_mercado(
+        lambda casa, fora:
+        casa >= 3
+    )
+
+    prob_fora_over05 = probabilidade_mercado(
+        lambda casa, fora:
+        fora >= 1
+    )
+
+    prob_fora_over15 = probabilidade_mercado(
+        lambda casa, fora:
+        fora >= 2
+    )
+
+    prob_fora_over25 = probabilidade_mercado(
+        lambda casa, fora:
+        fora >= 3
+    )
+
+
+    # =========================
+    # BTTS
+    # =========================
+
+    prob_btts_sim = probabilidade_mercado(
+        lambda casa, fora:
+        casa >= 1 and fora >= 1
+    )
+
+    prob_btts_nao = (
+        1 - prob_btts_sim
+    )
+
+
+    # =========================
+    # RESULTADO 1X2
+    # =========================
+
+    prob_casa_modelo = probabilidade_mercado(
+        lambda casa, fora:
+        casa > fora
+    )
+
+    prob_empate_modelo = probabilidade_mercado(
+        lambda casa, fora:
+        casa == fora
+    )
+
+    prob_fora_modelo = probabilidade_mercado(
+        lambda casa, fora:
+        casa < fora
+    )
+
+
+    # =========================
+    # DUPLA CHANCE
+    # =========================
+
+    prob_dupla_1x = (
+        prob_casa_modelo +
+        prob_empate_modelo
+    )
+
+    prob_dupla_x2 = (
+        prob_empate_modelo +
+        prob_fora_modelo
+    )
+
+    prob_dupla_12 = (
+        prob_casa_modelo +
+        prob_fora_modelo
+    )
+
+
+    # =========================
+    # DNB
+    # =========================
+
+    prob_dnb_casa = prob_casa_modelo
+
+    prob_dnb_fora = prob_fora_modelo
+
+
+    # =========================
+    # TIME MARCA PRIMEIRO
+    # =========================
+
+    prob_time_marca_primeiro = (
+        probabilidade_mercado(
+            lambda casa, fora:
+            casa > 0 and casa > fora
+        )
+        +
+        probabilidade_mercado(
+            lambda casa, fora:
+            fora > 0 and fora > casa
+        )
+    )
+
+
+    # =========================
+    # CASA VENCE + OVER 1.5
+    # =========================
+
+    prob_casa_vence_over15 = (
+        probabilidade_mercado(
+            lambda casa, fora:
+            casa > fora
+            and casa + fora >= 2
+        )
+    )
+
+
+    # =========================
+    # FORA VENCE + OVER 1.5
+    # =========================
+
+    prob_fora_vence_over15 = (
+        probabilidade_mercado(
+            lambda casa, fora:
+            fora > casa
+            and casa + fora >= 2
+        )
+    )
+
+
+    # =========================
+    # BTTS + OVER 2.5
+    # =========================
+
+    prob_btts_over25 = (
+        probabilidade_mercado(
+            lambda casa, fora:
+            casa >= 1
+            and fora >= 1
+            and casa + fora >= 3
+        )
+    )
+
+
+    # =========================
+    # BTTS + OVER 3.5
+    # =========================
+
+    prob_btts_over35 = (
+        probabilidade_mercado(
+            lambda casa, fora:
+            casa >= 1
+            and fora >= 1
+            and casa + fora >= 4
+        )
+    )
+# =========================
 # OVER/UNDER 2.5
 # =========================
 
