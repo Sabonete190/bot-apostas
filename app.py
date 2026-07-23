@@ -459,23 +459,7 @@ odd_btts_over35 = st.number_input(
     step=0.01
 )
 
-# =========================
-# BTTS
-# =========================
 
-st.subheader("BTTS")
-
-odd_btts_sim = st.number_input(
-    "Odd BTTS SIM",
-    min_value=1.0,
-    step=0.01
-)
-
-odd_btts_nao = st.number_input(
-    "Odd BTTS NÃO",
-    min_value=1.0,
-    step=0.01
-)
 # =========================
 # POSIÇÃO NA TABELA
 # =========================
