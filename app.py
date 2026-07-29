@@ -1485,49 +1485,7 @@ if st.button("Analisar Jogo"):
         )
 
         st.write("---")
-# =========================
-# OVER/UNDER 2.5
-# =========================
 
-    total_gols_esperados = (
-        gols_esperados_casa +
-        gols_esperados_fora
-    )
-
-    # =========================
-    # AJUSTE DA LIGA
-    # =========================
-
-    ajuste_liga_gols = (
-        media_gols_liga / 2.50
-    )
-
-    total_gols_esperados *= (
-        ajuste_liga_gols
-    )
-
-    prob_under25 = 0
-
-    for gols in range(3):
-
-        prob_under25 += poisson(
-            total_gols_esperados,
-            gols
-        )
-
-    prob_over25 = 1 - prob_under25
-
-    st.subheader("Over/Under 2.5")
-
-    st.write(
-        f"Over 2.5: "
-        f"{round(prob_over25 * 100, 2)}%"
-    )
-
-    st.write(
-        f"Under 2.5: "
-        f"{round(prob_under25 * 100, 2)}%"
-    )   
     # =========================
     # ODDS JUSTAS OVER/UNDER
     # =========================
