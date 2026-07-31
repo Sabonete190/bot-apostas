@@ -55,6 +55,7 @@ if "melhor_mercado" not in st.session_state:
 
 # TÍTULO
 st.title("📊 Bot de Apostas Profissional")
+st.write(teste_erro_streamlit)
 
 st.write("Preencha os dados da partida.")
 # =========================
