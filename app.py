@@ -55,8 +55,6 @@ if "melhor_mercado" not in st.session_state:
 
 # TÍTULO
 st.title("📊 Bot de Apostas Profissional")
-if True:
-st.write("Teste")
 
 st.write("Preencha os dados da partida.")
 # =========================
