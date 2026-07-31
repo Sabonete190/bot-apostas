@@ -2392,6 +2392,31 @@ if st.button("Salvar Aposta"):
         "posicao_casa": posicao_casa,
 
         "posicao_fora": posicao_fora,
+        
+        # =========================
+        # MÉTRICAS DO MERCADO
+        # =========================
+
+        "Probabilidade Modelo": st.session_state.get(
+            "melhor_probabilidade",
+            0
+        ),
+
+        "Odd Justa": st.session_state.get(
+            "melhor_odd_justa",
+            0
+        ),
+
+        "Kelly": st.session_state.get(
+            "melhor_kelly",
+            0
+        ),
+
+        "Gols Esperados Casa": gols_esperados_casa,
+
+        "Gols Esperados Fora": gols_esperados_fora,
+
+        "Força Gol": forca_gol,
 
         # =========================
         # RESULTADO
