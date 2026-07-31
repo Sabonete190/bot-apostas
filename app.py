@@ -5,6 +5,7 @@ import os
 import requests
 import base64
 import json
+from datetime import datetime
 
 with open("pesos.json", "r") as f:
     pesos = json.load(f)
@@ -2335,6 +2336,8 @@ if st.button("Salvar Aposta"):
         "Mercado": mercado_salvo,
 
         "Odd": odd_escolhida,
+        
+        "Data": datetime.now().strftime("%d/%m/%Y"),
 
         # =========================
         # DADOS DO MODELO
