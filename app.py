@@ -711,7 +711,7 @@ if st.button("Analisar Jogo"):
         (ataque_fora / (defesa_casa + 0.5))
     ) / 2
 
-    stsubheader("Análise Estatística")
+    st.subheader("Análise Estatística")
 
     st.write(f"Ataque Casa: {round(ataque_casa, 2)}")
     st.write(f"Ataque Fora: {round(ataque_fora, 2)}")
