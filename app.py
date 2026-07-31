@@ -711,7 +711,7 @@ if st.button("Analisar Jogo"):
         (ataque_fora / (defesa_casa + 0.5))
     ) / 2
 
-    st.subheader("Análise Estatística")
+    stsubheader("Análise Estatística")
 
     st.write(f"Ataque Casa: {round(ataque_casa, 2)}")
     st.write(f"Ataque Fora: {round(ataque_fora, 2)}")
@@ -2335,7 +2335,7 @@ if st.button("Salvar Aposta"):
 
         "Mercado": mercado_salvo,
 
- "Odd": odd_escolhida,
+        "Odd": odd_escolhida,
                 "Probabilidade Modelo": st.session_state.get(
             "melhor_probabilidade",
             0
