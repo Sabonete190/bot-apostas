@@ -2336,7 +2336,16 @@ if st.button("Salvar Aposta"):
         "Mercado": mercado_salvo,
 
         "Odd": odd_escolhida,
-        
+                "Probabilidade Modelo": st.session_state.get(
+            "melhor_probabilidade",
+            0
+        ),
+
+        "Odd Justa": st.session_state.get(
+            "melhor_odd_justa",
+            0
+        ),
+                
         "Data": datetime.now().strftime("%d/%m/%Y"),
 
         # =========================
