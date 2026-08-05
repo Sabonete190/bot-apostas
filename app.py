@@ -2023,87 +2023,7 @@ if st.button("Analisar Jogo"):
         st.error(
             "❌ Jogo Sem Valor"
         )
-# =========================
-    # MELHOR MERCADO
-    # =========================
 
-    st.subheader("Melhor Mercado")
-
-    melhor_mercado = "Sem valor claro"
-
-    mercados = {
-
-        "🔥 Vitória Casa": edge_casa,
-        "🤝 Empate": edge_empate,
-        "🔥 Vitória Fora": edge_fora,
-
-        "⚽ Over 2.5": edge_over25,
-        "🛡️ Under 2.5": edge_under25,
-
-        "🔥 BTTS SIM": edge_btts_sim,
-        "❌ BTTS NÃO": edge_btts_nao
-    }
-
-    melhor_mercado = max(
-        mercados,
-        key=mercados.get
-    )
-
-    melhor_edge_mercado = mercados[
-        melhor_mercado
-    ]
-
-    if melhor_edge_mercado > 0:
-
-        st.success(
-            f"Melhor Mercado: {melhor_mercado}"
-        )
-
-        st.write(
-            f"Edge: "
-            f"{round(melhor_edge_mercado * 100, 2)}%"
-        )
-
-    else:
-
-        st.error(
-            "Sem mercado de valor"
-        )
-        dados = {
-    "data": data_jogo,
-    "time_casa": time_casa,
-    "time_fora": time_fora,
-
-    "xg_casa": xg_casa,
-    "xg_fora": xg_fora,
-
-    "xga_casa": xga_casa,
-    "xga_fora": xga_fora,
-
-    "forma_casa": forma_casa,
-    "forma_fora": forma_fora,
-
-    "eficiencia_casa": eficiencia_casa,
-    "eficiencia_fora": eficiencia_fora,
-
-    "chutes_casa": chutes_casa,
-    "chutes_fora": chutes_fora,
-
-    "posicao_casa": posicao_casa,
-    "posicao_fora": posicao_fora,
-
-    "mercado": melhor_mercado,
-
-    "odd": odd_escolhida,
-
-    "ev": melhor_ev,
-
-    "edge": melhor_edge,
-
-    "confianca": confianca,
-
-    "resultado": ""
-}
     # =========================
     # GESTÃO DE STAKE
     # =========================
@@ -2189,6 +2109,92 @@ if st.button("Analisar Jogo"):
 
     st.success(
         f"{perfil_jogo}"
+    )
+    # =========================
+# MELHOR MERCADO
+# =========================
+
+st.subheader("🏆 Melhor Mercado")
+
+melhor_mercado = None
+melhor_dados = None
+
+for nome, dados in mercados_calculados.items():
+
+    if (
+        melhor_dados is None
+        or dados["ev"] > melhor_dados["ev"]
+    ):
+
+        melhor_mercado = nome
+        melhor_dados = dados
+
+
+if (
+    melhor_dados is not None
+    and melhor_dados["ev"] > 0
+):
+
+    st.success(
+        f"🔥 Melhor Mercado: {melhor_mercado}"
+    )
+
+    st.write(
+        f"Probabilidade: "
+        f"{round(melhor_dados['probabilidade']*100,2)}%"
+    )
+
+    st.write(
+        f"Odd Mercado: "
+        f"{round(melhor_dados['odd'],2)}"
+    )
+
+    st.write(
+        f"Odd Justa: "
+        f"{round(melhor_dados['odd_justa'],2)}"
+    )
+
+    st.write(
+        f"EV: "
+        f"{round(melhor_dados['ev']*100,2)}%"
+    )
+
+    st.write(
+        f"Edge: "
+        f"{round(melhor_dados['edge']*100,2)}%"
+    )
+
+    st.write(
+        f"Kelly: "
+        f"{round(melhor_dados['kelly']*100,2)}%"
+    )
+
+    st.session_state["melhor_mercado"] = melhor_mercado
+
+    st.session_state["melhor_probabilidade"] = (
+        melhor_dados["probabilidade"]
+    )
+
+    st.session_state["melhor_odd_justa"] = (
+        melhor_dados["odd_justa"]
+    )
+
+    st.session_state["melhor_ev"] = (
+        melhor_dados["ev"]
+    )
+
+    st.session_state["melhor_edge"] = (
+        melhor_dados["edge"]
+    )
+
+    st.session_state["melhor_kelly"] = (
+        melhor_dados["kelly"]
+    )
+
+else:
+
+    st.error(
+        "Nenhum mercado possui valor positivo."
     )
 # =========================
     # TOP APOSTA
