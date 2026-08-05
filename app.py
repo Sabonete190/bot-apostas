@@ -2196,51 +2196,6 @@ else:
     st.error(
         "Nenhum mercado possui valor positivo."
     )
-# =========================
-    # TOP APOSTA
-    # =========================
-
-    st.subheader("Top Aposta do Jogo")
-
-    mercados = {
-
-        "Vitória Casa": edge_casa,
-        "Empate": edge_empate,
-        "Vitória Fora": edge_fora,
-
-        "Over 2.5": edge_over25,
-        "Under 2.5": edge_under25,
-
-        "BTTS SIM": edge_btts_sim,
-        "BTTS NÃO": edge_btts_nao
-    }
-
-    melhor_mercado = max(
-        mercados,
-        key=mercados.get
-    )
-
-    melhor_edge_final = mercados[
-        melhor_mercado
-    ]
-
-    if melhor_edge_final > 0:
-
-        st.success(
-            f"🔥 Melhor Aposta: "
-            f"{melhor_mercado}"
-        )
-
-        st.write(
-            f"Edge: "
-            f"{round(melhor_edge_final * 100, 2)}%"
-        )
-
-    else:
-
-        st.error(
-            "❌ Nenhuma aposta de valor encontrada"
-        )
 
     # =========================
     # SALVAR RESULTADOS
