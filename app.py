@@ -2119,7 +2119,7 @@ st.subheader("🏆 Melhor Mercado")
 melhor_mercado = None
 melhor_dados = None
 
-for nome, dados in mercados_calculados.items():
+for nome, dados in resultados_completos.items():
 
     if (
         melhor_dados is None
