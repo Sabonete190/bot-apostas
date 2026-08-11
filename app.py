@@ -1356,6 +1356,92 @@ if st.button("Analisar Jogo"):
 
             "kelly": kelly
         }
+        # =========================
+# MELHOR MERCADO
+# =========================
+
+st.subheader("🏆 Melhor Mercado")
+
+melhor_mercado = None
+melhor_dados = None
+
+for nome, dados in resultados_completos.items():
+
+    if (
+        melhor_dados is None
+        or dados["ev"] > melhor_dados["ev"]
+    ):
+
+        melhor_mercado = nome
+        melhor_dados = dados
+
+
+if (
+    melhor_dados is not None
+    and melhor_dados["ev"] > 0
+):
+
+    st.success(
+        f"🔥 Melhor Mercado: {melhor_mercado}"
+    )
+
+    st.write(
+        f"Probabilidade: "
+        f"{round(melhor_dados['probabilidade'] * 100, 2)}%"
+    )
+
+    st.write(
+        f"Odd Mercado: "
+        f"{round(melhor_dados['odd'], 2)}"
+    )
+
+    st.write(
+        f"Odd Justa: "
+        f"{round(melhor_dados['odd_justa'], 2)}"
+    )
+
+    st.write(
+        f"EV: "
+        f"{round(melhor_dados['ev'] * 100, 2)}%"
+    )
+
+    st.write(
+        f"Edge: "
+        f"{round(melhor_dados['edge'] * 100, 2)}%"
+    )
+
+    st.write(
+        f"Kelly: "
+        f"{round(melhor_dados['kelly'] * 100, 2)}%"
+    )
+
+    st.session_state["melhor_mercado"] = melhor_mercado
+
+    st.session_state["melhor_probabilidade"] = (
+        melhor_dados["probabilidade"]
+    )
+
+    st.session_state["melhor_odd_justa"] = (
+        melhor_dados["odd_justa"]
+    )
+
+    st.session_state["melhor_ev"] = (
+        melhor_dados["ev"]
+    )
+
+    st.session_state["melhor_edge"] = (
+        melhor_dados["edge"]
+    )
+
+    st.session_state["melhor_kelly"] = (
+        melhor_dados["kelly"]
+    )
+
+else:
+
+    st.error(
+        "❌ Nenhum mercado possui valor positivo."
+        )
 
 
     # =========================
