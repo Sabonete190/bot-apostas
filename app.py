@@ -1307,6 +1307,171 @@ if st.button("Analisar Jogo"):
             "odd": odd_btts_over35
         }
     }
+    # =========================
+# DICIONÁRIO PRINCIPAL DOS MERCADOS
+# =========================
+
+resultados_mercados = {
+
+    # =========================
+    # OVER / UNDER
+    # =========================
+
+    "Over 1.5": {
+        "probabilidade": prob_over15,
+        "odd": odd_over15
+    },
+
+    "Over 2.5": {
+        "probabilidade": prob_over25,
+        "odd": odd_over25
+    },
+
+    "Over 3.5": {
+        "probabilidade": prob_over35,
+        "odd": odd_over35
+    },
+
+    "Under 2.5": {
+        "probabilidade": prob_under25,
+        "odd": odd_under25
+    },
+
+    "Under 3.5": {
+        "probabilidade": prob_under35,
+        "odd": odd_under35
+    },
+
+    # =========================
+    # BTTS
+    # =========================
+
+    "BTTS SIM": {
+        "probabilidade": prob_btts_sim,
+        "odd": odd_btts_sim
+    },
+
+    "BTTS NÃO": {
+        "probabilidade": prob_btts_nao,
+        "odd": odd_btts_nao
+    },
+
+    # =========================
+    # GOLS POR EQUIPE
+    # =========================
+
+    "Casa marca 1+ gol": {
+        "probabilidade": prob_casa_marca_1,
+        "odd": odd_casa_marca_1
+    },
+
+    "Fora marca 1+ gol": {
+        "probabilidade": prob_fora_marca_1,
+        "odd": odd_fora_marca_1
+    },
+
+    "Casa marca 2+ gols": {
+        "probabilidade": prob_casa_marca_2,
+        "odd": odd_casa_marca_2
+    },
+
+    "Fora marca 2+ gols": {
+        "probabilidade": prob_fora_marca_2,
+        "odd": odd_fora_marca_2
+    },
+
+    "Casa Over 0.5": {
+        "probabilidade": prob_casa_over05,
+        "odd": odd_casa_over05
+    },
+
+    "Casa Over 1.5": {
+        "probabilidade": prob_casa_over15,
+        "odd": odd_casa_over15
+    },
+
+    "Casa Over 2.5": {
+        "probabilidade": prob_casa_over25,
+        "odd": odd_casa_over25
+    },
+
+    "Fora Over 0.5": {
+        "probabilidade": prob_fora_over05,
+        "odd": odd_fora_over05
+    },
+
+    "Fora Over 1.5": {
+        "probabilidade": prob_fora_over15,
+        "odd": odd_fora_over15
+    },
+
+    "Fora Over 2.5": {
+        "probabilidade": prob_fora_over25,
+        "odd": odd_fora_over25
+    },
+
+    # =========================
+    # DUPLA CHANCE
+    # =========================
+
+    "Dupla Chance 1X": {
+        "probabilidade": prob_dupla_1x,
+        "odd": odd_dupla_1x
+    },
+
+    "Dupla Chance X2": {
+        "probabilidade": prob_dupla_x2,
+        "odd": odd_dupla_x2
+    },
+
+    "Dupla Chance 12": {
+        "probabilidade": prob_dupla_12,
+        "odd": odd_dupla_12
+    },
+
+    # =========================
+    # DNB
+    # =========================
+
+    "DNB Casa": {
+        "probabilidade": prob_dnb_casa,
+        "odd": odd_dnb_casa
+    },
+
+    "DNB Fora": {
+        "probabilidade": prob_dnb_fora,
+        "odd": odd_dnb_fora
+    },
+
+    # =========================
+    # MERCADOS COMBINADOS
+    # =========================
+
+    "Time marca primeiro": {
+        "probabilidade": prob_time_marca_primeiro,
+        "odd": odd_time_marca_primeiro
+    },
+
+    "Casa vence + Over 1.5": {
+        "probabilidade": prob_casa_vence_over15,
+        "odd": odd_casa_vence_over15
+    },
+
+    "Fora vence + Over 1.5": {
+        "probabilidade": prob_fora_vence_over15,
+        "odd": odd_fora_vence_over15
+    },
+
+    "BTTS + Over 2.5": {
+        "probabilidade": prob_btts_over25,
+        "odd": odd_btts_over25
+    },
+
+    "BTTS + Over 3.5": {
+        "probabilidade": prob_btts_over35,
+        "odd": odd_btts_over35
+    }
+}
 
 
     # =========================
