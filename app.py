@@ -1310,52 +1310,77 @@ if st.button("Analisar Jogo"):
 
 
     # =========================
-    # CALCULAR ODDS JUSTAS
-    # EV, EDGE E KELLY
-    # =========================
+# CALCULAR ODDS JUSTAS
+# EV, EDGE E KELLY
+# =========================
 
-    resultados_completos = {}
+def calcular_odd_justa(probabilidade):
+
+    if probabilidade <= 0:
+        return 0
+
+    return 1 / probabilidade
 
 
-    for mercado, dados in resultados_mercados.items():
+def calcular_ev(probabilidade, odd):
 
-        probabilidade = dados["probabilidade"]
+    if odd <= 1:
+        return 0
 
-        odd = dados["odd"]
+    return (probabilidade * odd) - 1
 
-        odd_justa = calcular_odd_justa(
-            probabilidade
-        )
 
-        ev = calcular_ev(
-            probabilidade,
-            odd
-        )
+def calcular_edge(probabilidade, odd):
 
-        edge = calcular_edge(
-            probabilidade,
-            odd
-        )
+    if odd <= 1:
+        return 0
 
-        kelly = calcular_kelly_mercado(
-            probabilidade,
-            odd
-        )
+    return probabilidade - (1 / odd)
 
-        resultados_completos[mercado] = {
 
-            "probabilidade": probabilidade,
+def calcular_kelly_mercado(probabilidade, odd):
 
-            "odd": odd,
+    if odd <= 1:
+        return 0
 
-            "odd_justa": odd_justa,
+    b = odd - 1
 
-            "ev": ev,
+    kelly = (
+        (probabilidade * b) -
+        (1 - probabilidade)
+    ) / b
 
-            "edge": edge,
+    return max(kelly, 0)
 
-            "kelly": kelly
-        }
+
+# =========================
+# RESULTADOS DOS MERCADOS
+# =========================
+
+resultados_completos = {}
+
+for mercado, dados in resultados_mercados.items():
+
+    probabilidade = dados["probabilidade"]
+    odd = dados["odd"]
+
+    odd_justa = calcular_odd_justa(probabilidade)
+    ev = calcular_ev(probabilidade, odd)
+    edge = calcular_edge(probabilidade, odd)
+    kelly = calcular_kelly_mercado(
+        probabilidade,
+        odd
+    )
+
+    resultados_completos[mercado] = {
+
+        "probabilidade": probabilidade,
+        "odd": odd,
+        "odd_justa": odd_justa,
+        "ev": ev,
+        "edge": edge,
+        "kelly": kelly
+    }
         # =========================
 # MELHOR MERCADO
 # =========================
