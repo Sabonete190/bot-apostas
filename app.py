@@ -135,23 +135,31 @@ def salvar_aposta(dados):
     )
 def salvar_pesos():
 
-    import json
-
-    pesos = {
-        "peso_xg": PESO_XG,
-        "peso_chutes": PESO_CHUTES,
-        "peso_eficiencia": PESO_EFICIENCIA,
-        "peso_tabela": PESO_TABELA,
-        "peso_forma": PESO_FORMA,
-        "peso_forca": PESO_FORCA
+    # Mantém a estrutura aninhada original do pesos.json
+    # (1x2 / over25 / under25 / btts). Só o bloco "1x2" é
+    # atualizado, pois é o único ajustado por atualizar_pesos().
+    pesos_atualizados = {
+        "1x2": {
+            "peso_xg": PESO_XG,
+            "peso_chutes": PESO_CHUTES,
+            "peso_eficiencia": PESO_EFICIENCIA,
+            "peso_tabela": PESO_TABELA,
+            "peso_forma": PESO_FORMA,
+            "peso_forca": PESO_FORCA
+        },
+        "over25": pesos_over25,
+        "under25": pesos_under25,
+        "btts": pesos_btts
     }
 
     with open("pesos.json", "w") as f:
-        json.dump(pesos, f, indent=4)
+        json.dump(pesos_atualizados, f, indent=4)
 
     salvar_no_github("pesos.json")
 
 def atualizar_pesos():
+
+    global PESO_XG, PESO_CHUTES, PESO_EFICIENCIA, PESO_TABELA, PESO_FORMA
 
     df = pd.read_csv(
         "resultados_apostas.csv"
@@ -160,8 +168,34 @@ def atualizar_pesos():
     if df.empty:
         return
 
-    # Pega os últimos 10 resultados
-    ultimos = df.tail(10)
+    if not os.path.exists(ARQUIVO_HISTORICO):
+        return
+
+    # resultados_apostas.csv só tem Resultado/Odd/Stake/Lucro.
+    # As estatísticas do jogo (xg, chutes, forma, etc.) ficam no
+    # historico_apostas.csv, então juntamos os dois pelo confronto.
+    df_hist = pd.read_csv(ARQUIVO_HISTORICO)
+
+    colunas_stats = [
+        "xg_casa", "xg_fora",
+        "chutes_casa", "chutes_fora",
+        "eficiencia_casa", "eficiencia_fora",
+        "forma_casa", "forma_fora",
+        "posicao_casa", "posicao_fora"
+    ]
+
+    for coluna in colunas_stats:
+        if coluna not in df_hist.columns:
+            df_hist[coluna] = None
+
+    # Pega os últimos 10 resultados e traz as estatísticas do jogo
+    ultimos = df.tail(10).merge(
+        df_hist[
+            ["Time Casa", "Time Fora", "Mercado"] + colunas_stats
+        ],
+        on=["Time Casa", "Time Fora", "Mercado"],
+        how="left"
+    )
 
     # Separa por mercado
     mercados = {
@@ -197,11 +231,19 @@ def atualizar_pesos():
         # Ajuste pequeno para evitar mudanças bruscas
         ajuste = saldo * 0.01
 
-        media_xg = (ultima["xg_casa"] + ultima["xg_fora"]) / 2
-        media_chutes = (ultima["chutes_casa"] + ultima["chutes_fora"]) / 2
-        media_eficiencia = (ultima["eficiencia_casa"] + ultima["eficiencia_fora"]) / 2
-        media_forma = (ultima["forma_casa"] + ultima["forma_fora"]) / 30
-        media_tabela = ((21 - ultima["posicao_casa"]) + (21 - ultima["posicao_fora"])) / 40
+        media_xg = resultados_mercado[["xg_casa", "xg_fora"]].mean().mean()
+        media_chutes = resultados_mercado[["chutes_casa", "chutes_fora"]].mean().mean()
+        media_eficiencia = resultados_mercado[["eficiencia_casa", "eficiencia_fora"]].mean().mean()
+        media_forma = resultados_mercado[["forma_casa", "forma_fora"]].mean().mean() / 30
+        media_tabela = (
+            (21 - resultados_mercado["posicao_casa"]).mean()
+            + (21 - resultados_mercado["posicao_fora"]).mean()
+        ) / 40
+
+        # Sem estatísticas casadas com o histórico -> pula este mercado
+        if pd.isna(media_xg) or pd.isna(media_chutes) or pd.isna(media_eficiencia) \
+                or pd.isna(media_forma) or pd.isna(media_tabela):
+            continue
 
         PESO_XG += ajuste * media_xg * 0.10
         PESO_CHUTES += ajuste * media_chutes * 0.05
@@ -1308,1188 +1350,811 @@ if st.button("Analisar Jogo"):
         }
     }
     # =========================
-# DICIONÁRIO PRINCIPAL DOS MERCADOS
-# =========================
-
-resultados_mercados = {
-
-    # =========================
-    # OVER / UNDER
+    # RESULTADOS DOS MERCADOS
     # =========================
 
-    "Over 1.5": {
-        "probabilidade": prob_over15,
-        "odd": odd_over15
-    },
+    resultados_completos = {}
 
-    "Over 2.5": {
-        "probabilidade": prob_over25,
-        "odd": odd_over25
-    },
-
-    "Over 3.5": {
-        "probabilidade": prob_over35,
-        "odd": odd_over35
-    },
-
-    "Under 2.5": {
-        "probabilidade": prob_under25,
-        "odd": odd_under25
-    },
-
-    "Under 3.5": {
-        "probabilidade": prob_under35,
-        "odd": odd_under35
-    },
-
-    # =========================
-    # BTTS
-    # =========================
-
-    "BTTS SIM": {
-        "probabilidade": prob_btts_sim,
-        "odd": odd_btts_sim
-    },
-
-    "BTTS NÃO": {
-        "probabilidade": prob_btts_nao,
-        "odd": odd_btts_nao
-    },
-
-    # =========================
-    # GOLS POR EQUIPE
-    # =========================
-
-    "Casa marca 1+ gol": {
-        "probabilidade": prob_casa_marca_1,
-        "odd": odd_casa_marca_1
-    },
-
-    "Fora marca 1+ gol": {
-        "probabilidade": prob_fora_marca_1,
-        "odd": odd_fora_marca_1
-    },
-
-    "Casa marca 2+ gols": {
-        "probabilidade": prob_casa_marca_2,
-        "odd": odd_casa_marca_2
-    },
-
-    "Fora marca 2+ gols": {
-        "probabilidade": prob_fora_marca_2,
-        "odd": odd_fora_marca_2
-    },
-
-    "Casa Over 0.5": {
-        "probabilidade": prob_casa_over05,
-        "odd": odd_casa_over05
-    },
-
-    "Casa Over 1.5": {
-        "probabilidade": prob_casa_over15,
-        "odd": odd_casa_over15
-    },
-
-    "Casa Over 2.5": {
-        "probabilidade": prob_casa_over25,
-        "odd": odd_casa_over25
-    },
-
-    "Fora Over 0.5": {
-        "probabilidade": prob_fora_over05,
-        "odd": odd_fora_over05
-    },
-
-    "Fora Over 1.5": {
-        "probabilidade": prob_fora_over15,
-        "odd": odd_fora_over15
-    },
-
-    "Fora Over 2.5": {
-        "probabilidade": prob_fora_over25,
-        "odd": odd_fora_over25
-    },
-
-    # =========================
-    # DUPLA CHANCE
-    # =========================
-
-    "Dupla Chance 1X": {
-        "probabilidade": prob_dupla_1x,
-        "odd": odd_dupla_1x
-    },
-
-    "Dupla Chance X2": {
-        "probabilidade": prob_dupla_x2,
-        "odd": odd_dupla_x2
-    },
-
-    "Dupla Chance 12": {
-        "probabilidade": prob_dupla_12,
-        "odd": odd_dupla_12
-    },
-
-    # =========================
-    # DNB
-    # =========================
-
-    "DNB Casa": {
-        "probabilidade": prob_dnb_casa,
-        "odd": odd_dnb_casa
-    },
-
-    "DNB Fora": {
-        "probabilidade": prob_dnb_fora,
-        "odd": odd_dnb_fora
-    },
-
-    # =========================
-    # MERCADOS COMBINADOS
-    # =========================
-
-    "Time marca primeiro": {
-        "probabilidade": prob_time_marca_primeiro,
-        "odd": odd_time_marca_primeiro
-    },
-
-    "Casa vence + Over 1.5": {
-        "probabilidade": prob_casa_vence_over15,
-        "odd": odd_casa_vence_over15
-    },
-
-    "Fora vence + Over 1.5": {
-        "probabilidade": prob_fora_vence_over15,
-        "odd": odd_fora_vence_over15
-    },
-
-    "BTTS + Over 2.5": {
-        "probabilidade": prob_btts_over25,
-        "odd": odd_btts_over25
-    },
-
-    "BTTS + Over 3.5": {
-        "probabilidade": prob_btts_over35,
-        "odd": odd_btts_over35
-    }
-}
-
-
-    # =========================
-# CALCULAR ODDS JUSTAS
-# EV, EDGE E KELLY
-# =========================
-
-def calcular_odd_justa(probabilidade):
-
-    if probabilidade <= 0:
-        return 0
-
-    return 1 / probabilidade
-
-
-def calcular_ev(probabilidade, odd):
-
-    if odd <= 1:
-        return 0
-
-    return (probabilidade * odd) - 1
-
-
-def calcular_edge(probabilidade, odd):
-
-    if odd <= 1:
-        return 0
-
-    return probabilidade - (1 / odd)
-
-
-def calcular_kelly_mercado(probabilidade, odd):
-
-    if odd <= 1:
-        return 0
-
-    b = odd - 1
-
-    kelly = (
-        (probabilidade * b) -
-        (1 - probabilidade)
-    ) / b
-
-    return max(kelly, 0)
-
-
-# =========================
-# RESULTADOS DOS MERCADOS
-# =========================
-
-resultados_completos = {}
-
-for mercado, dados in resultados_mercados.items():
-
-    probabilidade = dados["probabilidade"]
-    odd = dados["odd"]
-
-    odd_justa = calcular_odd_justa(probabilidade)
-    ev = calcular_ev(probabilidade, odd)
-    edge = calcular_edge(probabilidade, odd)
-    kelly = calcular_kelly_mercado(
-        probabilidade,
-        odd
-    )
-
-    resultados_completos[mercado] = {
-
-        "probabilidade": probabilidade,
-        "odd": odd,
-        "odd_justa": odd_justa,
-        "ev": ev,
-        "edge": edge,
-        "kelly": kelly
-    }
-        # =========================
-# MELHOR MERCADO
-# =========================
-
-st.subheader("🏆 Melhor Mercado")
-
-melhor_mercado = None
-melhor_dados = None
-
-for nome, dados in resultados_completos.items():
-
-    if (
-        melhor_dados is None
-        or dados["ev"] > melhor_dados["ev"]
-    ):
-
-        melhor_mercado = nome
-        melhor_dados = dados
-
-
-if (
-    melhor_dados is not None
-    and melhor_dados["ev"] > 0
-):
-
-    st.success(
-        f"🔥 Melhor Mercado: {melhor_mercado}"
-    )
-
-    st.write(
-        f"Probabilidade: "
-        f"{round(melhor_dados['probabilidade'] * 100, 2)}%"
-    )
-
-    st.write(
-        f"Odd Mercado: "
-        f"{round(melhor_dados['odd'], 2)}"
-    )
-
-    st.write(
-        f"Odd Justa: "
-        f"{round(melhor_dados['odd_justa'], 2)}"
-    )
-
-    st.write(
-        f"EV: "
-        f"{round(melhor_dados['ev'] * 100, 2)}%"
-    )
-
-    st.write(
-        f"Edge: "
-        f"{round(melhor_dados['edge'] * 100, 2)}%"
-    )
-
-    st.write(
-        f"Kelly: "
-        f"{round(melhor_dados['kelly'] * 100, 2)}%"
-    )
-
-    st.session_state["melhor_mercado"] = melhor_mercado
-
-    st.session_state["melhor_probabilidade"] = (
-        melhor_dados["probabilidade"]
-    )
-
-    st.session_state["melhor_odd_justa"] = (
-        melhor_dados["odd_justa"]
-    )
-
-    st.session_state["melhor_ev"] = (
-        melhor_dados["ev"]
-    )
-
-    st.session_state["melhor_edge"] = (
-        melhor_dados["edge"]
-    )
-
-    st.session_state["melhor_kelly"] = (
-        melhor_dados["kelly"]
-    )
-
-else:
-
-    st.error(
-        "❌ Nenhum mercado possui valor positivo."
-        )
-
-
-    # =========================
-    # EXIBIR RESULTADOS
-    # =========================
-
-    st.subheader(
-        "Análise Completa dos Mercados"
-    )
-
-
-    for mercado, dados in resultados_completos.items():
-
-        st.write(
-            f"### {mercado}"
-        )
-
-        st.write(
-            f"Probabilidade Modelo: "
-            f"{round(dados['probabilidade'] * 100, 2)}%"
-        )
-
-        st.write(
-            f"Odd Justa: "
-            f"{round(dados['odd_justa'], 2)}"
-        )
-
-        st.write(
-            f"Odd Mercado: "
-            f"{round(dados['odd'], 2)}"
-        )
-
-        st.write(
-            f"EV: "
-            f"{round(dados['ev'] * 100, 2)}%"
-        )
-
-        st.write(
-            f"Edge: "
-            f"{round(dados['edge'] * 100, 2)}%"
-        )
-
-        st.write(
-            f"Kelly: "
-            f"{round(dados['kelly'] * 100, 2)}%"
-        )
-
-        st.write("---")
-
-
-
-    # =========================
-    # CALCULAR MÉTRICAS
-    # =========================
-
-    for nome_mercado, dados in mercados_calculados.items():
+    for mercado, dados in resultados_mercados.items():
 
         probabilidade = dados["probabilidade"]
-
         odd = dados["odd"]
 
-        dados["odd_justa"] = (
-            calcular_odd_justa(
-                probabilidade
-            )
+        odd_justa = calcular_odd_justa(probabilidade)
+        ev = calcular_ev(probabilidade, odd)
+        edge = calcular_edge(probabilidade, odd)
+        kelly = calcular_kelly_mercado(
+            probabilidade,
+            odd
         )
 
-        dados["ev"] = (
-            calcular_ev(
-                probabilidade,
-                odd
-            )
-        )
+        resultados_completos[mercado] = {
 
-        dados["edge"] = (
-            calcular_edge(
-                probabilidade,
-                odd
-            )
-        )
-
-        dados["kelly"] = (
-            calcular_kelly_mercado(
-                probabilidade,
-                odd
-            )
-        )
-
-
-    # =========================
-    # EXIBIR ANÁLISE DOS MERCADOS
+            "probabilidade": probabilidade,
+            "odd": odd,
+            "odd_justa": odd_justa,
+            "ev": ev,
+            "edge": edge,
+            "kelly": kelly
+        }
+            # =========================
+    # MELHOR MERCADO
     # =========================
 
-    st.subheader(
-        "📊 Análise Completa dos Mercados"
-    )
+    st.subheader("🏆 Melhor Mercado")
+
+    melhor_mercado = None
+    melhor_dados = None
+
+    for nome, dados in resultados_completos.items():
+
+        if (
+            melhor_dados is None
+            or dados["ev"] > melhor_dados["ev"]
+        ):
+
+            melhor_mercado = nome
+            melhor_dados = dados
 
 
-    for nome_mercado, dados in mercados_calculados.items():
+    if (
+        melhor_dados is not None
+        and melhor_dados["ev"] > 0
+    ):
 
-        st.write(
-            f"### {nome_mercado}"
+        st.success(
+            f"🔥 Melhor Mercado: {melhor_mercado}"
         )
 
         st.write(
             f"Probabilidade: "
-            f"{round(dados['probabilidade'] * 100, 2)}%"
+            f"{round(melhor_dados['probabilidade'] * 100, 2)}%"
+        )
+
+        st.write(
+            f"Odd Mercado: "
+            f"{round(melhor_dados['odd'], 2)}"
         )
 
         st.write(
             f"Odd Justa: "
-            f"{round(dados['odd_justa'], 2)}"
+            f"{round(melhor_dados['odd_justa'], 2)}"
         )
 
         st.write(
             f"EV: "
-            f"{round(dados['ev'] * 100, 2)}%"
+            f"{round(melhor_dados['ev'] * 100, 2)}%"
         )
 
         st.write(
             f"Edge: "
-            f"{round(dados['edge'] * 100, 2)}%"
+            f"{round(melhor_dados['edge'] * 100, 2)}%"
         )
 
         st.write(
             f"Kelly: "
-            f"{round(dados['kelly'] * 100, 2)}%"
+            f"{round(melhor_dados['kelly'] * 100, 2)}%"
         )
 
-        st.write("---")
+        st.session_state["melhor_mercado"] = melhor_mercado
 
-    # =========================
-    # ODDS JUSTAS OVER/UNDER
-    # =========================
-
-    odd_justa_over25 = (
-        1 / prob_over25
-    )
-
-    odd_justa_under25 = (
-        1 / prob_under25
-    )
-
-    st.subheader("Odds Justas Over/Under")
-
-    st.write(
-        f"Odd Justa Over 2.5: "
-        f"{round(odd_justa_over25, 2)}"
-    )
-
-    st.write(
-        f"Odd Justa Under 2.5: "
-        f"{round(odd_justa_under25, 2)}"
-    )
-         # =========================
-    # BTTS
-    # =========================
-
-    prob_btts_sim = 0
-
-    for gols_casa in range(8):
-
-        for gols_fora in range(8):
-
-            if gols_casa >= 1 and gols_fora >= 1:
-
-                prob_btts_sim += (
-                    poisson(
-                        gols_esperados_casa,
-                        gols_casa
-                    )
-                    *
-                    poisson(
-                        gols_esperados_fora,
-                        gols_fora
-                    )
-                )
-
-    prob_btts_nao = 1 - prob_btts_sim
-
-    st.subheader("BTTS")
-
-    st.write(
-        f"BTTS SIM: "
-        f"{round(prob_btts_sim * 100, 2)}%"
-    )
-
-    st.write(
-        f"BTTS NÃO: "
-        f"{round(prob_btts_nao * 100, 2)}%"
-    )
-    # =========================
-    # ODDS JUSTAS BTTS
-    # =========================
-
-    odd_justa_btts_sim = (
-        1 / prob_btts_sim
-    )
-
-    odd_justa_btts_nao = (
-        1 / prob_btts_nao
-    )
-
-    st.subheader("Odds Justas BTTS")
-
-    st.write(
-        f"Odd Justa BTTS SIM: "
-        f"{round(odd_justa_btts_sim, 2)}"
-    )
-
-    st.write(
-        f"Odd Justa BTTS NÃO: "
-        f"{round(odd_justa_btts_nao, 2)}"
-    )
-    # =========================
-    # EV OVER/UNDER
-    # =========================
-
-    ev_over25 = (
-        prob_over25 * odd_over25
-    ) - 1
-
-    ev_under25 = (
-        prob_under25 * odd_under25
-    ) - 1
-
-    st.subheader("EV Over/Under")
-
-    st.write(
-        f"EV Over 2.5: "
-        f"{round(ev_over25, 2)}"
-    )
-
-    st.write(
-        f"EV Under 2.5: "
-        f"{round(ev_under25, 2)}"
-    )
-
-    # =========================
-    # EV BTTS
-    # =========================
-
-    ev_btts_sim = (
-        prob_btts_sim * odd_btts_sim
-    ) - 1
-
-    ev_btts_nao = (
-        prob_btts_nao * odd_btts_nao
-    ) - 1
-
-    st.subheader("EV BTTS")
-
-    st.write(
-        f"EV BTTS SIM: "
-        f"{round(ev_btts_sim, 2)}"
-    )
-
-    st.write(
-        f"EV BTTS NÃO: "
-        f"{round(ev_btts_nao, 2)}"
-    )
-    # =========================
-    # EDGE OVER/BTTS
-    # =========================
-
-    edge_over25 = (
-        prob_over25 -
-        (1 / odd_over25)
-    )
-
-    edge_under25 = (
-        prob_under25 -
-        (1 / odd_under25)
-    )
-
-    edge_btts_sim = (
-        prob_btts_sim -
-        (1 / odd_btts_sim)
-    )
-
-    edge_btts_nao = (
-        prob_btts_nao -
-        (1 / odd_btts_nao)
-    )
-
-    st.subheader("Edge Over/BTTS")
-
-    st.write(
-        f"Edge Over 2.5: "
-        f"{round(edge_over25 * 100, 2)}%"
-    )
-
-    st.write(
-        f"Edge Under 2.5: "
-        f"{round(edge_under25 * 100, 2)}%"
-    )
-
-    st.write(
-        f"Edge BTTS SIM: "
-        f"{round(edge_btts_sim * 100, 2)}%"
-    )
-
-    st.write(
-        f"Edge BTTS NÃO: "
-        f"{round(edge_btts_nao * 100, 2)}%"
-    )
-    # =========================
-    # KELLY OVER/BTTS
-    # =========================
-
-    kelly_over25 = calcular_kelly(
-        prob_over25,
-        odd_over25
-    )
-
-    kelly_under25 = calcular_kelly(
-        prob_under25,
-        odd_under25
-    )
-
-    kelly_btts_sim = calcular_kelly(
-        prob_btts_sim,
-        odd_btts_sim
-    )
-
-    kelly_btts_nao = calcular_kelly(
-        prob_btts_nao,
-        odd_btts_nao
-    )
-
-    st.subheader("Kelly Over/BTTS")
-
-    st.write(
-        f"Kelly Over 2.5: "
-        f"{round(kelly_over25 * 100, 2)}%"
-    )
-
-    st.write(
-        f"Kelly Under 2.5: "
-        f"{round(kelly_under25 * 100, 2)}%"
-    )
-
-    st.write(
-        f"Kelly BTTS SIM: "
-        f"{round(kelly_btts_sim * 100, 2)}%"
-    )
-
-    st.write(
-        f"Kelly BTTS NÃO: "
-        f"{round(kelly_btts_nao * 100, 2)}%"
-    )
- # =========================
-    # PROBABILIDADES PRÓPRIAS
-    # =========================
-
-    forca_total = ataque_casa + ataque_fora + defesa_casa + defesa_fora
-
-    prob_casa_modelo = (
-        ataque_casa + defesa_fora
-    ) / forca_total
-
-    prob_fora_modelo = (
-        ataque_fora + defesa_casa
-    ) / forca_total
-
-    equilibrio = abs(prob_casa_modelo - prob_fora_modelo)
-
-    prob_empate_modelo = 0.30 - (equilibrio * 0.2)
-
-    prob_empate_modelo = max(0.10, prob_empate_modelo)
-
-    soma_modelo = (
-        prob_casa_modelo +
-        prob_fora_modelo +
-        prob_empate_modelo
-    )
-
-    prob_casa_modelo /= soma_modelo
-    prob_fora_modelo /= soma_modelo
-    prob_empate_modelo /= soma_modelo
-
-    st.subheader("Probabilidades do Modelo")
-
-    st.write(f"Casa Modelo: {round(prob_casa_modelo * 100, 2)}%")
-    st.write(f"Empate Modelo: {round(prob_empate_modelo * 100, 2)}%")
-    st.write(f"Fora Modelo: {round(prob_fora_modelo * 100, 2)}%")
-    # =========================
-    # ODDS JUSTAS
-    # =========================
-
-    odd_justa_casa = (
-        1 / prob_casa_modelo
-    )
-
-    odd_justa_empate = (
-        1 / prob_empate_modelo
-    )
-
-    odd_justa_fora = (
-        1 / prob_fora_modelo
-    )
-
-    st.subheader("Odds Justas")
-
-    st.write(
-        f"Odd Justa Casa: "
-        f"{round(odd_justa_casa, 2)}"
-    )
-
-    st.write(
-        f"Odd Justa Empate: "
-        f"{round(odd_justa_empate, 2)}"
-    )
-
-    st.write(
-        f"Odd Justa Fora: "
-        f"{round(odd_justa_fora, 2)}"
-    )
-    # =========================
-    # PROBABILIDADES IMPLÍCITAS
-    # =========================
-
-    prob_casa = 1 / odd_casa
-    prob_empate = 1 / odd_empate
-    prob_fora = 1 / odd_fora
-
-    # =========================
-    # NORMALIZAÇÃO
-    # =========================
-
-    soma = prob_casa + prob_empate + prob_fora
-
-    prob_casa /= soma
-    prob_empate /= soma
-    prob_fora /= soma
-
-    # =========================
-    # RESULTADO
-    # =========================
-
-    st.success("Análise concluída")
-
-    st.subheader("Probabilidades")
-
-    st.write(f"Casa: {round(prob_casa * 100, 2)}%")
-    st.write(f"Empate: {round(prob_empate * 100, 2)}%")
-    st.write(f"Fora: {round(prob_fora * 100, 2)}%")
-
-    # =========================
-    # EV
-    # =========================
-
-    # =========================
-    # EV DO MODELO
-    # =========================
-
-    ev_casa = (
-        prob_casa_modelo * odd_casa
-    ) - 1
-
-    ev_empate = (
-        prob_empate_modelo * odd_empate
-    ) - 1
-
-    ev_fora = (
-        prob_fora_modelo * odd_fora
-    ) - 1
-
-    st.subheader("EV do Modelo")
-
-    st.write(
-        f"EV Casa: {round(ev_casa, 2)}"
-    )
-
-    st.write(
-        f"EV Empate: {round(ev_empate, 2)}"
-    )
-
-    st.write(
-        f"EV Fora: {round(ev_fora, 2)}"
-    )
-    # =========================
-    # EDGE 1X2
-    # =========================
-
-    edge_casa = (
-        prob_casa_modelo -
-        (1 / odd_casa)
-    )
-
-    edge_empate = (
-        prob_empate_modelo -
-        (1 / odd_empate)
-    )
-
-    edge_fora = (
-        prob_fora_modelo -
-        (1 / odd_fora)
-    )
-
-    st.subheader("Edge 1X2")
-
-    st.write(
-        f"Edge Casa: "
-        f"{round(edge_casa * 100, 2)}%"
-    )
-
-    st.write(
-        f"Edge Empate: "
-        f"{round(edge_empate * 100, 2)}%"
-    )
-
-    st.write(
-        f"Edge Fora: "
-        f"{round(edge_fora * 100, 2)}%"
-    )
-    # =========================
-    # EDGE
-    # =========================
-
-    edge_casa = (
-        prob_casa_modelo - prob_casa
-    )
-
-    edge_empate = (
-        prob_empate_modelo - prob_empate
-    )
-
-    edge_fora = (
-        prob_fora_modelo - prob_fora
-    )
-
-    st.subheader("Edge do Modelo")
-
-    st.write(
-        f"Edge Casa: {round(edge_casa * 100, 2)}%"
-    )
-
-    st.write(
-        f"Edge Empate: {round(edge_empate * 100, 2)}%"
-    )
-
-    st.write(
-        f"Edge Fora: {round(edge_fora * 100, 2)}%"
-    )
-    # =========================
-    # KELLY CRITERION
-    # =========================
-
-    def calcular_kelly(probabilidade, odd):
-
-        kelly = (
-            (
-                odd * probabilidade
-            ) - 1
-        ) / (odd - 1)
-
-        return max(kelly, 0)
-
-    kelly_casa = calcular_kelly(
-        prob_casa_modelo,
-        odd_casa
-    )
-
-    kelly_empate = calcular_kelly(
-        prob_empate_modelo,
-        odd_empate
-    )
-
-    kelly_fora = calcular_kelly(
-        prob_fora_modelo,
-        odd_fora
-    )
-
-    st.subheader("Kelly Criterion")
-
-    st.write(
-        f"Kelly Casa: "
-        f"{round(kelly_casa * 100, 2)}%"
-    )
-
-    st.write(
-        f"Kelly Empate: "
-        f"{round(kelly_empate * 100, 2)}%"
-    )
-
-    st.write(
-        f"Kelly Fora: "
-        f"{round(kelly_fora * 100, 2)}%"
-    )
-    # =========================
-    # CONFIANÇA DO MODELO
-    # =========================
-
-    maior_edge = max(
-        abs(edge_casa),
-        abs(edge_empate),
-        abs(edge_fora)
-    )
-
-    maior_ev = max(
-        ev_casa,
-        ev_empate,
-        ev_fora
-    )
-
-    confianca = (
-        (forca_gol * 4)
-        +
-        (maior_edge * 20)
-        +
-        (maior_ev * 10)
-    )
-
-    confianca = max(
-        0,
-        min(confianca, 10)
-    )
-
-    st.subheader("Confiança do Modelo")
-
-    st.write(
-        f"Confiança: {round(confianca, 1)}/10"
-    )
-    # =========================
-    # DECISÃO INTELIGENTE
-    # =========================
-
-    st.subheader("Decisão do Modelo")
-
-    melhor_edge = max(
-        edge_casa,
-        edge_empate,
-        edge_fora
-    )
-
-    melhor_ev = max(
-        ev_casa,
-        ev_empate,
-        ev_fora
-    )
-
-    if (
-        melhor_edge >= 0.10
-        and melhor_ev >= 0.10
-        and confianca >= 7
-    ):
-
-        st.success(
-            "🔥 Entrada Forte Detectada"
+        st.session_state["melhor_probabilidade"] = (
+            melhor_dados["probabilidade"]
         )
 
-    elif (
-        melhor_edge >= 0.05
-        and melhor_ev >= 0.05
-        and confianca >= 5
-    ):
+        st.session_state["melhor_odd_justa"] = (
+            melhor_dados["odd_justa"]
+        )
 
-        st.warning(
-            "⚠️ Entrada Moderada"
+        st.session_state["melhor_ev"] = (
+            melhor_dados["ev"]
+        )
+
+        st.session_state["melhor_edge"] = (
+            melhor_dados["edge"]
+        )
+
+        st.session_state["melhor_kelly"] = (
+            melhor_dados["kelly"]
         )
 
     else:
 
         st.error(
-            "❌ Jogo Sem Valor"
+            "❌ Nenhum mercado possui valor positivo."
+            )
+
+
+        # =========================
+        # EXIBIR RESULTADOS
+        # =========================
+
+        st.subheader(
+            "Análise Completa dos Mercados"
         )
 
-    # =========================
-    # GESTÃO DE STAKE
-    # =========================
 
-    st.subheader("Stake Sugerida")
+        for mercado, dados in resultados_completos.items():
 
-    stake = 0
+            st.write(
+                f"### {mercado}"
+            )
 
-    if (
-        melhor_edge >= 0.10
-        and melhor_ev >= 0.10
-        and confianca >= 7
-    ):
+            st.write(
+                f"Probabilidade Modelo: "
+                f"{round(dados['probabilidade'] * 100, 2)}%"
+            )
 
-        stake = 5
+            st.write(
+                f"Odd Justa: "
+                f"{round(dados['odd_justa'], 2)}"
+            )
 
-    elif (
-        melhor_edge >= 0.05
-        and melhor_ev >= 0.05
-        and confianca >= 5
-    ):
+            st.write(
+                f"Odd Mercado: "
+                f"{round(dados['odd'], 2)}"
+            )
 
-        stake = 2
+            st.write(
+                f"EV: "
+                f"{round(dados['ev'] * 100, 2)}%"
+            )
 
-    else:
+            st.write(
+                f"Edge: "
+                f"{round(dados['edge'] * 100, 2)}%"
+            )
+
+            st.write(
+                f"Kelly: "
+                f"{round(dados['kelly'] * 100, 2)}%"
+            )
+
+            st.write("---")
+
+        # =========================
+        # ODDS JUSTAS OVER/UNDER
+        # =========================
+
+        odd_justa_over25 = (
+            1 / prob_over25
+        )
+
+        odd_justa_under25 = (
+            1 / prob_under25
+        )
+
+        st.subheader("Odds Justas Over/Under")
+
+        st.write(
+            f"Odd Justa Over 2.5: "
+            f"{round(odd_justa_over25, 2)}"
+        )
+
+        st.write(
+            f"Odd Justa Under 2.5: "
+            f"{round(odd_justa_under25, 2)}"
+        )
+             # =========================
+        # BTTS
+        # =========================
+
+        prob_btts_sim = 0
+
+        for gols_casa in range(8):
+
+            for gols_fora in range(8):
+
+                if gols_casa >= 1 and gols_fora >= 1:
+
+                    prob_btts_sim += (
+                        poisson(
+                            gols_esperados_casa,
+                            gols_casa
+                        )
+                        *
+                        poisson(
+                            gols_esperados_fora,
+                            gols_fora
+                        )
+                    )
+
+        prob_btts_nao = 1 - prob_btts_sim
+
+        st.subheader("BTTS")
+
+        st.write(
+            f"BTTS SIM: "
+            f"{round(prob_btts_sim * 100, 2)}%"
+        )
+
+        st.write(
+            f"BTTS NÃO: "
+            f"{round(prob_btts_nao * 100, 2)}%"
+        )
+        # =========================
+        # ODDS JUSTAS BTTS
+        # =========================
+
+        odd_justa_btts_sim = (
+            1 / prob_btts_sim
+        )
+
+        odd_justa_btts_nao = (
+            1 / prob_btts_nao
+        )
+
+        st.subheader("Odds Justas BTTS")
+
+        st.write(
+            f"Odd Justa BTTS SIM: "
+            f"{round(odd_justa_btts_sim, 2)}"
+        )
+
+        st.write(
+            f"Odd Justa BTTS NÃO: "
+            f"{round(odd_justa_btts_nao, 2)}"
+        )
+        # =========================
+        # EV OVER/UNDER
+        # =========================
+
+        ev_over25 = (
+            prob_over25 * odd_over25
+        ) - 1
+
+        ev_under25 = (
+            prob_under25 * odd_under25
+        ) - 1
+
+        st.subheader("EV Over/Under")
+
+        st.write(
+            f"EV Over 2.5: "
+            f"{round(ev_over25, 2)}"
+        )
+
+        st.write(
+            f"EV Under 2.5: "
+            f"{round(ev_under25, 2)}"
+        )
+
+        # =========================
+        # EV BTTS
+        # =========================
+
+        ev_btts_sim = (
+            prob_btts_sim * odd_btts_sim
+        ) - 1
+
+        ev_btts_nao = (
+            prob_btts_nao * odd_btts_nao
+        ) - 1
+
+        st.subheader("EV BTTS")
+
+        st.write(
+            f"EV BTTS SIM: "
+            f"{round(ev_btts_sim, 2)}"
+        )
+
+        st.write(
+            f"EV BTTS NÃO: "
+            f"{round(ev_btts_nao, 2)}"
+        )
+        # =========================
+        # EDGE OVER/BTTS
+        # =========================
+
+        edge_over25 = (
+            prob_over25 -
+            (1 / odd_over25)
+        )
+
+        edge_under25 = (
+            prob_under25 -
+            (1 / odd_under25)
+        )
+
+        edge_btts_sim = (
+            prob_btts_sim -
+            (1 / odd_btts_sim)
+        )
+
+        edge_btts_nao = (
+            prob_btts_nao -
+            (1 / odd_btts_nao)
+        )
+
+        st.subheader("Edge Over/BTTS")
+
+        st.write(
+            f"Edge Over 2.5: "
+            f"{round(edge_over25 * 100, 2)}%"
+        )
+
+        st.write(
+            f"Edge Under 2.5: "
+            f"{round(edge_under25 * 100, 2)}%"
+        )
+
+        st.write(
+            f"Edge BTTS SIM: "
+            f"{round(edge_btts_sim * 100, 2)}%"
+        )
+
+        st.write(
+            f"Edge BTTS NÃO: "
+            f"{round(edge_btts_nao * 100, 2)}%"
+        )
+        # =========================
+        # KELLY OVER/BTTS
+        # =========================
+
+        kelly_over25 = calcular_kelly(
+            prob_over25,
+            odd_over25
+        )
+
+        kelly_under25 = calcular_kelly(
+            prob_under25,
+            odd_under25
+        )
+
+        kelly_btts_sim = calcular_kelly(
+            prob_btts_sim,
+            odd_btts_sim
+        )
+
+        kelly_btts_nao = calcular_kelly(
+            prob_btts_nao,
+            odd_btts_nao
+        )
+
+        st.subheader("Kelly Over/BTTS")
+
+        st.write(
+            f"Kelly Over 2.5: "
+            f"{round(kelly_over25 * 100, 2)}%"
+        )
+
+        st.write(
+            f"Kelly Under 2.5: "
+            f"{round(kelly_under25 * 100, 2)}%"
+        )
+
+        st.write(
+            f"Kelly BTTS SIM: "
+            f"{round(kelly_btts_sim * 100, 2)}%"
+        )
+
+        st.write(
+            f"Kelly BTTS NÃO: "
+            f"{round(kelly_btts_nao * 100, 2)}%"
+        )
+     # =========================
+        # PROBABILIDADES PRÓPRIAS
+        # =========================
+
+        forca_total = ataque_casa + ataque_fora + defesa_casa + defesa_fora
+
+        prob_casa_modelo = (
+            ataque_casa + defesa_fora
+        ) / forca_total
+
+        prob_fora_modelo = (
+            ataque_fora + defesa_casa
+        ) / forca_total
+
+        equilibrio = abs(prob_casa_modelo - prob_fora_modelo)
+
+        prob_empate_modelo = 0.30 - (equilibrio * 0.2)
+
+        prob_empate_modelo = max(0.10, prob_empate_modelo)
+
+        soma_modelo = (
+            prob_casa_modelo +
+            prob_fora_modelo +
+            prob_empate_modelo
+        )
+
+        prob_casa_modelo /= soma_modelo
+        prob_fora_modelo /= soma_modelo
+        prob_empate_modelo /= soma_modelo
+
+        st.subheader("Probabilidades do Modelo")
+
+        st.write(f"Casa Modelo: {round(prob_casa_modelo * 100, 2)}%")
+        st.write(f"Empate Modelo: {round(prob_empate_modelo * 100, 2)}%")
+        st.write(f"Fora Modelo: {round(prob_fora_modelo * 100, 2)}%")
+        # =========================
+        # ODDS JUSTAS
+        # =========================
+
+        odd_justa_casa = (
+            1 / prob_casa_modelo
+        )
+
+        odd_justa_empate = (
+            1 / prob_empate_modelo
+        )
+
+        odd_justa_fora = (
+            1 / prob_fora_modelo
+        )
+
+        st.subheader("Odds Justas")
+
+        st.write(
+            f"Odd Justa Casa: "
+            f"{round(odd_justa_casa, 2)}"
+        )
+
+        st.write(
+            f"Odd Justa Empate: "
+            f"{round(odd_justa_empate, 2)}"
+        )
+
+        st.write(
+            f"Odd Justa Fora: "
+            f"{round(odd_justa_fora, 2)}"
+        )
+        # =========================
+        # PROBABILIDADES IMPLÍCITAS
+        # =========================
+
+        prob_casa = 1 / odd_casa
+        prob_empate = 1 / odd_empate
+        prob_fora = 1 / odd_fora
+
+        # =========================
+        # NORMALIZAÇÃO
+        # =========================
+
+        soma = prob_casa + prob_empate + prob_fora
+
+        prob_casa /= soma
+        prob_empate /= soma
+        prob_fora /= soma
+
+        # =========================
+        # RESULTADO
+        # =========================
+
+        st.success("Análise concluída")
+
+        st.subheader("Probabilidades")
+
+        st.write(f"Casa: {round(prob_casa * 100, 2)}%")
+        st.write(f"Empate: {round(prob_empate * 100, 2)}%")
+        st.write(f"Fora: {round(prob_fora * 100, 2)}%")
+
+        # =========================
+        # EV
+        # =========================
+
+        # =========================
+        # EV DO MODELO
+        # =========================
+
+        ev_casa = (
+            prob_casa_modelo * odd_casa
+        ) - 1
+
+        ev_empate = (
+            prob_empate_modelo * odd_empate
+        ) - 1
+
+        ev_fora = (
+            prob_fora_modelo * odd_fora
+        ) - 1
+
+        st.subheader("EV do Modelo")
+
+        st.write(
+            f"EV Casa: {round(ev_casa, 2)}"
+        )
+
+        st.write(
+            f"EV Empate: {round(ev_empate, 2)}"
+        )
+
+        st.write(
+            f"EV Fora: {round(ev_fora, 2)}"
+        )
+        # =========================
+        # EDGE 1X2
+        # =========================
+
+        edge_casa = (
+            prob_casa_modelo -
+            (1 / odd_casa)
+        )
+
+        edge_empate = (
+            prob_empate_modelo -
+            (1 / odd_empate)
+        )
+
+        edge_fora = (
+            prob_fora_modelo -
+            (1 / odd_fora)
+        )
+
+        st.subheader("Edge 1X2")
+
+        st.write(
+            f"Edge Casa: "
+            f"{round(edge_casa * 100, 2)}%"
+        )
+
+        st.write(
+            f"Edge Empate: "
+            f"{round(edge_empate * 100, 2)}%"
+        )
+
+        st.write(
+            f"Edge Fora: "
+            f"{round(edge_fora * 100, 2)}%"
+        )
+        # =========================
+        # EDGE
+        # =========================
+
+        edge_casa = (
+            prob_casa_modelo - prob_casa
+        )
+
+        edge_empate = (
+            prob_empate_modelo - prob_empate
+        )
+
+        edge_fora = (
+            prob_fora_modelo - prob_fora
+        )
+
+        st.subheader("Edge do Modelo")
+
+        st.write(
+            f"Edge Casa: {round(edge_casa * 100, 2)}%"
+        )
+
+        st.write(
+            f"Edge Empate: {round(edge_empate * 100, 2)}%"
+        )
+
+        st.write(
+            f"Edge Fora: {round(edge_fora * 100, 2)}%"
+        )
+        # =========================
+        # KELLY CRITERION
+        # =========================
+
+        def calcular_kelly(probabilidade, odd):
+
+            if odd <= 1:
+                return 0
+
+            kelly = (
+                (
+                    odd * probabilidade
+                ) - 1
+            ) / (odd - 1)
+
+            return max(kelly, 0)
+
+        kelly_casa = calcular_kelly(
+            prob_casa_modelo,
+            odd_casa
+        )
+
+        kelly_empate = calcular_kelly(
+            prob_empate_modelo,
+            odd_empate
+        )
+
+        kelly_fora = calcular_kelly(
+            prob_fora_modelo,
+            odd_fora
+        )
+
+        st.subheader("Kelly Criterion")
+
+        st.write(
+            f"Kelly Casa: "
+            f"{round(kelly_casa * 100, 2)}%"
+        )
+
+        st.write(
+            f"Kelly Empate: "
+            f"{round(kelly_empate * 100, 2)}%"
+        )
+
+        st.write(
+            f"Kelly Fora: "
+            f"{round(kelly_fora * 100, 2)}%"
+        )
+        # =========================
+        # CONFIANÇA DO MODELO
+        # =========================
+
+        maior_edge = max(
+            abs(edge_casa),
+            abs(edge_empate),
+            abs(edge_fora)
+        )
+
+        maior_ev = max(
+            ev_casa,
+            ev_empate,
+            ev_fora
+        )
+
+        confianca = (
+            (forca_gol * 4)
+            +
+            (maior_edge * 20)
+            +
+            (maior_ev * 10)
+        )
+
+        confianca = max(
+            0,
+            min(confianca, 10)
+        )
+
+        st.subheader("Confiança do Modelo")
+
+        st.write(
+            f"Confiança: {round(confianca, 1)}/10"
+        )
+        # =========================
+        # DECISÃO INTELIGENTE
+        # =========================
+
+        st.subheader("Decisão do Modelo")
+
+        melhor_edge = max(
+            edge_casa,
+            edge_empate,
+            edge_fora
+        )
+
+        melhor_ev = max(
+            ev_casa,
+            ev_empate,
+            ev_fora
+        )
+
+        if (
+            melhor_edge >= 0.10
+            and melhor_ev >= 0.10
+            and confianca >= 7
+        ):
+
+            st.success(
+                "🔥 Entrada Forte Detectada"
+            )
+
+        elif (
+            melhor_edge >= 0.05
+            and melhor_ev >= 0.05
+            and confianca >= 5
+        ):
+
+            st.warning(
+                "⚠️ Entrada Moderada"
+            )
+
+        else:
+
+            st.error(
+                "❌ Jogo Sem Valor"
+            )
+
+        # =========================
+        # GESTÃO DE STAKE
+        # =========================
+
+        st.subheader("Stake Sugerida")
 
         stake = 0
 
-    st.write(
-        f"Stake Recomendada: {stake}% da banca"
-    )
-# =========================
-    # PERFIL DO JOGO
+        if (
+            melhor_edge >= 0.10
+            and melhor_ev >= 0.10
+            and confianca >= 7
+        ):
+
+            stake = 5
+
+        elif (
+            melhor_edge >= 0.05
+            and melhor_ev >= 0.05
+            and confianca >= 5
+        ):
+
+            stake = 2
+
+        else:
+
+            stake = 0
+
+        st.write(
+            f"Stake Recomendada: {stake}% da banca"
+        )
     # =========================
+        # PERFIL DO JOGO
+        # =========================
 
-    st.subheader("Perfil da Partida")
+        st.subheader("Perfil da Partida")
 
-    perfil_jogo = "⚖️ Equilibrado"
+        perfil_jogo = "⚖️ Equilibrado"
 
-    total_xg = (
-        gols_esperados_casa +
-        gols_esperados_fora
-    )
+        total_xg = (
+            gols_esperados_casa +
+            gols_esperados_fora
+        )
 
-    diferenca_forca = abs(
-        ataque_casa - ataque_fora
-    )
+        diferenca_forca = abs(
+            ataque_casa - ataque_fora
+        )
 
-    # Jogo explosivo
+        # Jogo explosivo
 
-    if (
-        total_xg >= 3
-        and prob_over25 >= 0.65
-    ):
+        if (
+            total_xg >= 3
+            and prob_over25 >= 0.65
+        ):
 
-        perfil_jogo = "🔥 Jogo Explosivo"
+            perfil_jogo = "🔥 Jogo Explosivo"
 
-    # Jogo defensivo
+        # Jogo defensivo
 
-    elif (
-        total_xg <= 2
-        and prob_under25 >= 0.55
-    ):
+        elif (
+            total_xg <= 2
+            and prob_under25 >= 0.55
+        ):
 
-        perfil_jogo = "🧱 Jogo Defensivo"
+            perfil_jogo = "🧱 Jogo Defensivo"
 
-    # Favorito forte
+        # Favorito forte
 
-    elif (
-        diferenca_forca >= 1
-        and confianca >= 7
-    ):
+        elif (
+            diferenca_forca >= 1
+            and confianca >= 7
+        ):
 
-        perfil_jogo = "🎯 Favorito Forte"
+            perfil_jogo = "🎯 Favorito Forte"
 
-    # BTTS forte
+        # BTTS forte
 
-    elif (
-        prob_btts_sim >= 0.65
-    ):
+        elif (
+            prob_btts_sim >= 0.65
+        ):
 
-        perfil_jogo = "⚔️ Jogo Aberto"
+            perfil_jogo = "⚔️ Jogo Aberto"
 
-    st.success(
-        f"{perfil_jogo}"
-    )
-    # =========================
-# MELHOR MERCADO
-# =========================
+        st.success(
+            f"{perfil_jogo}"
+        )
+        # =========================
+        # SALVAR RESULTADOS
+        # =========================
 
-st.subheader("🏆 Melhor Mercado")
+        st.session_state["melhor_mercado"] = melhor_mercado
 
-melhor_mercado = None
-melhor_dados = None
+        st.session_state["ev_casa"] = ev_casa
+        st.session_state["ev_empate"] = ev_empate
+        st.session_state["ev_fora"] = ev_fora
 
-for nome, dados in resultados_completos.items():
+        st.session_state["edge_casa"] = edge_casa
+        st.session_state["edge_empate"] = edge_empate
+        st.session_state["edge_fora"] = edge_fora
 
-    if (
-        melhor_dados is None
-        or dados["ev"] > melhor_dados["ev"]
-    ):
-
-        melhor_mercado = nome
-        melhor_dados = dados
-
-
-if (
-    melhor_dados is not None
-    and melhor_dados["ev"] > 0
-):
-
-    st.success(
-        f"🔥 Melhor Mercado: {melhor_mercado}"
-    )
-
-    st.write(
-        f"Probabilidade: "
-        f"{round(melhor_dados['probabilidade']*100,2)}%"
-    )
-
-    st.write(
-        f"Odd Mercado: "
-        f"{round(melhor_dados['odd'],2)}"
-    )
-
-    st.write(
-        f"Odd Justa: "
-        f"{round(melhor_dados['odd_justa'],2)}"
-    )
-
-    st.write(
-        f"EV: "
-        f"{round(melhor_dados['ev']*100,2)}%"
-    )
-
-    st.write(
-        f"Edge: "
-        f"{round(melhor_dados['edge']*100,2)}%"
-    )
-
-    st.write(
-        f"Kelly: "
-        f"{round(melhor_dados['kelly']*100,2)}%"
-    )
-
-    st.session_state["melhor_mercado"] = melhor_mercado
-
-    st.session_state["melhor_probabilidade"] = (
-        melhor_dados["probabilidade"]
-    )
-
-    st.session_state["melhor_odd_justa"] = (
-        melhor_dados["odd_justa"]
-    )
-
-    st.session_state["melhor_ev"] = (
-        melhor_dados["ev"]
-    )
-
-    st.session_state["melhor_edge"] = (
-        melhor_dados["edge"]
-    )
-
-    st.session_state["melhor_kelly"] = (
-        melhor_dados["kelly"]
-    )
-
-else:
-
-    st.error(
-        "Nenhum mercado possui valor positivo."
-    )
-
-    # =========================
-    # SALVAR RESULTADOS
-    # =========================
-
-    st.session_state["melhor_mercado"] = melhor_mercado
-
-    st.session_state["ev_casa"] = ev_casa
-    st.session_state["ev_empate"] = ev_empate
-    st.session_state["ev_fora"] = ev_fora
-
-    st.session_state["edge_casa"] = edge_casa
-    st.session_state["edge_empate"] = edge_empate
-    st.session_state["edge_fora"] = edge_fora
-
-    st.session_state["stake"] = stake
-    st.session_state["confianca"] = confianca
-    st.session_state["perfil_jogo"] = perfil_jogo    
+        st.session_state["stake"] = stake
+        st.session_state["confianca"] = confianca
+        st.session_state["perfil_jogo"] = perfil_jogo    
     
 # =========================
 # SALVAR APOSTA
@@ -2717,6 +2382,10 @@ else:
 # =========================
 # SELECIONAR APOSTA
 # =========================
+
+# Garante que a variável sempre exista, mesmo sem histórico ainda
+aposta_selecionada = None
+
 if (
     not historico_resultados.empty
     and "ID" in historico_resultados.columns
@@ -2793,136 +2462,144 @@ odd_aposta = st.number_input(
 
 if st.button("Salvar Resultado"):
 
-    lucro = 0
+    if aposta_selecionada is None or aposta_selecionada.empty:
 
-    if resultado_aposta == "GREEN":
-
-        lucro = (
-            valor_stake * odd_aposta
-        ) - valor_stake
-
-    elif resultado_aposta == "RED":
-
-        lucro = -valor_stake
+        st.warning(
+            "Selecione uma aposta salva antes de registrar o resultado."
+        )
 
     else:
 
         lucro = 0
 
-    # =========================
-    # PEGAR DADOS DA APOSTA SELECIONADA
-    # =========================
+        if resultado_aposta == "GREEN":
 
-    time_casa_resultado = aposta_selecionada.iloc[0]["Time Casa"]
+            lucro = (
+                valor_stake * odd_aposta
+            ) - valor_stake
 
-    time_fora_resultado = aposta_selecionada.iloc[0]["Time Fora"]
+        elif resultado_aposta == "RED":
 
-    campeonato_resultado = aposta_selecionada.iloc[0]["Campeonato"]
+            lucro = -valor_stake
 
-    mercado_resultado = aposta_selecionada.iloc[0]["Mercado"]
+        else:
 
-    # =========================
-    # DADOS RESULTADO
-    # =========================
+            lucro = 0
 
-    dados_resultado = {
+        # =========================
+        # PEGAR DADOS DA APOSTA SELECIONADA
+        # =========================
 
-        "Time Casa": time_casa_resultado,
+        time_casa_resultado = aposta_selecionada.iloc[0]["Time Casa"]
 
-        "Time Fora": time_fora_resultado,
+        time_fora_resultado = aposta_selecionada.iloc[0]["Time Fora"]
 
-        "Campeonato": campeonato_resultado,
+        campeonato_resultado = aposta_selecionada.iloc[0]["Campeonato"]
 
-        "Mercado": mercado_resultado,
+        mercado_resultado = aposta_selecionada.iloc[0]["Mercado"]
 
-        "Resultado": resultado_aposta,
+        # =========================
+        # DADOS RESULTADO
+        # =========================
 
-        "Stake R$": valor_stake,
+        dados_resultado = {
 
-        "Odd": odd_aposta,
+            "Time Casa": time_casa_resultado,
 
-        "Lucro": round(lucro, 2)
-    }
+            "Time Fora": time_fora_resultado,
 
-    arquivo_resultados = "resultados_apostas.csv"
+            "Campeonato": campeonato_resultado,
 
-    df_novo = pd.DataFrame(
-        [dados_resultado]
-    )
+            "Mercado": mercado_resultado,
 
-    if os.path.exists(
-        arquivo_resultados
-    ):
+            "Resultado": resultado_aposta,
+
+            "Stake R$": valor_stake,
+
+            "Odd": odd_aposta,
+
+            "Lucro": round(lucro, 2)
+        }
+
+        arquivo_resultados = "resultados_apostas.csv"
+
+        df_novo = pd.DataFrame(
+            [dados_resultado]
+        )
+
+        if os.path.exists(
+            arquivo_resultados
+        ):
+
+            try:
+
+                df_antigo = pd.read_csv(
+                    arquivo_resultados
+                )
+
+            except:
+
+                df_antigo = pd.DataFrame()
+
+            df_final = pd.concat(
+                [
+                    df_antigo,
+                    df_novo
+                ],
+                ignore_index=True
+            )
+
+        else:
+
+            df_final = df_novo
+
+        df_final.to_csv(
+            arquivo_resultados,
+            index=False
+        )
+
+        salvar_no_github(
+            arquivo_resultados
+        )
+
 
         try:
 
-            df_antigo = pd.read_csv(
-                arquivo_resultados
-            )
+          df_hist = pd.read_csv(
+            ARQUIVO_HISTORICO
+          )
 
-        except:
+          filtro = (
+              (df_hist["Time Casa"] == time_casa_resultado)
+              &
+              (df_hist["Time Fora"] == time_fora_resultado)
+          )
 
-            df_antigo = pd.DataFrame()
+          df_hist.loc[
+            filtro,
+            "Resultado"
+          ] = resultado_aposta.lower()
 
-        df_final = pd.concat(
-            [
-                df_antigo,
-                df_novo
-            ],
-            ignore_index=True
-        )
+          df_hist.to_csv(
+            ARQUIVO_HISTORICO,
+            index=False
+          )
 
-    else:
+          salvar_no_github(
+             ARQUIVO_HISTORICO
+          )
 
-        df_final = df_novo
+        except Exception as e:
 
-    df_final.to_csv(
-        arquivo_resultados,
-        index=False
-    )
-
-    salvar_no_github(
-        arquivo_resultados
-    )
-
-
-    try:
-
-      df_hist = pd.read_csv(
-        ARQUIVO_HISTORICO
-      )
-
-      filtro = (
-          (df_hist["Time Casa"] == time_casa_resultado)
-          &
-          (df_hist["Time Fora"] == time_fora_resultado)
-      )
-
-      df_hist.loc[
-        filtro,
-        "Resultado"
-      ] = resultado_aposta.lower()
-
-      df_hist.to_csv(
-        ARQUIVO_HISTORICO,
-        index=False
-      )
-
-      salvar_no_github(
-         ARQUIVO_HISTORICO
-      )
-
-    except Exception as e:
-
-      st.error(
-         f"Erro ao atualizar histórico: {e}"
-      )
+          st.error(
+             f"Erro ao atualizar histórico: {e}"
+          )
     
-    verificar_rodada()
+        verificar_rodada()
 
-    st.success(
-        "✅ Resultado salvo"
-    )
+        st.success(
+            "✅ Resultado salvo"
+        )
 
 # =========================
 # ESTATÍSTICAS DO BOT
