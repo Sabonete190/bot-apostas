@@ -443,13 +443,13 @@ st.subheader("Acima/Abaixo")
 odd_under25 = st.number_input(
     "Ímpar Menos de 2,5",
     valor_mínimo=1,0,
-    passo=0,01
+    passo=0.01
 )
 
 odd_under35 = st.number_input(
     "Ímpar abaixo de 3,5",
     valor_mínimo=1,0,
-    passo=0,01
+    passo=0.01
 )
 
 
@@ -487,55 +487,55 @@ odd_casa_marca_1 = st.number_input(
 odd_fora_marca_1 = st.number_input(
     "Odd Fora marca 1+ gol",
     valor_mínimo=1,0,
-    passo=0,01
+    passo=0.01
 )
 
 odd_casa_marca_2 = st.number_input(
     "Casa marca 2+ gols",
     valor_mínimo=1,0,
-    passo=0,01
+    passo=0.01
 )
 
 odd_fora_marca_2 = st.number_input(
     "Odd Fora marca 2+ gols",
     valor_mínimo=1,0,
-    passo=0,01
+    passo=0.01
 )
 
 odd_casa_over05 = st.number_input(
     "Casa Ímpar Acima de 0,5",
     valor_mínimo=1,0,
-    passo=0,01
+    passo=0.01
 )
 
 odd_casa_over15 = st.number_input(
     "Casa Ímpar Acima de 1,5",
     valor_mínimo=1,0,
-    passo=0,01
+    passo=0.01
 )
 
 odd_casa_over25 = st.number_input(
     "Casa Ímpar Acima de 2,5",
     valor_mínimo=1,0,
-    passo=0,01
+    passo=0.01
 )
 
 odd_fora_over05 = st.number_input(
     "Ímpar Fora Acima de 0,5",
     valor_mínimo=1,0,
-    passo=0,01
+    passo=0.01
 )
 
 odd_fora_over15 = st.number_input(
     "Odd Fora Acima de 1.5",
     valor_mínimo=1,0,
-    passo=0,01
+    passo=0.01
 )
 
 odd_fora_over25 = st.number_input(
     "Odd Fora Mais de 2,5",
     valor_mínimo=1,0,
-    passo=0,01
+    passo=0.01
 )
 
 
@@ -548,19 +548,19 @@ st.subheader("Dupla Chance")
 odd_dupla_1x = st.number_input(
     "Odd Dupla Chance 1X",
     valor_mínimo=1,0,
-    passo=0,01
+    passo=0.01
 )
 
 odd_dupla_x2 = st.number_input(
     "Odd Dupla Chance X2",
     valor_mínimo=1,0,
-    passo=0,01
+    passo=0.01
 )
 
 odd_dupla_12 = st.number_input(
     "Odd Dupla Chance 12",
     valor_mínimo=1,0,
-    passo=0,01
+    passo=0.01
 )
 
 
@@ -573,13 +573,13 @@ st.subheader("Empate Anula a Aposta - DNB")
 odd_dnb_casa = st.number_input(
     "Casa DNB ímpar",
     valor_mínimo=1,0,
-    passo=0,01
+    passo=0.01
 )
 
 odd_dnb_fora = st.number_input(
     "Odd DNB Fora",
     valor_mínimo=1,0,
-    passo=0,01
+    passo=0.01
 )
 
 
@@ -592,31 +592,31 @@ st.subheader("Mercados Combinados")
 horário_ímpar_marca_primeiro = st.número_input(
     "Odd Time marca primeiro",
     valor_mínimo=1,0,
-    passo=0,01
+    passo=0.01
 )
 
 odd_casa_vence_over15 = st.number_input(
     "Odd Casa vence + Mais de 1.5",
     valor_mínimo=1,0,
-    passo=0,01
+    passo=0.01
 )
 
 odd_fora_vence_over15 = st.number_input(
     "Ímpar Fora vence + Mais de 1,5",
     valor_mínimo=1,0,
-    passo=0,01
+    passo=0.01
 )
 
 odd_btts_over25 = st.number_input(
     "Ímpar BTTS + Mais de 2,5",
     valor_mínimo=1,0,
-    passo=0,01
+    passo=0.01
 )
 
 odd_btts_over35 = st.number_input(
     "Ímpar BTTS + Mais de 3,5",
     valor_mínimo=1,0,
-    passo=0,01
+    passo=0.01
 )
 
 
@@ -648,61 +648,61 @@ st.subheader("Dados dos Tempos")
 xg_casa = st.number_input(
     "xG Casa",
     valor_mínimo=0,0,
-    passo=0,1
+    passo=0.1
 )
 
 xg_fora = st.number_input(
     "xG Fora",
     valor_mínimo=0,0,
-    passo=0,1
+    passo=0.1
 )
 
 xga_casa = st.number_input(
     "xGA Casa",
     valor_mínimo=0,0,
-    passo=0,1
+    passo=0.1
 )
 
 xga_fora = st.number_input(
     "xGA Fora",
     valor_mínimo=0,0,
-    passo=0,1
+    passo=0.1
 )
 
 sofridos_casa = st.number_input(
     "Gols Sofridos Casa",
     valor_mínimo=0,0,
-    passo=0,1
+    passo=0.1
 )
 
 sofridos_fora = st.number_input(
     "Gols Sofridos Fora",
     valor_mínimo=0,0,
-    passo=0,1
+    passo=0.1
 )
 
 chutes_casa = st.number_input(
     "Chutes no Gol Casa",
     valor_mínimo=0,0,
-    passo=0,1
+    passo=0.1
 )
 
 chutes_fora = st.number_input(
     "Chutes no Gol Fora",
     valor_mínimo=0,0,
-    passo=0,1
+    passo=0.1
 )
 
 eficiência_casa = st.número_input(
     "Eficiência Casa",
     valor_mínimo=0,0,
-    passo=0,1
+    passo=0.1
 )
 
 eficiência_fora = st.number_input(
     "Eficiência Fora",
     valor_mínimo=0,0,
-    passo=0,1
+    passo=0.1
 )
 # =========================
 # FORMA RECENTE
