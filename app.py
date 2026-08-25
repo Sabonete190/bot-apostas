@@ -1,10 +1,10 @@
-importar streamlit como st
-importar matemática
+import streamlit como st
+import matemática
 import pandas as pd
-importar os
-solicitações de importação
-importar base64
-importar json
+import os
+import requests
+import base64
+import json
 from datetime import datetime
 
 com open("pesos.json", "r") as f:
