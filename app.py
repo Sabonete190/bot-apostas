@@ -401,19 +401,19 @@ st.subheader("Mercado 1X2")
 odd_casa = st.number_input(
     "Casa Estranha",
     valor_mínimo=1,0,
-    passo=0,01
+    passo=0.01
 )
 
 ímpar_empate = st.number_input(
     "Empate Ímpar",
     valor_mínimo=1,0,
-    passo=0,01
+    passo=0.01
 )
 
 odd_fora = st.number_input(
     "Fora Ímpar",
     valor_mínimo=1,0,
-    passo=0,01
+    passo=0.01
 )
 
 # =========================
