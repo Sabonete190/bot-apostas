@@ -29,7 +29,7 @@ PESO_FORCA = pesos_1x2["peso_forca"]
 def calcular_kelly(probabilidade, ímpar):
 
     if ímpar <= 1:
-        retornar 0
+        return 0
 
     b = ímpar - 1
 
@@ -38,7 +38,7 @@ def calcular_kelly(probabilidade, ímpar):
         - (1 -?)
     ) / b
 
-    retornar max(kelly, 0)
+    return max(kelly, 0)
 #CONFIGURAÇAO DA PÁ GINA
 st.set_page_config(
     título_da_página="Bot de Apostas",
@@ -146,7 +146,7 @@ def carregar_csv_com_esquema(caminho, colunas_esperadas, mapa_legado=Nenhum):
         se a coluna não estiver em df.columns:
             df[coluna] = pd.NA
 
-    retornar df
+    return df
 
 # =========================
 # GITHUB
