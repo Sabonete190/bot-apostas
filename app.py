@@ -358,15 +358,15 @@ def atualizar_pesos():
             PESO_XG = máx(0,10, mín(PESO_XG, 3))
 
         se não pd.isna(media_chutes):
-            PESO_CHUTES += ajuste * media_chutes * 0,05
+            PESO_CHUTES += ajuste * media_chutes * 0.05
             PESO_CHUTES = máx(0,10, min(PESO_CHUTES, 3))
 
         se não pd.isna(media_eficiencia):
-            PESO_EFICIENCIA += ajuste * media_eficiencia * 0,10
+            PESO_EFICIENCIA += ajuste * media_eficiencia * 0.10
             PESO_EFICIENCIA = máx(0,10, min(PESO_EFICIENCIA, 3))
 
         se não pd.isna(media_forma):
-            PESO_FORMA += ajuste * media_forma * 0,20
+            PESO_FORMA += ajuste * media_forma * 0.20
             PESO_FORMA = máx(0,10, mín(PESO_FORMA, 3))
 
     salvar_pesos()
