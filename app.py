@@ -462,13 +462,13 @@ st.subheader("BTTS")
 odd_btts_sim = st.number_input(
     "SIM BTTS ímpar",
     valor_mínimo=1,0,
-    passo=0,01
+    passo=0.01
 )
 
 odd_btts_nao = st.number_input(
     "Odd BTTS NÃƒO",
     valor_mínimo=1,0,
-    passo=0,01
+    passo=0.01
 )
 
 
@@ -481,7 +481,7 @@ st.subheader("Gols por Equipe")
 odd_casa_marca_1 = st.number_input(
     "Odd Casa marca 1+ gol",
     valor_mínimo=1,0,
-    passo=0,01
+    passo=0.01
 )
 
 odd_fora_marca_1 = st.number_input(
