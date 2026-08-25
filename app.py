@@ -23,7 +23,7 @@ PESO_FORMA = pesos_1x2["peso_forma"]
 PESO_FORCA = pesos_1x2["peso_forca"]
 
 # =========================
-# FUNÃ‡ÃƒO KELLY
+# FUNÇÃO KELLY
 # =========================
 
 def calcular_kelly(probabilidade, odd):
@@ -39,7 +39,7 @@ def calcular_kelly(probabilidade, odd):
     ) / b
 
     return max(kelly, 0)
-# CONFIGURAÃ‡ÃƒO DA PÃGINA
+# CONFIGURAÇÃO DA PAGINA
 st.set_page_config(
     page_title="Bot de Apostas",
     layout="centered"
@@ -53,12 +53,12 @@ if "melhor_mercado" not in st.session_state:
 
     st.session_state["melhor_mercado"] = "N/A"
 
-# TÃTULO
-st.title("ðŸ“Š Bot de Apostas Profissional")
+# TITULO
+st.title("Bot de Apostas Profissional")
 
 st.write("Preencha os dados da partida.")
 # =========================
-# HISTÃ“RICO CSV
+# HISTORICO CSV
 # =========================
 
 ARQUIVO_HISTORICO = "historico_apostas.csv"
