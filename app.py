@@ -1,5 +1,5 @@
-import streamlit como st
-import matemática
+import streamlit as st
+import math
 import pandas as pd
 import os
 import requests
