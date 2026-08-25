@@ -23,7 +23,7 @@ PESO_FORMA = pesos_1x2["peso_forma"]
 PESO_FORCA = pesos_1x2["peso_forca"]
 
 # =========================
-# FUNÃ‡ÃƒO KELLY
+# FUNÇÃO KELLY
 # =========================
 
 def calcular_kelly(probabilidade, ímpar):
