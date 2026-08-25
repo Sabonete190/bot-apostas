@@ -425,19 +425,19 @@ st.subheader("Acima/Abaixo")
 ímpar_acima_de_15 = st.número_entrada(
     "Ímpar acima de 1,5",
     valor_mínimo=1,0,
-    passo=0,01
+    passo=0.01
 )
 
 ímpar_acima_de_25 = st.número_entrada(
     "Ímpar acima de 2,5",
     valor_mínimo=1,0,
-    passo=0,01
+    passo=0.01
 )
 
 ímpar_acima_de_35 = st.número_entrada(
     "Ímpar acima de 3,5",
     valor_mínimo=1,0,
-    passo=0,01
+    passo=0.01
 )
 
 odd_under25 = st.number_input(
