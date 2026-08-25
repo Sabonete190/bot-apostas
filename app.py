@@ -28,7 +28,7 @@ PESO_FORCA = pesos_1x2["peso_forca"]
 
 def calcular_kelly(probabilidade, ímpar):
 
-    se ímpar <= 1:
+    if ímpar <= 1:
         retornar 0
 
     b = ímpar - 1
@@ -49,7 +49,7 @@ st.set_page_config(
 # ESTADO DA SESSÃO
 # =========================
 
-se "melhor_mercado" não estiver em st.session_state:
+if "melhor_mercado" não estiver em st.session_state:
 
     st.session_state["melhor_mercado"] = "N/A"
 
@@ -125,7 +125,7 @@ MAPA_COLUNAS_LEGADAS = {
 
 def carregar_csv_com_esquema(caminho, colunas_esperadas, mapa_legado=Nenhum):
 
-    se não os.path.exists(caminho):
+    if não os.path.exists(caminho):
         retornar pd.DataFrame(colunas=colunas_esperadas)
 
     tentar:
@@ -133,7 +133,7 @@ def carregar_csv_com_esquema(caminho, colunas_esperadas, mapa_legado=Nenhum):
     exceto Exceção:
         retornar pd.DataFrame(colunas=colunas_esperadas)
 
-    se mapa_legado:
+    if mapa_legado:
         para coluna_antiga, coluna_nova em mapa_legado.items():
             se coluna_antiga estiver em df.columns e coluna_nova não estiver em df.columns:
                 df = df.rename(colunas={coluna_antiga: coluna_nova})
@@ -164,14 +164,14 @@ def salvar_no_github(nome_arquivo):
         "Autorização": f"token {GITHUB_TOKEN}"
     }
 
-    com open(nome_arquivo, "rb") como arquivo:
+    with open(nome_arquivo, "rb") como arquivo:
         conteúdo = base64.b64encode(arquivo.read()).decode()
 
     resposta = requests.get(url, headers=headers)
 
     sha = Nenhum
 
-    Se response.status_code == 200:
+    if response.status_code == 200:
         sha = response.json()["sha"]
 
     dados = {
@@ -180,7 +180,7 @@ def salvar_no_github(nome_arquivo):
         "ramo": "principal"
     }
 
-    se sha:
+    if sha:
         dados["sha"] = sha
 
     solicitações.put(
@@ -193,7 +193,7 @@ def salvar_aposta(dados):
 
     df_novo = pd.DataFrame([dados])
 
-    se os.path.exists(ARQUIVO_HISTORICO):
+    if os.path.exists(ARQUIVO_HISTORICO):
 
         tentar:
 
@@ -230,7 +230,7 @@ def salvar_resultado(dados):
 
     df_novo = pd.DataFrame([dados])
 
-    se os.path.exists(ARQUIVO_RESULTADOS):
+    if os.path.exists(ARQUIVO_RESULTADOS):
 
         tentar:
 
@@ -278,7 +278,7 @@ def salvar_pesos():
         "btts": pesos_btts
     }
 
-    com open("pesos.json", "w") as f:
+    with open("pesos.json", "w") as f:
         json.dump(pesos_atualizados, f, indent=4)
 
     salvar_no_github("pesos.json")
@@ -293,10 +293,10 @@ def atualizar_pesos():
         mapa_legado=MAPA_COLUNAS_LEGADAS
     )
 
-    se df.vazio:
+    if df.vazio:
         retornar
 
-    se não os.path.exists(ARQUIVO_HISTORICO):
+    if não os.path.exists(ARQUIVO_HISTORICO):
         retornar
 
     # resultados_apostas.csv agora já traz o contexto completo (xG,
@@ -322,7 +322,7 @@ def atualizar_pesos():
             ultimos["Mercado"].isin(nomes)
         ]
 
-        se resultados_mercado.vazio:
+        if resultados_mercado.vazio:
             continuar
 
         verdes = len(
@@ -357,15 +357,15 @@ def atualizar_pesos():
             PESO_XG += ajuste * media_xg * 0,10
             PESO_XG = máx(0,10, mín(PESO_XG, 3))
 
-        se não pd.isna(media_chutes):
+        if não pd.isna(media_chutes):
             PESO_CHUTES += ajuste * media_chutes * 0.05
             PESO_CHUTES = máx(0,10, min(PESO_CHUTES, 3))
 
-        se não pd.isna(media_eficiencia):
+        if não pd.isna(media_eficiencia):
             PESO_EFICIENCIA += ajuste * media_eficiencia * 0.10
             PESO_EFICIENCIA = máx(0,10, min(PESO_EFICIENCIA, 3))
 
-        se não pd.isna(media_forma):
+        if não pd.isna(media_forma):
             PESO_FORMA += ajuste * media_forma * 0.20
             PESO_FORMA = máx(0,10, mín(PESO_FORMA, 3))
 
@@ -378,7 +378,7 @@ def verificar_rodada():
         mapa_legado=MAPA_COLUNAS_LEGADAS
     )
 
-    se df.vazio:
+    if df.vazio:
         retornar
 
     jogos = len(
@@ -389,7 +389,7 @@ def verificar_rodada():
         ]
     )
 
-    se jogos % 10 == 0:
+    if jogos % 10 == 0:
         atualizar_pesos()
         
 # =========================
