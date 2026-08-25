@@ -2161,8 +2161,8 @@ if st.button("Analisar Jogo"):
             )
 
         elif (
-            melhor_edge >= 0,05
-            e melhor_ev >= 0,05
+            melhor_edge >= 0.05
+            e melhor_ev >= 0.05
             e confianca >= 5
         ):
 
@@ -2185,16 +2185,16 @@ if st.button("Analisar Jogo"):
         participação = 0
 
         se (
-            melhor_edge >= 0,10
-            e melhor_ev >= 0,10
+            melhor_edge >= 0.10
+            e melhor_ev >= 0.10
             e confianca >= 7
         ):
 
             aposta = 5
 
         elif (
-            melhor_edge >= 0,05
-            e melhor_ev >= 0,05
+            melhor_edge >= 0.05
+            e melhor_ev >= 0.05
             e confianca >= 5
         ):
 
