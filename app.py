@@ -340,7 +340,7 @@ def atualizar_pesos():
         saldo = verdes - vermelhos
 
         # Ajuste pequeno para evitar mudanças bruscas
-        ajuste = saldo * 0,01
+        ajuste = saldo * 0.01
 
         media_xg = resultados_mercado[["xG Casa", "xG Fora"]].mean().mean()
         media_chutes = resultados_mercado[["Chutes Casa", "Chutes Fora"]].mean().mean()
