@@ -7,7 +7,7 @@ import base64
 import json
 from datetime import datetime
 
-com open("pesos.json", "r") as f:
+with open("pesos.json", "r") as f:
     pesos = json.load(f)
 
 pesos_1x2 = pesos["1x2"]
