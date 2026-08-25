@@ -2529,7 +2529,7 @@ valor_stake = st.number_input(
 
 odd_aposta = st.number_input(
     "Estranho das apostas",
-    valor_mínimo=1,01,
+    valor_mínimo=1.01,
     valor=2,00,
     passo=0,01
 )
