@@ -1,4 +1,3 @@
-{
     "1x2": {
         "peso_xg": 0.35,
         "peso_chutes": 0.20,
@@ -33,5 +32,22 @@
         "peso_tabela": 0.05,
         "peso_forma": 0.10,
         "peso_forca": 0.05
+    },
+
+    "casa_marca_primeiro": {
+        "peso_xg": 0.30,
+        "peso_chutes": 0.20,
+        "peso_eficiencia": 0.20,
+        "peso_tabela": 0.10,
+        "peso_forma": 0.15,
+        "peso_forca": 0.05
+    },
+
+    "fora_marca_primeiro": {
+        "peso_xg": 0.30,
+        "peso_chutes": 0.20,
+        "peso_eficiencia": 0.20,
+        "peso_tabela": 0.10,
+        "peso_forma": 0.15,
+        "peso_forca": 0.05
     }
-}
