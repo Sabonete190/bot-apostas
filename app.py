@@ -15,6 +15,28 @@ pesos_over25 = pesos["over25"]
 pesos_under25 = pesos["under25"]
 pesos_btts = pesos["btts"]
 
+# Valores padrão usados apenas se o pesos.json ainda não tiver esses
+# dois blocos (compatibilidade com arquivos salvos antes desta
+# atualização).
+_DEFAULT_PESOS_MARCA_PRIMEIRO = {
+    "peso_xg": 0.30,
+    "peso_chutes": 0.20,
+    "peso_eficiencia": 0.20,
+    "peso_tabela": 0.10,
+    "peso_forma": 0.15,
+    "peso_forca": 0.05
+}
+
+pesos_casa_marca_primeiro = pesos.get(
+    "casa_marca_primeiro",
+    _DEFAULT_PESOS_MARCA_PRIMEIRO
+)
+
+pesos_fora_marca_primeiro = pesos.get(
+    "fora_marca_primeiro",
+    _DEFAULT_PESOS_MARCA_PRIMEIRO
+)
+
 PESO_XG = pesos_1x2["peso_xg"]
 PESO_CHUTES = pesos_1x2["peso_chutes"]
 PESO_EFICIENCIA = pesos_1x2["peso_eficiencia"]
@@ -266,8 +288,13 @@ def salvar_resultado(dados):
 def salvar_pesos():
 
     # Mantém a estrutura aninhada original do pesos.json
-    # (1x2 / over25 / under25 / btts). Só o bloco "1x2" é
-    # atualizado, pois é o único ajustado por atualizar_pesos().
+    # (1x2 / over25 / under25 / btts / casa_marca_primeiro /
+    # fora_marca_primeiro). Só o bloco "1x2" é atualizado, pois é
+    # o único cujos pesos alimentam diretamente o cálculo de força
+    # (ataque/defesa) — os demais blocos, incluindo os dois novos,
+    # são mantidos e realimentados pelo saldo de acertos/erros de
+    # cada mercado em atualizar_pesos(), no mesmo padrão que
+    # over25/under25/btts já seguiam.
     pesos_atualizados = {
         "1x2": {
             "peso_xg": PESO_XG,
@@ -279,7 +306,9 @@ def salvar_pesos():
         },
         "over25": pesos_over25,
         "under25": pesos_under25,
-        "btts": pesos_btts
+        "btts": pesos_btts,
+        "casa_marca_primeiro": pesos_casa_marca_primeiro,
+        "fora_marca_primeiro": pesos_fora_marca_primeiro
     }
 
     with open("pesos.json", "w") as f:
@@ -317,7 +346,9 @@ def atualizar_pesos():
         "1x2": ["Vitória Casa", "Empate", "Vitória Fora"],
         "over25": ["Over 2.5"],
         "under25": ["Under 2.5"],
-        "btts": ["BTTS SIM", "BTTS NÃO"]
+        "btts": ["BTTS SIM", "BTTS NÃO"],
+        "casa_marca_primeiro": ["Casa marca primeiro"],
+        "fora_marca_primeiro": ["Fora marca primeiro"]
     }
 
     for nome_mercado, nomes in mercados.items():
@@ -593,8 +624,14 @@ odd_dnb_fora = st.number_input(
 
 st.subheader("Mercados Combinados")
 
-odd_time_marca_primeiro = st.number_input(
-    "Odd Time marca primeiro",
+odd_casa_marca_primeiro = st.number_input(
+    "Odd Casa marca primeiro",
+    min_value=1.0,
+    step=0.01
+)
+
+odd_fora_marca_primeiro = st.number_input(
+    "Odd Fora marca primeiro",
     min_value=1.0,
     step=0.01
 )
@@ -1180,19 +1217,17 @@ if st.button("Analisar Jogo"):
 
 
     # =========================
-    # TIME MARCA PRIMEIRO
+    # CASA/FORA MARCA PRIMEIRO
     # =========================
 
-    prob_time_marca_primeiro = (
-        probabilidade_mercado(
-            lambda casa, fora:
-            casa > 0 and casa > fora
-        )
-        +
-        probabilidade_mercado(
-            lambda casa, fora:
-            fora > 0 and fora > casa
-        )
+    prob_casa_marca_primeiro = probabilidade_mercado(
+        lambda casa, fora:
+        casa > 0 and casa > fora
+    )
+
+    prob_fora_marca_primeiro = probabilidade_mercado(
+        lambda casa, fora:
+        fora > 0 and fora > casa
     )
 
 
@@ -1452,9 +1487,14 @@ if st.button("Analisar Jogo"):
         # MERCADOS COMBINADOS
         # =========================
 
-        "Time marca primeiro": {
-            "probabilidade": prob_time_marca_primeiro,
-            "odd": odd_time_marca_primeiro
+        "Casa marca primeiro": {
+            "probabilidade": prob_casa_marca_primeiro,
+            "odd": odd_casa_marca_primeiro
+        },
+
+        "Fora marca primeiro": {
+            "probabilidade": prob_fora_marca_primeiro,
+            "odd": odd_fora_marca_primeiro
         },
 
         "Casa vence + Over 1.5": {
@@ -2342,7 +2382,10 @@ if st.button("Salvar Aposta"):
         "Under 2.5": odd_under25,
 
         "BTTS SIM": odd_btts_sim,
-        "BTTS NÃO": odd_btts_nao
+        "BTTS NÃO": odd_btts_nao,
+
+        "Casa marca primeiro": odd_casa_marca_primeiro,
+        "Fora marca primeiro": odd_fora_marca_primeiro
     }
 
     odd_escolhida = odds_mercados.get(
