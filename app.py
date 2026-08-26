@@ -45,6 +45,62 @@ PESO_FORMA = pesos_1x2["peso_forma"]
 PESO_FORCA = pesos_1x2["peso_forca"]
 
 # =========================
+# BANCO DE DADOS LOCAL DOS TIMES
+# =========================
+# Estatísticas reais dos times (partidas jogadas, médias de gols
+# marcados/sofridos, % de Over) lidas de um arquivo JSON local, em
+# vez de vir de uma API. Veja times_serie_a.json para o formato.
+
+ARQUIVO_TIMES = "times_serie_a.json"
+
+
+def carregar_times():
+
+    if not os.path.exists(ARQUIVO_TIMES):
+        return {}
+
+    try:
+        with open(ARQUIVO_TIMES, "r", encoding="utf-8") as f:
+            dados = json.load(f)
+    except Exception:
+        return {}
+
+    # Ignora chaves de metadado/comentário (começam com "_") e
+    # mantém só os times de verdade.
+    return {
+        nome: stats
+        for nome, stats in dados.items()
+        if not nome.startswith("_")
+    }
+
+
+TIMES_DB = carregar_times()
+
+OPCAO_TIME_MANUAL = "➕ Outro time (preencher manualmente)"
+
+# Lista de times para os dropdowns, em ordem alfabética, com uma
+# opção extra para times que ainda não estão no banco de dados.
+NOMES_TIMES = sorted(TIMES_DB.keys()) + [OPCAO_TIME_MANUAL]
+
+
+def obter_stats_time(nome_time):
+    """Devolve as estatísticas do time no banco local, ou um
+    dicionário zerado se o time não existir (ex.: opção manual)."""
+
+    return TIMES_DB.get(
+        nome_time,
+        {
+            "jogos": 0,
+            "gols_marcados_media": 0.0,
+            "gols_sofridos_media": 0.0,
+            "over05": 0.0,
+            "over15": 0.0,
+            "over25": 0.0,
+            "over35": 0.0,
+        }
+    )
+
+# =========================
 # FUNÇÃO KELLY
 # =========================
 
@@ -681,45 +737,122 @@ posicao_fora = st.number_input(
     value=10
 )
 # =========================
+# IDENTIFICAÇÃO DO JOGO
+# (times vêm do banco de dados local, não mais de texto livre)
+# =========================
+
+st.subheader("Times")
+
+campeonato = st.text_input(
+    "Campeonato",
+    value="Brasileirão"
+)
+
+time_casa_selecionado = st.selectbox(
+    "Time Casa",
+    NOMES_TIMES
+)
+
+if time_casa_selecionado == OPCAO_TIME_MANUAL:
+
+    time_casa = st.text_input(
+        "Nome do Time Casa (manual)"
+    )
+
+else:
+
+    time_casa = time_casa_selecionado
+
+time_fora_selecionado = st.selectbox(
+    "Time Fora",
+    NOMES_TIMES
+)
+
+if time_fora_selecionado == OPCAO_TIME_MANUAL:
+
+    time_fora = st.text_input(
+        "Nome do Time Fora (manual)"
+    )
+
+else:
+
+    time_fora = time_fora_selecionado
+
+# Estatísticas reais do banco de dados local para os times
+# selecionados (vazio/zerado se for a opção manual).
+stats_casa = obter_stats_time(time_casa_selecionado)
+stats_fora = obter_stats_time(time_fora_selecionado)
+
+st.caption(
+    f"📊 {time_casa or '—'}: {stats_casa['jogos']} jogos no banco • "
+    f"Gols marcados: {stats_casa['gols_marcados_media']} • "
+    f"Gols sofridos: {stats_casa['gols_sofridos_media']} • "
+    f"Over 1.5: {round(stats_casa['over15'] * 100, 1)}% • "
+    f"Over 2.5: {round(stats_casa['over25'] * 100, 1)}%"
+)
+
+st.caption(
+    f"📊 {time_fora or '—'}: {stats_fora['jogos']} jogos no banco • "
+    f"Gols marcados: {stats_fora['gols_marcados_media']} • "
+    f"Gols sofridos: {stats_fora['gols_sofridos_media']} • "
+    f"Over 1.5: {round(stats_fora['over15'] * 100, 1)}% • "
+    f"Over 2.5: {round(stats_fora['over25'] * 100, 1)}%"
+)
+
+# =========================
 # DADOS DOS TIMES
+# (pré-preenchidos com o banco de dados local; o campo continua
+# editável manualmente, caso queira ajustar)
 # =========================
 
 st.subheader("Dados dos Times")
 
 xg_casa = st.number_input(
-    "xG Casa",
+    "xG Casa (auto: gols marcados/jogo do banco)",
     min_value=0.0,
-    step=0.1
+    step=0.1,
+    value=float(stats_casa["gols_marcados_media"]),
+    key=f"xg_casa_{time_casa_selecionado}"
 )
 
 xg_fora = st.number_input(
-    "xG Fora",
+    "xG Fora (auto: gols marcados/jogo do banco)",
     min_value=0.0,
-    step=0.1
+    step=0.1,
+    value=float(stats_fora["gols_marcados_media"]),
+    key=f"xg_fora_{time_fora_selecionado}"
 )
 
 xga_casa = st.number_input(
-    "xGA Casa",
+    "xGA Casa (auto: gols sofridos/jogo do banco)",
     min_value=0.0,
-    step=0.1
+    step=0.1,
+    value=float(stats_casa["gols_sofridos_media"]),
+    key=f"xga_casa_{time_casa_selecionado}"
 )
 
 xga_fora = st.number_input(
-    "xGA Fora",
+    "xGA Fora (auto: gols sofridos/jogo do banco)",
     min_value=0.0,
-    step=0.1
+    step=0.1,
+    value=float(stats_fora["gols_sofridos_media"]),
+    key=f"xga_fora_{time_fora_selecionado}"
 )
 
 sofridos_casa = st.number_input(
-    "Gols Sofridos Casa",
+    "Gols Sofridos Casa (auto: banco de dados)",
     min_value=0.0,
-    step=0.1
+    step=0.1,
+    value=float(stats_casa["gols_sofridos_media"]),
+    key=f"sofridos_casa_{time_casa_selecionado}"
 )
 
 sofridos_fora = st.number_input(
-    "Gols Sofridos Fora",
+    "Gols Sofridos Fora (auto: banco de dados)",
     min_value=0.0,
-    step=0.1
+    step=0.1,
+    value=float(stats_fora["gols_sofridos_media"]),
+    key=f"sofridos_fora_{time_fora_selecionado}"
 )
 
 chutes_casa = st.number_input(
@@ -803,22 +936,6 @@ st.write(
 st.write(
     f"Força Fora: {nivel_fora}"
 )
-# =========================
-# IDENTIFICAÇÃO DO JOGO
-# =========================
-
-time_casa = st.text_input(
-    "Time Casa"
-)
-
-time_fora = st.text_input(
-    "Time Fora"
-)
-
-campeonato = st.text_input(
-    "Campeonato"
-)
-
 # =========================
 # DADOS DO BRASILEIRÃO
 # =========================
