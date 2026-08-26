@@ -1,0 +1,24 @@
+{
+    "_comentario": "Modelo/gabarito do banco de dados local dos times da Série A 2026. Os valores abaixo sao PLACEHOLDERS (0.0 / 50%) so para o app nao quebrar antes de voce preencher com estatisticas reais (ex.: Sofascore, FBref, footystats). jogos = numero de partidas usadas para calcular as medias. Percentuais de Over sao decimais (0.62 = 62%).",
+
+    "Atlético-MG": {"jogos": 0, "gols_marcados_media": 0.0, "gols_sofridos_media": 0.0, "over05": 0.50, "over15": 0.50, "over25": 0.50, "over35": 0.50},
+    "Athletico-PR": {"jogos": 0, "gols_marcados_media": 0.0, "gols_sofridos_media": 0.0, "over05": 0.50, "over15": 0.50, "over25": 0.50, "over35": 0.50},
+    "Bahia": {"jogos": 0, "gols_marcados_media": 0.0, "gols_sofridos_media": 0.0, "over05": 0.50, "over15": 0.50, "over25": 0.50, "over35": 0.50},
+    "Botafogo": {"jogos": 0, "gols_marcados_media": 0.0, "gols_sofridos_media": 0.0, "over05": 0.50, "over15": 0.50, "over25": 0.50, "over35": 0.50},
+    "Bragantino": {"jogos": 0, "gols_marcados_media": 0.0, "gols_sofridos_media": 0.0, "over05": 0.50, "over15": 0.50, "over25": 0.50, "over35": 0.50},
+    "Chapecoense": {"jogos": 0, "gols_marcados_media": 0.0, "gols_sofridos_media": 0.0, "over05": 0.50, "over15": 0.50, "over25": 0.50, "over35": 0.50},
+    "Corinthians": {"jogos": 0, "gols_marcados_media": 0.0, "gols_sofridos_media": 0.0, "over05": 0.50, "over15": 0.50, "over25": 0.50, "over35": 0.50},
+    "Coritiba": {"jogos": 0, "gols_marcados_media": 0.0, "gols_sofridos_media": 0.0, "over05": 0.50, "over15": 0.50, "over25": 0.50, "over35": 0.50},
+    "Cruzeiro": {"jogos": 0, "gols_marcados_media": 0.0, "gols_sofridos_media": 0.0, "over05": 0.50, "over15": 0.50, "over25": 0.50, "over35": 0.50},
+    "Flamengo": {"jogos": 0, "gols_marcados_media": 0.0, "gols_sofridos_media": 0.0, "over05": 0.50, "over15": 0.50, "over25": 0.50, "over35": 0.50},
+    "Fluminense": {"jogos": 0, "gols_marcados_media": 0.0, "gols_sofridos_media": 0.0, "over05": 0.50, "over15": 0.50, "over25": 0.50, "over35": 0.50},
+    "Grêmio": {"jogos": 0, "gols_marcados_media": 0.0, "gols_sofridos_media": 0.0, "over05": 0.50, "over15": 0.50, "over25": 0.50, "over35": 0.50},
+    "Internacional": {"jogos": 0, "gols_marcados_media": 0.0, "gols_sofridos_media": 0.0, "over05": 0.50, "over15": 0.50, "over25": 0.50, "over35": 0.50},
+    "Mirassol": {"jogos": 0, "gols_marcados_media": 0.0, "gols_sofridos_media": 0.0, "over05": 0.50, "over15": 0.50, "over25": 0.50, "over35": 0.50},
+    "Palmeiras": {"jogos": 0, "gols_marcados_media": 0.0, "gols_sofridos_media": 0.0, "over05": 0.50, "over15": 0.50, "over25": 0.50, "over35": 0.50},
+    "Remo": {"jogos": 0, "gols_marcados_media": 0.0, "gols_sofridos_media": 0.0, "over05": 0.50, "over15": 0.50, "over25": 0.50, "over35": 0.50},
+    "Santos": {"jogos": 0, "gols_marcados_media": 0.0, "gols_sofridos_media": 0.0, "over05": 0.50, "over15": 0.50, "over25": 0.50, "over35": 0.50},
+    "São Paulo": {"jogos": 0, "gols_marcados_media": 0.0, "gols_sofridos_media": 0.0, "over05": 0.50, "over15": 0.50, "over25": 0.50, "over35": 0.50},
+    "Vasco": {"jogos": 0, "gols_marcados_media": 0.0, "gols_sofridos_media": 0.0, "over05": 0.50, "over15": 0.50, "over25": 0.50, "over35": 0.50},
+    "Vitória": {"jogos": 0, "gols_marcados_media": 0.0, "gols_sofridos_media": 0.0, "over05": 0.50, "over15": 0.50, "over25": 0.50, "over35": 0.50}
+}
