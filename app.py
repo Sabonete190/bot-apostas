@@ -2961,6 +2961,8 @@ with aba_base:
         "BP_Geral", "BP_Casa", "BP_Fora",
         "Jogos_Casa", "Jogos_Fora",
         "Gols_Marcados", "Gols_Sofridos",
+        # Resultado histórico do time (0.0–1.0 = 0%–100%)
+        "Vitoria_%", "Empate_%", "Derrota_%",
         "Over_05_Gols", "Under_05_Gols",
         "Over_15_Gols", "Under_15_Gols",
         "Over_25_Gols", "Under_25_Gols",
@@ -2979,6 +2981,27 @@ with aba_base:
         "xG_Para", "xG_Contra", "Diff_xG",
         "Metas_Para", "Metas_Contra",  # chutes a favor / sofridos por partida
         "Finalizando_Delta", "Delta_Concedido",
+    ]
+
+    # Colunas que o usuário preenche em % (0–100) mas que o sistema
+    # armazena e usa internamente como fração (0.0–1.0). A conversão
+    # acontece no data_editor via column_config (sem tocar nos dados
+    # internos dos cálculos).
+    COLUNAS_PERCENTUAL = [
+        "Vitoria_%", "Empate_%", "Derrota_%",
+        "Over_05_Gols", "Under_05_Gols",
+        "Over_15_Gols", "Under_15_Gols",
+        "Over_25_Gols", "Under_25_Gols",
+        "Over_35_Gols", "Under_35_Gols",
+        "Over_75_Cantos", "Under_75_Cantos",
+        "Over_85_Cantos", "Under_85_Cantos",
+        "Over_95_Cantos", "Under_95_Cantos",
+        "Over_105_Cantos", "Under_105_Cantos",
+        "Over_25_Cartoes", "Under_25_Cartoes",
+        "Over_35_Cartoes", "Under_35_Cartoes",
+        "Over_45_Cartoes", "Under_45_Cartoes",
+        "Over_55_Cartoes", "Under_55_Cartoes",
+        "BTTS_Sim", "BTTS_Nao",
     ]
 
     PARES_OVER_UNDER = [
@@ -3195,6 +3218,33 @@ with aba_base:
         pc = max(0.01, min(0.98, pc + ajuste_bp))
         pf = max(0.01, min(0.98, pf - ajuste_bp))
         pe = max(0.01, 1 - pc - pf)
+
+        # Ajuste por histórico de Vitória/Empate/Derrota_%
+        # Só aplica se os dados foram preenchidos (soma > 0).
+        # Usa a taxa histórica de vitória da casa e derrota do
+        # visitante (= vitória da casa no ponto de vista do fora)
+        # como um sinal adicional, com peso pequeno (20%) para não
+        # sobrepor o modelo de gols.
+        hist_peso = 0.20
+        v_casa = tc["Vitoria_%"]   # taxa histórica de vitória da casa
+        v_fora = tf["Vitoria_%"]   # taxa histórica de vitória do fora
+        e_casa = tc["Empate_%"]
+        e_fora = tf["Empate_%"]
+        d_casa = tc["Derrota_%"]   # = taxa de derrota da casa (visitante vence)
+
+        soma_hist_c = v_casa + e_casa + d_casa
+        soma_hist_f = v_fora + e_fora + tf["Derrota_%"]
+
+        if soma_hist_c > 0 and soma_hist_f > 0:
+            # Taxa histórica ponderada de cada resultado
+            hist_pc = (v_casa / soma_hist_c + (1 - tf["Derrota_%"] / soma_hist_f) * 0.5) / 1.5
+            hist_pe = (e_casa / soma_hist_c + e_fora / soma_hist_f) / 2
+            hist_pf = (d_casa / soma_hist_c + v_fora / soma_hist_f) / 2
+            # Mistura modelo Poisson+BP (80%) com histórico (20%)
+            pc = pc * (1 - hist_peso) + hist_pc * hist_peso
+            pe = pe * (1 - hist_peso) + hist_pe * hist_peso
+            pf = pf * (1 - hist_peso) + hist_pf * hist_peso
+
         soma = pc + pe + pf
         pc, pe, pf = pc / soma, pe / soma, pf / soma
 
@@ -3435,15 +3485,45 @@ with aba_base:
     with st.expander("📝 Editar Base de Dados dos Times"):
         st.caption(
             "Edite os valores direto aqui e clique em Salvar. "
-            "Ou edite o arquivo times_serie_a_completo.csv no GitHub e recarregue o app."
+            "Ou edite o arquivo times_serie_a_completo.csv no GitHub e recarregue o app. "
+            "Os campos de % aceitam valores de 0 a 100 (ex: 60 = 60%). "
+            "O sistema converte automaticamente para fração interna."
         )
-        df_edit = st.data_editor(
-            df_base,
+
+        # Cria uma cópia de exibição com percentuais em escala 0-100
+        # para facilitar a edição. Os valores internos continuam em
+        # 0.0-1.0 para os cálculos.
+        df_exibicao = df_base.copy()
+        for col in COLUNAS_PERCENTUAL:
+            if col in df_exibicao.columns:
+                df_exibicao[col] = (df_exibicao[col] * 100).round(1)
+
+        # Configuração visual das colunas no data_editor
+        col_cfg = {}
+        for col in COLUNAS_PERCENTUAL:
+            col_cfg[col] = st.column_config.NumberColumn(
+                col,
+                min_value=0.0,
+                max_value=100.0,
+                step=0.1,
+                format="%.1f%%",
+                help="Digite o valor em % (ex: 60 para 60%)"
+            )
+
+        df_editado = st.data_editor(
+            df_exibicao,
+            column_config=col_cfg,
             use_container_width=True,
             num_rows="fixed",
             key="base_editor"
         )
+
         if st.button("💾 Salvar Base de Dados", key="base_salvar"):
-            df_edit_calc = _recalcular_derivadas(df_edit)
-            _salvar_base(df_edit_calc)
+            # Converte de volta para fração (0.0-1.0) antes de salvar
+            df_salvar = df_editado.copy()
+            for col in COLUNAS_PERCENTUAL:
+                if col in df_salvar.columns:
+                    df_salvar[col] = (df_salvar[col] / 100).round(4)
+            df_salvar_calc = _recalcular_derivadas(df_salvar)
+            _salvar_base(df_salvar_calc)
             st.success("Base salva e enviada ao GitHub!")
