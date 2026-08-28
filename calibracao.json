@@ -1,0 +1,16 @@
+{
+    "peso_xg_ataque": 0.5,
+    "peso_xg_defesa": 0.5,
+    "peso_finalizacao": 0.15,
+    "peso_concedido": 0.15,
+    "peso_chutes_ataque": 0.15,
+    "peso_chutes_defesa": 0.15,
+    "fator_mando": 1.1,
+    "fator_calibracao_gols": 1.0,
+    "fator_calibracao_cantos": 1.0,
+    "fator_calibracao_cartoes": 1.0,
+    "peso_historico_cantos": 0.4,
+    "peso_historico_cartoes": 0.4,
+    "peso_historico_btts": 0.4,
+    "peso_bp": 0.15
+}
