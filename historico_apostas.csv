@@ -1,14 +1,15 @@
-ID,Time Casa,Time Fora,Campeonato,Mercado,Odd Casa,Odd Empate,Odd Fora,EV Casa,EV Empate,EV Fora,Edge Casa,Edge Empate,Edge Fora,Stake,Confiança,Perfil
-1,Coritiba,Bahia,Brasileirão,Under 2.5,2.75,3.25,2.62,0.02,-0.27,0.05,0.0262,-0.0662,0.0401,0,4.7212223655758265,🧱 Jogo Defensivo
-2,Vasco,Bragantino,Brasileirão,Vitória Fora,2.05,3.35,3.9,-0.16,-0.25,0.42,-0.0562,-0.0627,0.1189,5,10.0,⚖️ Equilibrado
-3,São Paulo,Botafogo,Brasileirão,Under 2.5,1.92,3.6,3.9,-0.18,-0.21,0.38,-0.0668,-0.0438,0.1106,5,9.582635842426862,🧱 Jogo Defensivo
-4,Flamengo,Coritiba,Brasileirão,Under 2.5,1.48,4.75,6.0,-0.29,-0.02,0.9,-0.164,0.006,0.158,5,10.0,🧱 Jogo Defensivo
-5,Athletico PR,Mirassol,Brasileirão,Under 2.5,1.74,3.55,5.15,-0.09,-0.31,0.45,-0.0222,-0.0747,0.097,2,10.0,🧱 Jogo Defensivo
-6,Grêmio,Corinthians,Brasileirão,BTTS NÃO,2.72,3.05,2.82,0.3,-0.37,-0.11,0.128,-0.1064,-0.0216,5,8.359645436172407,🧱 Jogo Defensivo
-7,Bahia,Botafogo,Brasileirão,Under 2.5,1.95,3.5,3.9,-0.13,-0.25,0.32,-0.0397,-0.0565,0.0963,2,8.954635768257326,🧱 Jogo Defensivo
-8,Santos,Vitoria,Brasileirão,Under 2.5,1.83,3.5,4.5,-0.14,-0.27,0.46,-0.0506,-0.0624,0.1129,5,9.02857939715868,🧱 Jogo Defensivo
-9,Bragantino,Internacional,Brasileirão,Vitória Fora,2.15,3.3,3.55,-0.11,-0.26,0.29,-0.031,-0.0652,0.0962,2,8.728292354806477,🧱 Jogo Defensivo
-10,Vasco,Atlético MG,Brasileirão,BTTS NÃO,2.12,3.3,3.6,-0.07,-0.28,0.25,-0.0112,-0.0711,0.0823,2,8.009337456761742,🧱 Jogo Defensivo
-11,Palmeiras,Chapecoense,Brasileirão,Under 2.5,1.25,6.1,11.0,-0.33,0.16,1.98,-0.2193,0.0342,0.1852,5,10.0,🧱 Jogo Defensivo
-12,Remo,São Paulo,Brasileirão,Under 2.5,2.87,3.15,2.57,0.11,-0.28,-0.02,0.0568,-0.0708,0.014,2,5.64525916452565,🧱 Jogo Defensivo
-13,Cruzeiro,Fluminense,Brasileirão,Vitória Fora,2.1,3.3,3.65,-0.11,-0.27,0.3,-0.0303,-0.0669,0.0972,2,8.945095972752824,🧱 Jogo Defensivo
+ID,Data,Campeonato,Time Casa,Time Fora,Mercado,Resultado Mercado,Probabilidade Modelo,Odd Mercado,Odd Justa,EV,Edge,Kelly,xG Casa,xG Fora,xGA Casa,xGA Fora,Forma Casa,Forma Fora,Eficiência Casa,Eficiência Fora,Chutes Casa,Chutes Fora,Gols Esperados Casa,Gols Esperados Fora,Placar Final
+1,,Brasileirão,Coritiba,Bahia,Under 2.5,,,,,,,,,,,,,,,,,,,,
+2,,Brasileirão,Vasco,Bragantino,Vitória Fora,,,,,,,,,,,,,,,,,,,,
+3,,Brasileirão,São Paulo,Botafogo,Under 2.5,,,,,,,,,,,,,,,,,,,,
+4,,Brasileirão,Flamengo,Coritiba,Under 2.5,,,,,,,,,,,,,,,,,,,,
+5,,Brasileirão,Athletico PR,Mirassol,Under 2.5,,,,,,,,,,,,,,,,,,,,
+6,,Brasileirão,Grêmio,Corinthians,BTTS NÃO,,,,,,,,,,,,,,,,,,,,
+7,,Brasileirão,Bahia,Botafogo,Under 2.5,,,,,,,,,,,,,,,,,,,,
+8,,Brasileirão,Santos,Vitoria,Under 2.5,,,,,,,,,,,,,,,,,,,,
+9,,Brasileirão,Bragantino,Internacional,Vitória Fora,,,,,,,,,,,,,,,,,,,,
+10,,Brasileirão,Vasco,Atlético MG,BTTS NÃO,,,,,,,,,,,,,,,,,,,,
+11,,Brasileirão,Palmeiras,Chapecoense,Under 2.5,,,,,,,,,,,,,,,,,,,,
+12,,Brasileirão,Remo,São Paulo,Under 2.5,,,,,,,,,,,,,,,,,,,,
+13,,Brasileirão,Cruzeiro,Fluminense,Vitória Fora,,,,,,,,,,,,,,,,,,,,
+14,29/08/2026,Brasileirão,Atlético-MG,Vitória,Fora vence + Over 1.5,,0.23382088599181855,0.0,4.276777909544788,0.49645367034763876,0.07757088599181855,0.09193586487919236,1.41,1.24,1.59,1.64,8.0,1.0,10.0,8.0,5.0,3.0,1.3649887196841513,1.1908139142181695,
