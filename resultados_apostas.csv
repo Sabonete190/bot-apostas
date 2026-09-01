@@ -1,13 +1,14 @@
-Time Casa,Time Fora,Campeonato,Mercado,Resultado,Stake R$,Odd,Lucro
-São Paulo,Botafogo,Brasileirão,Under 2.5,GREEN,10.0,1.92,9.2
-Vasco,Bragantino,Brasileirão,Vitória Fora,GREEN,10.0,3.85,28.5
-Flamengo,Coritiba,Brasileirão,Under 2.5,RED,10.0,1.97,-10.0
-Athletico PR,Mirassol,Brasileirão,Under 2.5,GREEN,10.0,1.69,6.9
-Grêmio,Corinthians,Brasileirão,BTTS NÃO,RED,10.0,1.76,-10.0
-Bahia,Botafogo,Brasileirão,Under 2.5,RED,10.0,2.12,-10.0
-Santos,Vitoria,Brasileirão,Under 2.5,RED,10.0,1.75,-10.0
-Bragantino,Internacional,Brasileirão,Vitória Fora,RED,10.0,3.55,-10.0
-Vasco,Atlético MG,Brasileirão,BTTS NÃO,GREEN,10.0,1.88,8.8
-Palmeiras,Chapecoense,Brasileirão,Under 2.5,GREEN,10.0,2.22,12.2
-Remo,São Paulo,Brasileirão,Under 2.5,GREEN,10.0,1.75,7.5
-Cruzeiro,Fluminense,Brasileirão,Vitória Fora,RED,10.0,3.65,-10.0
+Data,Campeonato,Time Casa,Time Fora,Mercado,Resultado Mercado,Probabilidade Modelo,Odd Mercado,Odd Justa,EV,Edge,Kelly,xG Casa,xG Fora,xGA Casa,xGA Fora,Forma Casa,Forma Fora,Eficiência Casa,Eficiência Fora,Chutes Casa,Chutes Fora,Gols Esperados Casa,Gols Esperados Fora,Placar Final,Stake R$,Lucro
+,Brasileirão,São Paulo,Botafogo,Under 2.5,,,,,,,,,,,,,,,,,,,,,10.0,9.2
+,Brasileirão,Vasco,Bragantino,Vitória Fora,,,,,,,,,,,,,,,,,,,,,10.0,28.5
+,Brasileirão,Flamengo,Coritiba,Under 2.5,,,,,,,,,,,,,,,,,,,,,10.0,-10.0
+,Brasileirão,Athletico PR,Mirassol,Under 2.5,,,,,,,,,,,,,,,,,,,,,10.0,6.9
+,Brasileirão,Grêmio,Corinthians,BTTS NÃO,,,,,,,,,,,,,,,,,,,,,10.0,-10.0
+,Brasileirão,Bahia,Botafogo,Under 2.5,,,,,,,,,,,,,,,,,,,,,10.0,-10.0
+,Brasileirão,Santos,Vitoria,Under 2.5,,,,,,,,,,,,,,,,,,,,,10.0,-10.0
+,Brasileirão,Bragantino,Internacional,Vitória Fora,,,,,,,,,,,,,,,,,,,,,10.0,-10.0
+,Brasileirão,Vasco,Atlético MG,BTTS NÃO,,,,,,,,,,,,,,,,,,,,,10.0,8.8
+,Brasileirão,Palmeiras,Chapecoense,Under 2.5,,,,,,,,,,,,,,,,,,,,,10.0,12.2
+,Brasileirão,Remo,São Paulo,Under 2.5,,,,,,,,,,,,,,,,,,,,,10.0,7.5
+,Brasileirão,Cruzeiro,Fluminense,Vitória Fora,,,,,,,,,,,,,,,,,,,,,10.0,-10.0
+29/08/2026,Brasileirão,Atlético-MG,Vitória,Fora vence + Over 1.5,RED,0.2338208859918185,5.75,4.276777909544788,0.4964536703476387,0.0775708859918185,0.0919358648791923,1.41,1.24,1.59,1.64,8.0,1.0,10.0,8.0,5.0,3.0,1.3649887196841513,1.1908139142181695,2 x 1,10.0,-10.0
