@@ -3328,12 +3328,27 @@ with aba_base:
         erro_g = round(gols_prev - (gc_real + gf_real), 2)
         erro_c = round(float(linha["Cantos_Esp"]) - cant_real, 2)
         erro_ct = round(float(linha["Cartoes_Esp"]) - cart_real, 2)
-        df.loc[filtro, ["Gols_Casa_Real", "Gols_Fora_Real", "Cantos_Real", "Cartoes_Real",
-                        "Erro_Gols", "Erro_Cantos", "Erro_Cartoes", "Resolvida"]] = [
-            gc_real, gf_real, cant_real, cart_real, erro_g, erro_c, erro_ct, True
-        ]
+
+        # Atribui cada coluna individualmente para evitar que o pandas
+        # tente encaixar tipos mistos (int, float, bool, str) numa única
+        # operação de lista — que é exatamente o que causa o ValueError
+        # "Invalid value 'RED' for dtype float64".
+        df.loc[filtro, "Gols_Casa_Real"] = gc_real
+        df.loc[filtro, "Gols_Fora_Real"] = gf_real
+        df.loc[filtro, "Cantos_Real"] = cant_real
+        df.loc[filtro, "Cartoes_Real"] = cart_real
+        df.loc[filtro, "Erro_Gols"] = erro_g
+        df.loc[filtro, "Erro_Cantos"] = erro_c
+        df.loc[filtro, "Erro_Cartoes"] = erro_ct
+        # "Resolvida" é salva como string "True"/"False" no CSV, então ao
+        # ler de volta o pandas pode inferi-la como object. Forçar str
+        # antes de salvar garante consistência em todas as releituras.
+        df["Resolvida"] = df["Resolvida"].astype(str)
+        df.loc[filtro, "Resolvida"] = "True"
+
         df.to_csv(ARQUIVO_PREVISOES, index=False, encoding="utf-8")
         salvar_no_github(ARQUIVO_PREVISOES)
+
         # Ajusta calibração
         calib = _obter_calibracao()
         calib = _ajustar_fator(calib, "fator_calibracao_gols", -erro_g * 0.02)
@@ -3439,7 +3454,9 @@ with aba_base:
 
     if os.path.exists(ARQUIVO_PREVISOES):
         df_prev = pd.read_csv(ARQUIVO_PREVISOES, encoding="utf-8")
-        pendentes = df_prev[df_prev["Resolvida"] == False] if "Resolvida" in df_prev.columns else pd.DataFrame()
+        pendentes = df_prev[
+            df_prev["Resolvida"].astype(str).str.lower().isin(["false", "0", ""])
+        ] if "Resolvida" in df_prev.columns else pd.DataFrame()
 
         if not pendentes.empty:
             opcoes = pendentes.apply(
