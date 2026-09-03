@@ -2837,7 +2837,7 @@ with aba_bot:
     # ESTATÍSTICAS DO BOT
     # =========================
 
-    df_stats = carregar_csv_com_esquema(
+    df_stats_raw = carregar_csv_com_esquema(
         ARQUIVO_RESULTADOS,
         COLUNAS_RESULTADOS,
         mapa_legado=MAPA_COLUNAS_LEGADAS
@@ -2849,79 +2849,70 @@ with aba_bot:
 
     st.subheader("Performance do Bot")
 
-    st.write("PAINEL CARREGADO")
+    if not df_stats_raw.empty:
 
-    if not df_stats.empty:
+        df_stats = df_stats_raw.copy()
 
-        total_apostas = len(df_stats)
-
-        greens = len(
-            df_stats[
-                df_stats["Resultado Mercado"] == "GREEN"
-            ]
+        # Normaliza o texto: remove espaços e padroniza maiúsculas
+        # para que "green", " GREEN " etc. sejam todos reconhecidos.
+        df_stats["Resultado Mercado"] = (
+            df_stats["Resultado Mercado"]
+            .astype(str)
+            .str.strip()
+            .str.upper()
         )
 
-        reds = len(
-            df_stats[
-                df_stats["Resultado Mercado"] == "RED"
-            ]
-        )
+        # Força Lucro e Stake para numérico.
+        # Se o CSV tiver células vazias ("") o pandas as carrega como
+        # string, fazendo .sum() concatenar texto em vez de somar.
+        df_stats["Lucro"] = pd.to_numeric(
+            df_stats["Lucro"], errors="coerce"
+        ).fillna(0)
 
-        voids = len(
-            df_stats[
-                df_stats["Resultado Mercado"] == "VOID"
-            ]
-        )
+        df_stats["Stake R$"] = pd.to_numeric(
+            df_stats["Stake R$"], errors="coerce"
+        ).fillna(0)
 
-        winrate = (
-            (greens / total_apostas) * 100
-        )
+        # Só contabiliza apostas que já têm resultado (exclui as
+        # salvas mas ainda não resolvidas, onde Resultado Mercado="").
+        df_resolvidas = df_stats[
+            df_stats["Resultado Mercado"].isin(["GREEN", "RED", "VOID"])
+        ]
 
-        lucro_total = (
-            df_stats["Lucro"].sum()
-        )
+        total_apostas = len(df_resolvidas)
 
-        total_stakes = (
-            df_stats["Stake R$"].sum()
-        )
+        if total_apostas == 0:
 
-        if total_stakes > 0:
-
-            roi = (
-                lucro_total / total_stakes
-            ) * 100
+            st.warning("Nenhum resultado registrado ainda.")
 
         else:
 
-            roi = 0
+            greens = len(df_resolvidas[df_resolvidas["Resultado Mercado"] == "GREEN"])
+            reds   = len(df_resolvidas[df_resolvidas["Resultado Mercado"] == "RED"])
+            voids  = len(df_resolvidas[df_resolvidas["Resultado Mercado"] == "VOID"])
 
-        st.write(
-            f"Total de Apostas: {total_apostas}"
-        )
+            # Winrate: só sobre apostas com resultado definitivo
+            # (GREEN ou RED) — VOIDs são devoluções e não entram.
+            apostas_validas = greens + reds
+            winrate = (
+                (greens / apostas_validas * 100)
+                if apostas_validas > 0 else 0
+            )
 
-        st.write(
-            f"🟢 Greens: {greens}"
-        )
+            lucro_total  = df_resolvidas["Lucro"].sum()
+            total_stakes = df_resolvidas["Stake R$"].sum()
+            roi = (
+                (lucro_total / total_stakes * 100)
+                if total_stakes > 0 else 0
+            )
 
-        st.write(
-            f"🔴 Reds: {reds}"
-        )
-
-        st.write(
-            f"⚪ Voids: {voids}"
-        )
-
-        st.write(
-            f"🎯 Winrate: {round(winrate, 2)}%"
-        )
-
-        st.write(
-            f"💰 Lucro Total: R$ {round(lucro_total, 2)}"
-        )
-
-        st.write(
-            f"📈 ROI: {round(roi, 2)}%"
-        )
+            st.write(f"Total de Apostas Resolvidas: {total_apostas}")
+            st.write(f"🟢 Greens: {greens}")
+            st.write(f"🔴 Reds: {reds}")
+            st.write(f"⚪ Voids: {voids}")
+            st.write(f"🎯 Winrate: {round(winrate, 2)}%")
+            st.write(f"💰 Lucro Total: R$ {round(lucro_total, 2)}")
+            st.write(f"📈 ROI: {round(roi, 2)}%")
 
     else:
 
@@ -3328,27 +3319,12 @@ with aba_base:
         erro_g = round(gols_prev - (gc_real + gf_real), 2)
         erro_c = round(float(linha["Cantos_Esp"]) - cant_real, 2)
         erro_ct = round(float(linha["Cartoes_Esp"]) - cart_real, 2)
-
-        # Atribui cada coluna individualmente para evitar que o pandas
-        # tente encaixar tipos mistos (int, float, bool, str) numa única
-        # operação de lista — que é exatamente o que causa o ValueError
-        # "Invalid value 'RED' for dtype float64".
-        df.loc[filtro, "Gols_Casa_Real"] = gc_real
-        df.loc[filtro, "Gols_Fora_Real"] = gf_real
-        df.loc[filtro, "Cantos_Real"] = cant_real
-        df.loc[filtro, "Cartoes_Real"] = cart_real
-        df.loc[filtro, "Erro_Gols"] = erro_g
-        df.loc[filtro, "Erro_Cantos"] = erro_c
-        df.loc[filtro, "Erro_Cartoes"] = erro_ct
-        # "Resolvida" é salva como string "True"/"False" no CSV, então ao
-        # ler de volta o pandas pode inferi-la como object. Forçar str
-        # antes de salvar garante consistência em todas as releituras.
-        df["Resolvida"] = df["Resolvida"].astype(str)
-        df.loc[filtro, "Resolvida"] = "True"
-
+        df.loc[filtro, ["Gols_Casa_Real", "Gols_Fora_Real", "Cantos_Real", "Cartoes_Real",
+                        "Erro_Gols", "Erro_Cantos", "Erro_Cartoes", "Resolvida"]] = [
+            gc_real, gf_real, cant_real, cart_real, erro_g, erro_c, erro_ct, True
+        ]
         df.to_csv(ARQUIVO_PREVISOES, index=False, encoding="utf-8")
         salvar_no_github(ARQUIVO_PREVISOES)
-
         # Ajusta calibração
         calib = _obter_calibracao()
         calib = _ajustar_fator(calib, "fator_calibracao_gols", -erro_g * 0.02)
@@ -3454,9 +3430,7 @@ with aba_base:
 
     if os.path.exists(ARQUIVO_PREVISOES):
         df_prev = pd.read_csv(ARQUIVO_PREVISOES, encoding="utf-8")
-        pendentes = df_prev[
-            df_prev["Resolvida"].astype(str).str.lower().isin(["false", "0", ""])
-        ] if "Resolvida" in df_prev.columns else pd.DataFrame()
+        pendentes = df_prev[df_prev["Resolvida"] == False] if "Resolvida" in df_prev.columns else pd.DataFrame()
 
         if not pendentes.empty:
             opcoes = pendentes.apply(
